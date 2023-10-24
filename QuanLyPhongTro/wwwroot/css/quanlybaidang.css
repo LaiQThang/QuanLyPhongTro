@@ -1,0 +1,43 @@
+
+.arrangeBox{
+    justify-content: space-between;
+    align-items: center;
+}
+.wrap_arrange{
+    width: 80%;
+}
+
+.btn-add--post{
+    border: 2px solid #3f6edc;
+    padding: 3px 15px;
+    border-radius: 5px !important;
+}
+
+.posts-item {
+    position: relative;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.posts-item:hover{
+    border: 1px solid #a79797;
+}
+
+.posts-img{
+   width: 25%;
+   border-radius: 5px;
+   border: 1px solid #a9a9a9;
+   height: 80%;
+}
+
+.posts--info{
+    width: 60%;
+    margin-left: 25px;
+}
+
+.posts--info h5 a{
+    font-size: 18px;
+    text-decoration: none;
+}
+
+

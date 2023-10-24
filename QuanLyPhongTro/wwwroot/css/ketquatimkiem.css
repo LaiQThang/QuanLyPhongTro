@@ -1,0 +1,123 @@
+/* ------ SEARCHBOX ------ */
+.body__searchbox form{
+    background-color: #f5b638;
+    padding: 10px 20px;
+    border-radius: 10px;
+}
+
+.body__searchbox form h4{
+    margin-top: 10px;
+}
+
+.body__searchbox form p{
+   padding-top: 12px;
+    margin-bottom: 3px;
+}
+
+.input-group-text {
+    background-color: #fff;
+}
+
+
+.body__searchbox form button{
+    margin-top: 18px;
+    margin-bottom: 10px;
+}
+
+.search__conditions{
+    border: 1px solid #e3dbdb;
+    padding: 15px 15px ;
+    border-radius: 5px;
+}
+
+.form-check{
+    margin-top: 15px;
+}
+
+/* ---- List Destination ----*/
+.title-search{
+    font-weight: 600;
+    font-size: 28px;
+}
+.arrangeBox{
+    width: 50%;
+    margin-bottom: 30px;
+}
+
+.destination-item{
+    max-height: 210px;
+    border: 1px solid #e3dbdb;
+    border-radius: 5px;
+    padding: 10px 10px;
+}
+
+.destination-item:hover{
+    border: 1px solid #b3aeae;
+
+}
+
+.destination-img{
+    max-width: 25%;
+    height: auto;
+    border-radius: 5px;
+}
+
+.destination--info{
+    margin-left: 20px;
+    width: 63%;
+    
+}
+
+.destination--info p{
+    margin: 6px 20px 6px 0;
+}
+
+.destination--info a, .btn__box a{
+    text-decoration: none;
+}
+
+.destination--content{
+    text-align: justify;  
+    line-height: 1.5rem;
+    overflow: hidden;   
+    display: block;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+    margin-right: 20px;
+}
+
+.btn-detail{
+    margin-top: 10px;
+    
+}
+
+.btn__box a{
+    color: #fff;
+}
+
+
+/* ----- Responsive ----- */
+@media(max-width: 415px){
+    .arrangeBox{
+        width: 100%;
+    }
+
+    .destination--title{
+        font-size: 16px;
+    }
+    .destination--content{
+        line-height: 1.2rem;
+        -webkit-line-clamp: 2;
+    }
+
+    .destination--info p{
+        font-size: 13px;
+    }
+
+    .destination-img{
+        height: 90px;
+        margin: auto;
+    }
+   
+}

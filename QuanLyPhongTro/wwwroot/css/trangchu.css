@@ -1,0 +1,177 @@
+.mw-1200{
+    max-width: 1200px;
+}
+
+.header{
+    max-width: 1200px;
+    padding: 8px 0;
+}
+
+.img img{
+    width: 86%;
+}
+
+.authentic ul,
+.action-list{
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.authentic ul li,
+.action-list li {
+    display: flex;
+    align-items: center;
+}
+
+.authentic ul li a,
+.action-list li a{
+    text-decoration: none;
+    color: #000;
+    font-weight: 500;
+    font-size: 20px;
+    padding: 10px 20px;
+    text-align: center;
+}
+
+
+.authentic ul li button:last-child{
+    margin-left: 10px;
+}
+
+.banner-search{
+    width: 600px;
+    height: 600px;
+}
+
+.search-input{
+    outline: none;
+    padding: 10px 20px;
+    margin-bottom: 20px;
+}
+
+.search-submit{
+    background-color: #0d6efd;
+    border: none;
+    color: #FFF;
+    padding: 10px 0;
+}
+
+.main-content{
+    font-size: 22px;
+    font-weight: 500;
+    margin: 20px 0;
+}
+
+.info-img {
+    box-shadow: 2px 2px 2px 2px #888888;
+    border-radius: 6px;
+    margin-top: 30px;
+}
+
+.info-img:hover{
+    box-shadow: 0 0 0 5px #D7D7DB;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.info-img span{
+    font-size: 18px;
+    font-weight: 500;
+    margin-left: 20px;
+}
+
+.info-img p{
+    font-size: 14px;
+    font-weight: 400;
+    margin-left: 20px;
+}
+
+.footer-action{
+    margin-top: 36px;
+}
+
+.footer-action i{
+    font-size: 60px;
+}
+
+.footer-action span{
+    font-size: 20px;
+    font-weight: 500;
+}
+
+.footer-action p{
+    font-size: 30px;
+    font-weight: 700;
+}
+
+.copyright{
+    background-color: #082738;
+}
+
+.copyright div {
+    padding: 10px 0;
+}
+
+.copyright div span{
+    color: #8E99A9;
+}
+.action-bar{
+    border: none;
+    background-color: #FFF;
+    font-size: 34px;
+    font-weight: 600;
+    margin-right: 30px;
+}
+
+.action-authencation--account{
+    font-size: 22px;
+}
+
+.action-authencation button{
+    margin-left: 30px;
+    border: none;
+    font-size: 22px;
+    padding: 8px 20px;
+    background-color: #F16E26;
+    color: #FFF;
+    border-radius: 6px;
+    align-items: center;
+}
+
+.action-authencation-dropdown{
+    border: none;
+    background-color: #FFF;
+    font-size: 20px;
+    font-weight: 500;
+}
+
+.action-account-dropdown{
+    background-color: #FFF !important;
+    color: #000 !important;
+}
+
+.action-account-accord{
+    text-decoration: none;
+    color: #000;
+    font-weight: 500;
+    font-size: 20px;
+    padding: 10px 20px;
+    text-align: center
+}
+
+
+
+@media(max-width: 415px){
+    .action-authencation button {
+        margin-left: 0;
+        border: none;
+        font-size: 14px;
+    }
+    .authentic ul li a {
+        padding: 0;
+    }
+    .authentic ul li:last-child {
+        margin-left: 10px;
+    }
+}

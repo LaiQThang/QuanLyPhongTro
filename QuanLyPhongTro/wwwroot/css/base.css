@@ -1,0 +1,83 @@
+/* ----------- file CSS chung giữa các trang -------- */
+
+:root{
+    --title-color: #0045a8;
+    --text-color: #000000;
+    --attribute-value-color: #4245a8;
+}
+
+
+.mt-30{
+    margin-top: 30px;
+}
+
+.mb-30{
+    margin-bottom: 30px;
+}
+
+.mb-10{
+    margin-bottom: 10px;
+}
+
+
+.mt-15{
+    margin-top: 15px;
+}
+
+
+.mt-50{
+    margin-top: 50px;
+}
+
+.mr-10{
+    margin-right: 10px;
+}
+
+.mr-20{
+    margin-right: 20px;
+}
+
+h5 {
+    color: var(--title-color);
+    text-transform: uppercase;
+}
+
+/* ----- Navbar trang cá nhân, sửa bài đăng, sửa phòng trọ, cho thuê phòng trọ ----- */
+
+.nav-list{
+    list-style: none;
+    border: 1px solid #e4e3e3;
+    padding-left: 0px;
+    padding-top: 15px;
+    border-radius: 5px;
+}
+
+.nav-item{
+    align-items: center;
+    margin-bottom: 15px;
+    font-size: 18px;
+    font-weight: 400;
+    padding-bottom: 15px;
+    padding-left: 18px;
+    border-bottom: 1px solid #e4e3e3;
+
+}
+
+.nav-item:hover, .nav-item a:hover{
+    color: #3063f0;
+}
+
+.nav-item:last-child{
+    border-bottom: none;
+    margin-bottom:0;
+}
+
+.nav-item a{
+    text-decoration: none;
+    color: #000;
+}
+
+.nav-item p{
+    margin-bottom: 0;
+    margin-left: 15px;
+}

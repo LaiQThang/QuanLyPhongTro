@@ -1,0 +1,28 @@
+
+.box-info--invidual dl{
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    border-bottom: 1px solid #d3d1d1;
+    margin-bottom: 0;
+    padding: 12px 0 7px 0;
+}
+
+.title-update-img{
+    width: 90%;
+}
+
+.box-info--invidual img{
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    border: 1px solid #e89242;
+}
+
+.box-info--invidual dt{
+    width: 25%;
+}
+
+.info-definition{
+    width: 65%;
+}

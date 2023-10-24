@@ -1,0 +1,219 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - QuanLyPhongTro</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/trangchu.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/QuanLyPhongTro.styles.css" asp-append-version="true" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    @await RenderSectionAsync("StyleCss", required: false)
+</head>
+<body>
+    <header class="d-flex justify-content-center w-100">
+        <div class="d-flex flex-row justify-content-between w-100 header">
+            <div class="img">
+                <img src="~/img\logo (1).png" />
+            </div>
+            <div class="action d-none d-lg-flex">
+                <ul class="d-flex action-list">
+                    <li>
+                        <a href="/">LUXSTAY</a>
+                    </li>
+                    <li>
+                        <div class="dropdown">
+                            <button class=" dropdown-toggle action-authencation-dropdown" type="button" id="homestay-dropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                                HOMESTAY
+                            </button>
+                            <ul class="dropdown-menu" aria-labelledby="homestay-dropdown">
+                                <li><a class="dropdown-item" href="#">Miền Bắc</a></li>
+                                <li><a class="dropdown-item" href="#">Miền Trung</a></li>
+                                <li><a class="dropdown-item" href="#">Miền Nam</a></li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li>
+                        <a href="/">THÔNG TIN</a>
+                    </li>
+                    <li>
+                        <a href="/">LIÊN HỆ</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="authentic  d-none text-align-center">
+                <ul class="d-flex">
+                    <li>
+                        <button class="btn btn-primary">
+                            <a href="#">Đăng kí</a>
+                        </button>
+                    </li>
+                    <li>
+                        <button class="btn btn-warning">
+                            <a href="#">Đăng nhập</a>
+                        </button>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="action-authencation d-flex justify-content-center align-items-center">
+                <div class="dropdown action-authencation--account d-none d-lg-block">
+                    <button class=" dropdown-toggle action-account-dropdown" type="button" id="account-dropdown"
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="fa-regular fa-circle-user"></i>
+                        <span>Tài khoản</span>
+                    </button>
+                    <ul class="dropdown-menu" aria-labelledby="account-dropdown">
+                        <li><a class="dropdown-item" href="#">Trang cá nhân</a></li>
+                        <li><a class="dropdown-item" href="#">Đăng xuất</a></li>
+                    </ul>
+                </div>
+                <!-- Button trigger modal -->
+                <button type="button" class="btn btn-primary " data-bs-toggle="modal" data-bs-target="#exampleModal">
+                    <i class="fa-regular fa-pen-to-square"></i>Posts
+                </button>
+
+                <!-- Modal -->
+                <div class="modal fade " id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">Thêm bài đăng</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                ...
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                <button type="button" class="btn btn-primary">Save changes</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <button class="action-bar d-lg-none d-flex align-items-center" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample"
+                    aria-controls="offcanvasExample">
+                <i class="fa-solid fa-bars"></i>
+            </button>
+
+            <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
+                <div class="offcanvas-header">
+                    <h4 class="offcanvas-title" id="offcanvasExampleLabel">LUXSTAY</h4>
+                    <div class="authentic text-align-center d-none">
+                        <ul class="d-flex ">
+                            <li>
+                                <a class="" href="#">Đăng kí</a>
+                            </li>
+                            <li>
+                                <a class="" href="#">Đăng nhập</a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="action-authencation d-flex justify-content-center align-items-center">
+                        <div class="dropdown action-authencation--account d-lg-none">
+                            <button class=" dropdown-toggle action-account-dropdown" type="button" id="account-dropdown"
+                                    data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="fa-regular fa-circle-user"></i>
+                                <span>Tài khoản</span>
+                            </button>
+                            <ul class="dropdown-menu" aria-labelledby="account-dropdown">
+                                <li><a class="dropdown-item" href="#">Trang cá nhân</a></li>
+                                <li><a class="dropdown-item" href="#">Đăng xuất</a></li>
+                            </ul>
+                        </div>
+
+                        <button class="d-none"><i class="fa-regular fa-pen-to-square"></i>Posts</button>
+                    </div>
+                    <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                </div>
+                <div class="offcanvas-body">
+                    <div class="action ">
+                        <ul class="d-flex flex-column action-list">
+                            <li>
+                                <a href="/">LUXSTAY</a>
+                            </li>
+                            <li>
+                                <div class="accordion accordion-flush" id="accordionFlushExample">
+                                    <div class="accordion-item">
+                                        <h2 class="accordion-header" id="flush-headingOne">
+                                            <button class="accordion-button collapsed action-account-accord" type="button" data-bs-toggle="collapse"
+                                                    data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
+                                                HOMESTAY
+                                            </button>
+                                        </h2>
+                                        <div id="flush-collapseOne" class="accordion-collapse collapse" aria-labelledby="flush-headingOne"
+                                             data-bs-parent="#accordionFlushExample">
+                                            <ul class="">
+                                                <li><a class="dropdown-item" href="#">Miền Bắc</a></li>
+                                                <li><a class="dropdown-item" href="#">Miền Trung</a></li>
+                                                <li><a class="dropdown-item" href="#">Miền Nam</a></li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                            <li>
+                                <a href="/">THÔNG TIN</a>
+                            </li>
+                            <li>
+                                <a href="/">LIÊN HỆ</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+    <div class="container">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+    <footer>
+        <div class="container-fluid main d-flex justify-content-center align-items-center" style="background: url(https://www.luxstay.me/wp-content/uploads/2018/05/bg-facts.jpg); background-size: cover; background-repeat: no-repeat;">
+                <div class="row mw-1200 d-flex w-100">
+                    <div class="col-lg-3  col-md-6">
+                        <div class="footer-action d-flex flex-column justify-content-center align-items-center">
+                            <i class="fa-solid fa-handshake"></i>
+                            <span>Đối tác</span>
+                            <p>100</p>
+                        </div>
+                    </div>
+                    <div class="col-lg-3  col-md-6">
+                        <div class="footer-action d-flex flex-column justify-content-center align-items-center">
+                            <i class="fa-solid fa-users"></i>
+                            <span>Khách hàng</span>
+                            <p>100</p>
+                        </div>
+                    </div>
+                    <div class="col-lg-3  col-md-6">
+                        <div class="footer-action d-flex flex-column justify-content-center align-items-center">
+                            <i class="fa-solid fa-cloud-arrow-down"></i>
+                            <span>Truy cập</span>
+                            <p>100</p>
+                        </div>
+                    </div>
+                    <div class="col-lg-3  col-md-6">
+                        <div class="footer-action d-flex flex-column justify-content-center align-items-center">
+                            <i class="fa-solid fa-life-ring"></i>
+                            <span>Đặt phòng</span>
+                            <p>100</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="container-fluid d-flex justify-content-center copyright">
+                <div class="mw-1200 w-100 ">
+                    <span class="">@@2023 Luxstay - Homestay - Copyright Nhom7</span>
+                </div>
+            </div>
+        </footer>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>
