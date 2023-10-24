@@ -1,3 +1,5 @@
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using QuanLyPhongTro.Data;
 
@@ -8,6 +10,22 @@ builder.Services.AddControllersWithViews();
 
 builder.Services.AddDbContext<RoomManagementContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("ConnectionRoomManagement")));
+
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+    .AddCookie(option =>
+    {
+        option.LoginPath = "/Authencation/Login";
+        option.ExpireTimeSpan = TimeSpan.FromMinutes(20);
+        option.AccessDeniedPath = "/Authencation/Denied";
+    });
+
+
+builder.Services.AddIdentityCore<IdentityUser>()
+	//.AddDefaultTokenProviders()
+	.AddRoles<IdentityRole>()
+    .AddSignInManager<SignInManager<IdentityUser>>()
+	.AddEntityFrameworkStores<RoomManagementContext>();
+
 
 var app = builder.Build();
 
@@ -24,10 +42,14 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
+app.UseAuthentication();
+
 app.UseAuthorization();
+
+
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+    pattern: "{controller=Authencation}/{action=Login}/{id?}");
 
 app.Run();

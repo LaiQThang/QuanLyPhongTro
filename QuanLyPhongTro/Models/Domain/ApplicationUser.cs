@@ -8,6 +8,7 @@ namespace QuanLyPhongTro.Models.Domain
         public byte GioiTinh { get; set; }
         public byte TrangThai { get; set; }
         public string Anh { get; set; }
+        public bool KeepLogin { get; set; }
         public ICollection<ChiTietDatPhong> ChiTietDatPhongs { get; set; } = null!;
         public ICollection<BaiDang> BaiDangs { get; set; } = null!;
         public ICollection<PhongTro> PhongTros { get; set; } = null!;
