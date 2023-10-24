@@ -1,13 +1,13 @@
 ﻿using Azure.Core;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.WebUtilities;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
+//using Microsoft.AspNetCore.Mvc;
+//using Microsoft.AspNetCore.WebUtilities;
+//using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using QuanLyPhongTro.Models.Domain;
 using System;
 using System.ComponentModel.DataAnnotations;
-using System.Text.Encodings.Web;
-using System.Text;
+//using System.Text.Encodings.Web;
+//using System.Text;
 //using System.Web.WebPages.Html;
 
 namespace QuanLyPhongTro.Models.ViewModels
@@ -20,13 +20,15 @@ namespace QuanLyPhongTro.Models.ViewModels
         private readonly IUserEmailStore<IdentityUser> _emailStore;
 		private readonly ILogger<InputModel> _logger;
 		private readonly RoleManager<IdentityRole> _roleManager;
+		private readonly IPasswordHasher<IdentityUser> _passwordHasher;
 
 		public InputModel(
 			UserManager<IdentityUser> userManager,
 			IUserStore<IdentityUser> userStore,
 			SignInManager<IdentityUser> signInManager,
 			ILogger<InputModel> logger,
-			RoleManager<IdentityRole> roleManager)
+			RoleManager<IdentityRole> roleManager,
+			IPasswordHasher<IdentityUser> currentUserManager)
 		{
 			_userManager = userManager;
 			_userStore = userStore;
@@ -34,6 +36,7 @@ namespace QuanLyPhongTro.Models.ViewModels
 			_signInManager = signInManager;
 			_logger = logger;
 			_roleManager = roleManager;
+			_passwordHasher = currentUserManager;
 		}
 
 		public RegisterInput Input { get; set; }
@@ -69,7 +72,8 @@ namespace QuanLyPhongTro.Models.ViewModels
 
 		public async Task<bool> OnPost(RegisterInput input)
 		{
-			if(input != null)
+
+			if (input != null)
 			{
 				var user = CreateUser();
 
@@ -80,7 +84,12 @@ namespace QuanLyPhongTro.Models.ViewModels
 				user.HoTen = input.HoTen;
 				user.PhoneNumber = input.PhoneNumber;
 
+				//var psh = HashPassword(input.Password);
+				//System.Diagnostics.Debug.WriteLine(psh, "LogThangPS");
+
 				var result = await _userManager.CreateAsync(user, input.Password);
+
+					System.Diagnostics.Debug.WriteLine(result, "LogThangInput");
 				if (result.Succeeded)
 				{
 					_logger.LogInformation("User created a new account with password.");
@@ -116,6 +125,17 @@ namespace QuanLyPhongTro.Models.ViewModels
 					$"Ensure that '{nameof(ApplicationUser)}' is not an abstract class and has a parameterless constructor, or alternatively " +
 					$"override the register page in /Areas/Identity/Pages/Account/Register.cshtml");
 			}
+		}
+		public string HashPassword(string password)
+		{
+			// Tạo một đối tượng User để băm mật khẩu
+			var user = new IdentityUser();
+
+			// Đặt mật khẩu cho đối tượng User
+			string PasswordHash = _passwordHasher.HashPassword(null, password);
+
+			// Trả về mật khẩu đã được băm
+			return PasswordHash;
 		}
 	}
 }

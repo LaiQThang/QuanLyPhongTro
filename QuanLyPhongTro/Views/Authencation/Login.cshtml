@@ -75,7 +75,8 @@
 									<div class="w-50 text-left">
 										<label class="checkbox-wrap checkbox-primary mb-0">
 											Remember Me
-											<input type="checkbox" checked asp-for="KeepLogin">
+											<input class="form-check-input" asp-for="KeepLogin">
+											@* @Html.DisplayNameFor(m => m.KeepLogin) *@
 											<span class="checkmark"></span>
 										</label>
 									</div>

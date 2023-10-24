@@ -1,6 +1,7 @@
-using Microsoft.AspNetCore.Authentication.Cookies;
+﻿using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using QuanLyPhongTro.Data;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -17,7 +18,9 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
         option.LoginPath = "/Authencation/Login";
         option.ExpireTimeSpan = TimeSpan.FromMinutes(20);
         option.AccessDeniedPath = "/Authencation/Denied";
-    });
+  //      option.Cookie.Name = "Authentication";
+		//option.Cookie.HttpOnly = true;
+	});
 
 
 builder.Services.AddIdentityCore<IdentityUser>()
@@ -26,6 +29,12 @@ builder.Services.AddIdentityCore<IdentityUser>()
     .AddSignInManager<SignInManager<IdentityUser>>()
 	.AddEntityFrameworkStores<RoomManagementContext>();
 
+builder.Services.Configure<IdentityOptions>(options =>
+{
+	options.Password.RequireNonAlphanumeric = false; // Yêu cầu ít nhất một ký tự không thuộc bảng chữ cái hoặc chữ số
+	options.Password.RequireUppercase = false; // Yêu cầu ít nhất một ký tự viết hoa
+	options.Password.RequireLowercase = false; 
+});
 
 var app = builder.Build();
 
@@ -46,10 +55,10 @@ app.UseAuthentication();
 
 app.UseAuthorization();
 
-
+//app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Authencation}/{action=Login}/{id?}");
+    pattern: "{controller=Authencation}/{action=Register}/{id?}");
 
 app.Run();
