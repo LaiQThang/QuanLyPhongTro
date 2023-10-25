@@ -1,7 +1,91 @@
 ﻿@*
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 *@
+@model IEnumerable<QuanLyPhongTro.Models.Domain.ApplicationUser>
 @{
+    string cookieValue = ViewBag.CookieValue;
+    ViewData["AccountUser"] = cookieValue;
+
 }
 
-<div>Đây là trang profile</div>
+@section StyleCss {
+    <link rel="stylesheet" href="~/css/trangcanhan.css" />
+}
+
+<div class="container-fluid d-flex justify-content-center align-items-center">
+    <div class="container mw-1200">
+        <div class="row">
+            @Html.Partial("Sidebar")
+
+            <div class="col-lg-9 col-md-12">
+                @if (ViewData["MessangeSuccess"] != null)
+                {
+                    <div class="alert alert-success" role="alert">
+                        @ViewData["MessangeSuccess"]
+                    </div>
+                }
+                @if (ViewData["MessangeError"] != null)
+                {
+                    <div class="alert alert-danger" role="alert">
+                        @ViewData["MessangeError"]
+                    </div>
+                }
+                <form class="box-info--invidual" method="post" asp-action="Edit" asp-controller="Profile" enctype="multipart/form-data">
+                    <h4>Thông tin cá nhân</h4>
+                    <dl>
+                            <dd class="title-update-img">Cập nhật thông tin của bạn và tìm hiểu thông tin này được dùng ra sao </d>
+                    </dl>
+                    
+                    @foreach(var item in Model)
+                    {
+                        <dl>
+                            <dd style="position: relative;" class="d-flex justify-content-center align-items-center w-100">
+                                @if(item.Anh != null)
+                                {
+                                    <img style="width:70px; height:70px;" src="~/imgUp/@item.Anh" alt="" id="choseimg">
+                                }
+                                else
+                                {
+                                    <img style="width:70px; height:70px;" src="~/img/avt.jpg" alt="" id="choseimg">
+
+                                }
+                                <label for="anhdaidien" style="position: absolute; left: 46%; bottom: 35%; width: 8%; height: 100%; background-color: transparent; text-align: center; align-items: center; opacity: 1.5; display: inline-grid; justify-content: center;"><i class="fa-solid fa-camera"></i></label>
+                                <input type="file"  name="Anh" id="anhdaidien" style="display: none;">
+                            </dd>
+                        </dl>
+                        
+                        <dl>
+                            <dt>Tên</dt>
+                            <input class="info-definition" name="HoTen" value="@Html.DisplayFor(modelIten => item.HoTen)">
+                        </dl>
+                        <dl>
+                            <dt>Email</dt>
+                            <input class="info-definition" name="Email" value="@Html.DisplayFor(modelIten => item.Email)">
+                        </dl>
+                        <dl>
+                            <dt>Số điện thoại</dt>
+                            <input class="info-definition" name="PhoneNumber" value="@Html.DisplayFor(modelIten => item.PhoneNumber)">
+                        </dl>
+                        <dl>
+                            <dt>Giới tính</dt>
+                            @if (item.GioiTinh == 0)
+                            {
+                                <input class="info-definition" name="GioiTinh" value="Nam"} >
+                            }
+                            else
+                            {
+                                <input class="info-definition" name="GioiTinh" value="Nữ" }>
+
+                            }
+                          @*   <select name="GioiTinh">
+                                <option value="0">Nam</option>
+                                <option value="1">nữ</option>
+                            </select> *@
+                        </dl>
+                    }
+                    <input type="submit" value="Lưu thông tin" class="btn btn-primary mt-3" style="float: right;">
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

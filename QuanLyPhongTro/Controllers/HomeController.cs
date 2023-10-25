@@ -4,27 +4,41 @@ using Microsoft.AspNetCore.Mvc;
 using QuanLyPhongTro.Models;
 using System.Diagnostics;
 using Microsoft.AspNetCore.Authorization;
+using QuanLyPhongTro.Data;
+using QuanLyPhongTro.Models.ViewModels;
 
 namespace QuanLyPhongTro.Controllers
 {
-    [Authorize]
+    //[Authorize]
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-
-        public HomeController(ILogger<HomeController> logger)
+        private readonly RoomManagementContext _roomManagementContext;
+        public HomeController(ILogger<HomeController> logger, RoomManagementContext roomManagementContext)
         {
             _logger = logger;
+            _roomManagementContext = roomManagementContext;
         }
 
         public IActionResult Index()
         {
+            string cookieName = "AccountUser";
+
+            if (Request.Cookies.TryGetValue(cookieName, out string cookieValue))
+            {
+                ViewBag.CookieValue = cookieValue;
+                //System.Diagnostics.Debug.WriteLine(result, "LogThang");
+                return View();
+
+            }
             return View();
         }
 		public async Task<IActionResult> Logout()
 		{
 			await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-			return RedirectToAction("Login", "Authencation");
+            Response.Cookies.Delete("AccountUser");
+
+            return RedirectToAction("Login", "Authencation");
 		}
 
 		public IActionResult Privacy()

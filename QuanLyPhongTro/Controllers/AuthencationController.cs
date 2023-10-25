@@ -83,11 +83,14 @@ namespace QuanLyPhongTro.Controllers
 			return View();
         }
 
+
+
         [HttpPost]
 		public async Task<IActionResult> Login(ApplicationUser modelLogin)
 		{
 			var access = new AccessAuthModel(_roomManagementContext, _passwordHasher, _signInManager, _userManager);
 			var check = access.CheckAccount(modelLogin.UserName, modelLogin.PasswordHash, modelLogin.KeepLogin);
+
             if(await check == true)
             {
                 List<Claim> claims  = new List<Claim>()
@@ -106,6 +109,13 @@ namespace QuanLyPhongTro.Controllers
 
                 await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme,
                     new ClaimsPrincipal(identity), properties);
+
+				string cookieName = "AccountUser";
+				CookieOptions cookieOptions = new CookieOptions
+				{
+					Expires = DateTime.Now.AddMinutes(20),
+				};
+				Response.Cookies.Append(cookieName, modelLogin.UserName, cookieOptions);
 
                return RedirectToAction("Index", "Home");
 			}

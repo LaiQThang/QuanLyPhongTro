@@ -1,6 +1,9 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using QuanLyPhongTro.Data;
 using QuanLyPhongTro.Models.Domain;
+using System;
 
 namespace QuanLyPhongTro.Models.ViewModels
 {
@@ -10,8 +13,15 @@ namespace QuanLyPhongTro.Models.ViewModels
         private readonly SignInManager<IdentityUser> _signInManager;
 		private readonly IPasswordHasher<IdentityUser> _passwordHasher;
 		private readonly UserManager<IdentityUser> _userManager;
+        public IList<AuthenticationScheme> ExternalLogins { get; set; }
 
-		public AccessAuthModel(
+        public string ReturnUrl { get; set; }
+
+
+        [TempData]
+        public string ErrorMessage { get; set; }
+
+        public AccessAuthModel(
 			RoomManagementContext roomManagementContext,
 			IPasswordHasher<IdentityUser> password, 
 			SignInManager<IdentityUser> signInManager,
@@ -22,12 +32,19 @@ namespace QuanLyPhongTro.Models.ViewModels
 			_signInManager = signInManager;
 			_userManager = user;
         }
-
+        
         public async Task<bool> CheckAccount(string user,  string password, bool KeepLogin)
         {
 			var res = _roomManagementContext.applicationUsers.FirstOrDefault(p => p.UserName == user);
+            //ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
+            //foreach (var provider in ExternalLogins)
+            //{
+            //    var providerName = provider.Name;
+            //    var providerDisplayName = provider.DisplayName;
 
-			if (res != null)
+            //    System.Diagnostics.Debug.WriteLine(providerName, providerDisplayName, "Logcheck123");
+            //}
+            if (res != null)
 			{
 				//var result = _passwordHasher.VerifyHashedPassword(null, res.PasswordHash, password);
 				////var checkpass = VerifyPassword(res.PasswordHash, password);
@@ -39,7 +56,7 @@ namespace QuanLyPhongTro.Models.ViewModels
 				if (user2 != null)
 				{
 				var result = await _signInManager.CheckPasswordSignInAsync(user2, password, lockoutOnFailure: false);
-				System.Diagnostics.Debug.WriteLine(result, "Logcheck");
+				//System.Diagnostics.Debug.WriteLine(result, "Logcheck");
 					if (result.Succeeded)
 					{
 						return true;
