@@ -1,0 +1,78 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@model QuanLyPhongTro.Models.ViewModels.RoomModel.RoomInput
+@{
+    string cookieValue = ViewBag.CookieValue;
+    ViewData["AccountUser"] = cookieValue;
+}
+@section StyleCss {
+    <link rel="stylesheet" href="~/css/quanlybaidang.css" />
+}
+
+<div class="container-fluid d-flex justify-content-center align-items-center">
+    <div class="container mw-1200">
+        <div class="row">
+
+            @Html.Partial("Sidebar")
+
+            <div class="col-lg-9 col-md-12">
+                <div class="list-destination d-flex flex-column w-100">
+                    <p class="title-search">Phòng trọ có kết quả: 3 </p>
+                    <div class="input-group arrangeBox">
+                        <div class="wrap_arrange d-flex">
+                            <span class="input-group-text">
+                                <span class="fa-solid fa-arrow-right-arrow-left"></span>
+                            </span>
+                            <select class="form-select choose-condition" id="validationCustom04" required>
+                                <option selected disabled value="">Sắp xếp theo ngày đăng mới nhất</option>
+                                <option selected disabled value="">Sắp xếp theo lượt xem cao nhất</option>
+                                <option selected disabled value="">Sắp xếp theo bài đăng có user xem gần nhất</option>
+                            </select>
+                        </div>
+                        <a class="btn btn-add--post" style="padding: 7px 22px;" asp-action="CreateRoom" asp-controller="Room">Thêm bài</a>
+                    </div>
+
+                    @foreach(var item in Model.phongTro)
+                    {
+                        <div class="posts-item d-flex flex-row align-items-center mt-30">
+                            <img src="~/imgUp/@item.Anh" alt="" class="posts-img">
+                            <div class="posts--info">
+                                @foreach( var province in Model.tinhThanhs)
+                                {
+                                    if(province.Id == item.TinhThanhId)
+                                    {
+                                        <p class="posts--province mt-15">@province.TenTinh</p>
+                                    }
+                                }
+                                <h5 class="posts--title"><a href="">@item.DiaChi</a></h5>
+                                <p class="posts--price">Giá: @item.Gia VNĐ</p>
+                                @if(item.TinhTrang == 1)
+                                {
+                                    <p class="posts--price">Tình trạng: Còn phòng</p>
+                                }
+                                else
+                                {
+                                <p class="posts--price">Tình trạng: Hết phòng</p>
+                                }
+                                <p class="posts--address">Diện tích: @item.DienTich </p>
+                            </div>
+                            <div class="btn-wrap mt-30 d-flex flex-column">
+                                <a class="btn btn-primary mb-10" asp-action="EditRoom" asp-route-roomId="@item.Id">Sửa bài</a>
+                                <a class="btn btn-warning">Xóa</a>
+                            </div>
+                        </div>
+                    }
+
+
+                    
+
+                </div>
+
+
+
+
+            </div>
+        </div>
+    </div>
+</div>

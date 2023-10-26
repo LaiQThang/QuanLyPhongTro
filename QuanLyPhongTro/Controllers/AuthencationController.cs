@@ -110,14 +110,16 @@ namespace QuanLyPhongTro.Controllers
                 await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme,
                     new ClaimsPrincipal(identity), properties);
 
-				string cookieName = "AccountUser";
-				CookieOptions cookieOptions = new CookieOptions
+				string cookieUser = "AccountUser";
+				string cookieId = "AccountId";
+                CookieOptions cookieOptions = new CookieOptions
 				{
 					Expires = DateTime.Now.AddMinutes(20),
 				};
-				Response.Cookies.Append(cookieName, modelLogin.UserName, cookieOptions);
+				Response.Cookies.Append(cookieUser, modelLogin.UserName, cookieOptions);
+				Response.Cookies.Append(cookieId, modelLogin.Id, cookieOptions);
 
-               return RedirectToAction("Index", "Home");
+                return RedirectToAction("Index", "Home");
 			}
 			ViewData["ValidateMessage"] = "Login Faild";
 			return View();

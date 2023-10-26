@@ -316,6 +316,10 @@ namespace QuanLyPhongTro.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<string>("Anh")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("ApplicationUserId")
                         .HasColumnType("nvarchar(450)");
 
@@ -326,10 +330,11 @@ namespace QuanLyPhongTro.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<decimal?>("Gia")
-                        .HasColumnType("decimal(6,2)");
+                        .HasColumnType("decimal(10,2)");
 
-                    b.Property<int>("NguoiDungID")
-                        .HasColumnType("int");
+                    b.Property<string>("NguoiDungID")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("SDT")
                         .HasColumnType("nvarchar(max)");

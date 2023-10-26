@@ -1,0 +1,140 @@
+﻿@model QuanLyPhongTro.Models.ViewModels.RoomModel.RoomInput
+@{
+    string cookieValue = ViewBag.CookieValue;
+    ViewData["AccountUser"] = cookieValue;
+
+}
+@section StyleCss {
+    <link rel="stylesheet" href="~/css/quanlybaidang.css" />
+}
+<div class="container-fluid d-flex flex-column justify-content-center mw-1200">
+    <div class="row">
+        @Html.Partial("Sidebar")
+        <div class="col-lg-9 col-md-12">
+            <div class="box-info">
+                <form class="box-content" asp-action="EditRoom" asp-controller="Room" method="post" enctype="multipart/form-data">
+                    <input type="hidden" asp-for="Id" value="@Model.room.Id" name="Id" />
+                    @if (ViewData["MessangeSuccess"] != null)
+                    {
+                        <div class="alert alert-success">@ViewData["MessangeSuccess"]</div>
+                    }
+                    @if (ViewData["MessangeError"] != null)
+                    {
+                        <div class="alert alert-danger">@ViewData["MessangeSuccess"]</div>
+                    }
+                    <h5>Điền đầy đủ thông tin Phòng</h5>
+                    <table class="table mt-30" width="100%">
+                        <tbody>
+                            <tr>
+                                <td colspan="1"><b>Địa chỉ</b></td>
+                                <td colspan="4">
+                                    <div class="form-floating mb-3">
+                                        @if (Model != null && Model.room != null)
+                                        {
+                                        <input type="text" class="form-control" asp-for="DiaChi" value="@Model.room.DiaChi" required autocomplete="DiaChi" id="floatingInput" placeholder="Nhập địa chỉ">
+                                        }
+                                        <span asp-validation-for="DiaChi" class="text-danger"></span>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="1"><b>Giá</b></td>
+                                <td colspan="4">
+                                    <div class="form-floating mb-3">
+                                        <input type="text" class="form-control" id="floatingInput" value="@Model.room.Gia" asp-for="Gia" required autocomplete="Gia" placeholder="Nhập giá">
+                                        <span asp-validation-for="Gia" class="text-danger"></span>
+
+                                    </div>
+                                </td>
+                            </tr>
+
+                            <tr>
+
+                                <td colspan="1"><b>Diện tích</b></td>
+                                <td>
+                                    <div class="form-floating mb-3">
+                                        <input type="text" asp-for="DienTich" value="@Model.room.DienTich" autocomplete="DienTich" required class="form-control" id="floatingInput" placeholder="Diện tích (m^2)">
+                                        <span asp-validation-for="DienTich" class="text-danger"></span>
+                                    </div>
+                                </td>
+
+                            </tr>
+                            <tr>
+
+                                <td colspan="1"><b>Ảnh phòng</b></td>
+                                <td>
+                                    <div class="mb-3">
+                                        <img src="~/imgUp/@Model.room.Anh" style="width: 50px; height:50px;"/>
+                                        <input type="file" asp-for="Anh" autocomplete="Anh"  class="form-control" id="floatingInput" placeholder="Diện tích (m^2)">
+                                    </div>
+                                </td>
+
+                            </tr>
+
+                            <tr>
+                                <td colspan="1"><b>Tình trạng</b></td>
+                                <td>
+                                    <div class="form-floating">
+                                        <select class="form-select" asp-for="TinhTrang" required id="floatingSelect" aria-label="Floating label select example">
+                                            <option selected>Tình trạng</option>
+                                            @if(Model.room.TinhTrang == 1)
+                                            {
+                                                <option selected value="1">Còn phòng</option>
+                                                <option value="2">Hết phòng</option>
+
+                                            }
+                                            else
+                                            {
+                                                <option value="1">Còn phòng</option>
+                                                <option selected value="2">Hết phòng</option>
+                                            }
+                                        </select>
+                                        <span asp-validation-for="TinhTrang" class="text-danger"></span>
+                                    </div>
+                                </td>
+
+
+                            </tr>
+
+                            <tr>
+                                <td colspan="1"><b>Điện thoại</b></td>
+                                <td>
+                                    <div class="form-floating mb-3">
+                                        <input type="number" asp-for="SDT" value="@Model.room.SDT" autocomplete="SDT" required class="form-control" id="floatingInput" placeholder="Số điện thoại">
+                                        <span asp-validation-for="SDT" class="text-danger"></span>
+                                    </div>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td colspan="1"><b>Tỉnh thành</b></td>
+                                <td>
+                                    <div class="form-floating">
+                                        <select class="form-select" asp-for="TinhThanh" id="floatingSelect" aria-label="Floating label select example">
+                                            <option >Tỉnh thành</option>
+                                            @foreach (var item in Model.tinhThanhs)
+                                            {
+                                                <option selected value="@item.Id">@item.TenTinh</option>
+                                            }
+
+                                        </select>
+                                        <span asp-validation-for="TinhThanh" class="text-danger"></span>
+                                    </div>
+                                </td>
+
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div class="btn-wrap mt-30 d-flex justify-content-center">
+                        <button type="submit" class="btn btn-primary mr-20">Lưu bài</button>
+                        <a class="btn btn-warning" asp-action="RoomIndex" asp-controller="Room">Hủy</a>
+                    </div>
+
+                </form>
+            </div>
+
+
+
+        </div>
+    </div>
+</div>
