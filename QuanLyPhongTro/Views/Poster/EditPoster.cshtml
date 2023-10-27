@@ -1,0 +1,129 @@
+﻿@model QuanLyPhongTro.Models.ViewModels.PosterModel.PosterInput
+@{
+    string cookieValue = ViewBag.CookieValue;
+    ViewData["AccountUser"] = cookieValue;
+}
+@section StyleCss {
+    <link rel="stylesheet" href="~/css/dangbai.css" />
+}
+
+<div class="container-fluid d-flex justify-content-center align-items-center">
+    <div class="container mw-1200">
+        <div class="row">
+
+            @Html.Partial("Sidebar")
+
+            <div class="col-lg-9 col-md-12">
+                <div class="container-fluid d-flex flex-column justify-content-center mw-1200">
+                    @if(ViewData["Message"] != null)
+                    {
+                        <div class="alert alert-@ViewData["Action"]">
+                            @ViewData["Message"]
+                        </div>
+                    }
+                    <form class="wrap-content" method="post" asp-action="EditPoster" asp-controller="Poster">
+                        <input name="posterId" value="@Model.baiDang.Id" hidden />
+                        <div class="box-info">
+                            <div class="box-content">
+                                <h5>Điền đầy đủ thông tin dưới đây</h5>
+                                <table class="table mt-30" width="100%">
+                                    <tbody>
+                                        <tr>
+                                            <td colspan="1"><b>Địa chỉ</b></td>
+                                            <td colspan="4">
+                                                <div class="form-floating mb-3">
+                                                    <input type="text" class="form-control" disabled value="@Model.baiDang.PhongTro.DiaChi" id="floatingInput" placeholder="Nhập địa chỉ">
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="1"><b>Giá</b></td>
+                                            <td colspan="4">
+                                                <div class="form-floating mb-3">
+                                                    <input type="text" class="form-control" disabled value="@Model.baiDang.PhongTro.Gia VNĐ" id="floatingInput" placeholder="Nhập giá">
+                                                </div>
+                                            </td>
+                                        </tr>
+
+                                        <tr>
+
+                                            <td colspan="1"><b>Diện tích</b></td>
+                                            <td>
+                                                <div class="form-floating mb-3">
+                                                    <input type="text" class="form-control" id="floatingInput" disabled value="@Model.baiDang.PhongTro.DienTich" placeholder="Diện tích (m^2)">
+                                                </div>
+                                            </td>
+                                            <td colspan="1"><b>Tình trạng</b></td>
+                                            <td>
+                                                <div class="form-floating mb-3">
+                                                    @if (Model.baiDang.PhongTro.TinhTrang == 1)
+                                                    {
+                                                        <input type="text" class="form-control" disabled id="floatingInput" value="Còn phòng" >
+                                                    }
+                                                    else
+                                                    {
+                                                        <input type="text" class="form-control" disabled id="floatingInput" value="Hết phòng">
+                                                    }
+                                                </div>
+                                            </td>
+                                        </tr>
+
+                                        <tr>
+                                            <td colspan="1"><b>Điện thoại</b></td>
+                                            <td>
+                                                <div class="form-floating mb-3">
+                                                    <input type="number" class="form-control" disabled value="@Model.baiDang.PhongTro.SDT" id="floatingInput" placeholder="Số điện thoại">
+                                                </div>
+                                            </td>
+                                        
+                                            <td colspan="1"><b>Ngày cập nhật</b>
+                                            <td>
+                                                <div class="form-floating mb-3">
+                                                    <input type="date" value="@Model.baiDang.NgayTao" disabled class="form-control" id="floatingInput">
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <div class="wrap-content--detail mt-30">
+                            <h5 class="title-detail">THÔNG TIN CHI TIẾT</h5>
+                            <div class="box-content">
+                                <div class="form-floating">
+                                    <textarea class="form-control" id="noidung" asp-for="NoiDung" placeholder="Leave a comment here" id="floatingTextarea2" style="height: 100px">@Model.baiDang.NoiDung</textarea>
+                                    <label for="floatingTextarea2"></label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="wrap-content--detail mt-30">
+                            <h5 class="title-detail">Tiêu đề</h5>
+                            <div class="box-content">
+                                <div class="form-floating">
+                                    <textarea class="form-control" id="tieude" asp-for="TieuDe" placeholder="Leave a comment here" id="floatingTextarea">@Model.baiDang.TieuDe</textarea>
+                                    <label for="floatingTextarea"></label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="btn-wrap mt-30 d-flex justify-content-center">
+                            <button class="btn btn-primary mr-20" type="submit">Lưu bài</button>
+                            <button class="btn btn-warning" type="button" onclick="resetValue()">Reset</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+    <script>
+        function resetValue() {
+            $("#tieude").val("");
+            $("#noidung").val("");
+        }
+    </script>
+}

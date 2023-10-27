@@ -38,12 +38,6 @@ namespace QuanLyPhongTro.Controllers
             if (user != null)
             {
                 ViewBag.CookieValue = user;
-                //var model = new ProfileModel(_roomManagementContext);
-                //var result = model.ProfileGet(cookieValue);
-                //string messagesucc = TempData["MessangeSuccess"] as string;
-                //string messageerr = TempData["MessangeError"] as string;
-                //ViewData["MessangeSuccess"] = messagesucc;
-                //ViewData["MessangeError"] = messageerr;
                 return true;
             }
             return false;

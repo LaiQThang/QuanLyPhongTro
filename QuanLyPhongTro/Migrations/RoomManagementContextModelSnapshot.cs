@@ -240,13 +240,15 @@ namespace QuanLyPhongTro.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ApplicationUserId")
+                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<DateTime?>("NgayTao")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("NguoiDungID")
-                        .HasColumnType("int");
+                    b.Property<string>("NguoiDungId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("NoiDung")
                         .HasColumnType("nvarchar(max)");
@@ -287,8 +289,9 @@ namespace QuanLyPhongTro.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("NguoiDungID")
-                        .HasColumnType("int");
+                    b.Property<string>("NguoiDungID")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("PhongTroId")
                         .HasColumnType("int");
@@ -336,10 +339,9 @@ namespace QuanLyPhongTro.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<decimal?>("Gia")
-                        .HasColumnType("decimal(10,2)");
+                        .HasColumnType("decimal(10)");
 
                     b.Property<string>("NguoiDungID")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("SDT")
@@ -481,7 +483,9 @@ namespace QuanLyPhongTro.Migrations
                 {
                     b.HasOne("QuanLyPhongTro.Models.Domain.ApplicationUser", "ApplicationUser")
                         .WithMany("BaiDangs")
-                        .HasForeignKey("ApplicationUserId");
+                        .HasForeignKey("ApplicationUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("QuanLyPhongTro.Models.Domain.PhongTro", "PhongTro")
                         .WithMany("BaiDangs")

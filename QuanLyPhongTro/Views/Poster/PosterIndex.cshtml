@@ -1,0 +1,83 @@
+﻿@model QuanLyPhongTro.Models.ViewModels.PosterModel.PosterInput
+@{
+    string cookieValue = ViewBag.CookieValue;
+    ViewData["AccountUser"] = cookieValue;
+}
+@section StyleCss {
+    <link rel="stylesheet" href="~/css/quanlybaidang.css" />
+}
+
+<div class="container-fluid d-flex justify-content-center align-items-center">
+    <div class="container mw-1200">
+        <div class="row">
+
+            @Html.Partial("Sidebar")
+
+            <div class="col-lg-9 col-md-12">
+                <div class="list-destination d-flex flex-column w-100">
+                    <p class="title-search">Số bài đã đăng: 3 </p>
+                    <div class="input-group arrangeBox">
+                        <div class="wrap_arrange d-flex">
+                            <span class="input-group-text">
+                                <span class="fa-solid fa-arrow-right-arrow-left"></span>
+                            </span>
+                            <select class="form-select choose-condition" id="validationCustom04" required>
+                                <option selected disabled value="">Sắp xếp theo ngày đăng mới nhất</option>
+                                <option selected disabled value="">Sắp xếp theo lượt xem cao nhất</option>
+                                <option selected disabled value="">Sắp xếp theo bài đăng có user xem gần nhất</option>
+                            </select>
+                        </div>
+                        <a class="btn btn-add--post" style=" padding: 7px 22px;" asp-action="CreatePoster" asp-controller="Poster">Thêm bài</a>
+                    </div>
+                    @if (Model != null && Model.baiDangs != null)
+                    {
+                        @foreach(var item in Model.baiDangs)
+                        {
+                            <div class="posts-item d-flex flex-row align-items-center mt-30" id="@item.Id">
+                                <img src="~/imgUp/@item.PhongTro.Anh" alt="" class="posts-img">
+                                <div class="posts--info">
+                                    <p class="posts--province mt-15">@item.PhongTro.TinhThanh.TenTinh</p>
+                                    <h5 class="posts--title"><a asp-action="EditPoster" asp-controller="Poster" asp-route-posterId="@item.Id">@item.TieuDe</a></h5>
+                                    <p class="posts--price">Giá: @item.PhongTro.Gia VNĐ</p>
+                                    <p class="posts--address">@item.PhongTro.DiaChi</p>
+                                </div>
+                                <div class="btn-wrap mt-30 d-flex flex-column">
+                                    <a class="btn btn-primary mb-10" asp-action="EditPoster" asp-controller="Poster" asp-route-posterId="@item.Id">Sửa bài</a>
+                                    <a class="btn btn-warning" href="javascript:void(0)" onclick="DeletePoster(@item.Id)">Xóa</a>
+                                </div>
+                            </div>
+                        }
+                        
+                    }
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+    <script>
+        function DeletePoster(id) {
+            var check = confirm("Bạn có chắc muốn xoá thông tin bài đăng này?");
+            if (check) {
+                $.ajax({
+                    url: "@Url.Action("DeletePoster", "Poster")",
+                    type: "POST",
+                    data: { posterId: id },
+                    success: function (res) {
+                        console.log(res)
+                        if (res.statusCode == 200) {
+                            alert("Xoá thành công!")
+                            $("#" + id).remove();
+                        }
+                        else {
+                            alert("Có lỗi xảy ra!");
+                        }
+                    },
+
+                })
+            }
+        }
+    </script>
+}

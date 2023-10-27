@@ -45,7 +45,7 @@
                                         <p class="posts--province mt-15">@province.TenTinh</p>
                                     }
                                 }
-                                <h5 class="posts--title"><a href="">@item.DiaChi</a></h5>
+                                <h5 class="posts--title"><a asp-action="EditRoom" asp-route-roomId="@item.Id">@item.DiaChi</a></h5>
                                 <p class="posts--price">Giá: @item.Gia VNĐ</p>
                                 @if(item.TinhTrang == 1)
                                 {

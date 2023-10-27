@@ -6,6 +6,7 @@ using System.Diagnostics;
 using Microsoft.AspNetCore.Authorization;
 using QuanLyPhongTro.Data;
 using QuanLyPhongTro.Models.ViewModels;
+using QuanLyPhongTro.Models.Domain;
 
 namespace QuanLyPhongTro.Controllers
 {
@@ -22,16 +23,11 @@ namespace QuanLyPhongTro.Controllers
 
         public IActionResult Index()
         {
-            string cookieName = "AccountUser";
-
-            if (Request.Cookies.TryGetValue(cookieName, out string cookieValue))
-            {
-                ViewBag.CookieValue = cookieValue;
-                //System.Diagnostics.Debug.WriteLine(result, "LogThang");
-                return View();
-
-            }
-            return View();
+            Authencation();
+            var model = new HomeModel(_roomManagementContext);
+            var list = model.getPosterPageHome();
+            var viewModel = viewModelHome(list);
+            return View(viewModel);
         }
 		public async Task<IActionResult> Logout()
 		{
@@ -44,9 +40,34 @@ namespace QuanLyPhongTro.Controllers
             return RedirectToAction("Login", "Authencation");
 		}
 
-		public IActionResult Privacy()
+        public HomeModel.HomeInput viewModelHome(List<BaiDang> baiDangs)
         {
-            return View();
+            var model = new HomeModel.HomeInput
+            {
+                baiDangs = baiDangs,
+            };
+            return model;
+        }
+
+        public bool Authencation()
+        {
+            var user = GetValueCoookie("AccountUser");
+
+            if (user != null)
+            {
+                ViewBag.CookieValue = user;
+                return true;
+            }
+            return false;
+        }
+        public string GetValueCoookie(string cookieName)
+        {
+
+            if (!string.IsNullOrEmpty(cookieName) && Request != null && Request.Cookies.TryGetValue(cookieName, out string cookieValue))
+            {
+                return cookieValue;
+            }
+            return null;
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

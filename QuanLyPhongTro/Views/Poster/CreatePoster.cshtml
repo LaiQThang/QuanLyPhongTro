@@ -1,0 +1,78 @@
+﻿@model QuanLyPhongTro.Models.ViewModels.PosterModel.PosterInput
+
+@{
+    string cookieValue = ViewBag.CookieValue;
+    ViewData["AccountUser"] = cookieValue;
+}
+@section StyleCss {
+    <link rel="stylesheet" href="~/css/dangbai.css" />
+}
+
+<div class="container-fluid d-flex justify-content-center align-items-center">
+    <div class="container mw-1200">
+        <div class="row">
+
+            @Html.Partial("Sidebar")
+
+            <div class="col-lg-9 col-md-12">
+                @if (ViewData["Message"] != null)
+                {
+                    <div  class="alert alert-danger">
+                        @ViewData["Message"]
+                    </div>
+                }
+                <form class="wrap-content" method="post" asp-action="CreatePoster" asp-controller="Poster">
+                    <div class="box-info">
+                        <div class="box-content">
+                            <h5>Điền đầy đủ thông tin dưới đây</h5>
+                            <table class="table mt-30" width="100%">
+                                <tbody>
+                                    <tr>
+                                        <td colspan="1" style="width: 16%;"><b>Chọn phòng</b></td>
+                                        <td>
+                                            <div class="form-floating">
+                                                <select class="form-select" asp-for="PhongTroId" id="floatingSelect" aria-label="Floating label select example">
+                                                    <option selected>Chọn phòng</option>
+                                                    @foreach(var item in Model.phongTros)
+                                                    {
+                                                        <option value="@item.Id">@item.DiaChi</option>
+                                                    }
+                                                </select>
+                                            </div>
+                                        </td>
+                                        
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="wrap-content--detail mt-30">
+                        <h5 class="title-detail">THÔNG TIN CHI TIẾT</h5>
+                        <div class="box-content">
+                            <div class="form-floating">
+                                <textarea class="form-control" asp-for="NoiDung" placeholder="Leave a comment here" id="floatingTextarea2" style="height: 100px"></textarea>
+                                <label for="floatingTextarea2"></label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="wrap-content--detail mt-30">
+                        <h5 class="title-detail">Tiêu đề</h5>
+                        <div class="box-content">
+                            <div class="form-floating">
+                                <textarea class="form-control" asp-for="TieuDe" placeholder="Leave a comment here" id="floatingTextarea"></textarea>
+                                <label for="floatingTextarea"></label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="btn-wrap mt-30 d-flex justify-content-center">
+                        <button class="btn btn-primary mr-20" type="submit">Lưu bài</button>
+                        <button class="btn btn-warning">Làm mới</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

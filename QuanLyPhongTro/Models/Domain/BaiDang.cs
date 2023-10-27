@@ -14,7 +14,8 @@ namespace QuanLyPhongTro.Models.Domain
         public string? Anh { get; set; }
         public bool flag { get; set; }
         public byte? TrangThai { get; set; }
-        public int NguoiDungID { get; set; }
+        public string NguoiDungId { get; set; }
+        public string ApplicationUserId { get; set; }
         public ApplicationUser ApplicationUser { get; set; } = null!;
         public int PhongTroId { get; set; }
         public PhongTro PhongTro { get; set; } = null!;

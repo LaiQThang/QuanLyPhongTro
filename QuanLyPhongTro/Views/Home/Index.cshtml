@@ -1,4 +1,5 @@
-﻿@{
+﻿@model QuanLyPhongTro.Models.ViewModels.HomeModel.HomeInput
+@{
     ViewData["Title"] = "Home Page";
 }
 @{
@@ -6,7 +7,45 @@
     ViewData["AccountUser"] = cookieValue;
 
 }
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+
+@section StyleCss {
+    <link rel="stylesheet" href="~/css/trangchu.css">
+}
+
+<div class="container-fluid main d-flex justify-content-center align-items-center" style="background: url(https://www.luxstay.me/wp-content/uploads/2018/05/bg-action.jpeg); background-size: cover; background-repeat: no-repeat;">
+    <div class="banner-search d-flex justify-content-center align-items-center">
+        <form action="" class="d-flex flex-column w-100">
+            <input type="text" placeholder="Bạn muốn thuê phòng ở đâu?" class="search-input" />
+            <input type="submit" value="Tìm kiếm" class="search-submit">
+        </form>
+    </div>
+</div>
+<div class="container-fluid d-flex justify-content-center flex-column align-items-center">
+    <div class="row text-center">
+        <span class="main-content">Mới cập nhật</span>
+    </div>
+    <div class="row mw-1200 w-100">
+        @if(Model != null && Model.baiDangs != null)
+        {
+            @foreach(var item in Model.baiDangs)
+            {
+                <div class="col-lg-4  col-md-6">
+                    <a href="#" style="text-decoration: none; color: #000;">
+                        <div class="info-img d-flex flex-column">
+                            <div class="w-100 info-img--css" style="background-image: url('@Url.Content("~/imgUp/" + @item.PhongTro.Anh)');">
+                            </div>
+                            <span>@item.TieuDe</span>
+                            <p style="font-size: 18px;"> @item.PhongTro.TinhThanh.TenTinh <br> @item.NgayTao</p>
+                            <p style="color: #f05637; font-size: 20px; font-weight: 600;">Giá tốt: @item.PhongTro.Gia VND</p>
+                        </div>
+                    </a>
+                </div>
+            }
+        }
+        
+        
+    </div>
+    <div class="row text-center">
+        <span class="main-content"><a href="#">Xem thêm</a></span>
+    </div>
 </div>

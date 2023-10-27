@@ -109,6 +109,7 @@ namespace QuanLyPhongTro.Models.ViewModels
                     TinhThanhId = input.TinhThanh,
                     Anh = Anh,
                     NguoiDungID = cookieId,
+                    ApplicationUserId = cookieId
                 };
                 await _context.phongTros.AddAsync(room);
                 await _context.SaveChangesAsync();
@@ -124,6 +125,11 @@ namespace QuanLyPhongTro.Models.ViewModels
                 return false;
             }
             var room = GetFirstID(id);
+            var model = _context.baiDangs.Where(res => res.PhongTroId == id);
+            foreach(var item in model)
+            {
+                item.flag = true;
+            }
             room.flag = true;
 
             await _context.SaveChangesAsync();
