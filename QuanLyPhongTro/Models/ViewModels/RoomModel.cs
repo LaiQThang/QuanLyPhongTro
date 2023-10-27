@@ -56,9 +56,9 @@ namespace QuanLyPhongTro.Models.ViewModels
             [DisplayName("Anh")]
             public string Anh { get; set; }
         }
-        public List<PhongTro> GetAllRoom()
+        public List<PhongTro> GetAllRoom(string id)
         {
-            return _context.phongTros.ToList();
+            return _context.phongTros.Where(res => res.NguoiDungID == id && res.flag == false).ToList();
         }
 
         public PhongTro GetFirstID(int? id)
@@ -80,7 +80,10 @@ namespace QuanLyPhongTro.Models.ViewModels
             var edit = GetFirstID(id);
             if(edit is PhongTro)
             {
+                if(pathfile != "")
+                {
                 edit.Anh = pathfile;
+                }
                 edit.DiaChi = room.DiaChi;
                 edit.Gia = room.Gia;
                 edit.DienTich = room.DienTich;
@@ -112,6 +115,19 @@ namespace QuanLyPhongTro.Models.ViewModels
                 return true;
             }
             return false;
+        }
+
+        public async Task<bool> DeleteRoom(int id)
+        {
+            if (id == 0)
+            {
+                return false;
+            }
+            var room = GetFirstID(id);
+            room.flag = true;
+
+            await _context.SaveChangesAsync();
+            return true;
         }
     }
 }

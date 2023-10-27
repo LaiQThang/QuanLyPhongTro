@@ -36,7 +36,10 @@ namespace QuanLyPhongTro.Controllers
 		public async Task<IActionResult> Logout()
 		{
 			await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-            Response.Cookies.Delete("AccountUser");
+            foreach (var cookie in Request.Cookies.Keys)
+            {
+                Response.Cookies.Delete(cookie);
+            }
 
             return RedirectToAction("Login", "Authencation");
 		}

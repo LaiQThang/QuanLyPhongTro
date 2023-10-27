@@ -35,7 +35,7 @@
 
                     @foreach(var item in Model.phongTro)
                     {
-                        <div class="posts-item d-flex flex-row align-items-center mt-30">
+                        <div class="posts-item d-flex flex-row align-items-center mt-30" id="@item.Id">
                             <img src="~/imgUp/@item.Anh" alt="" class="posts-img">
                             <div class="posts--info">
                                 @foreach( var province in Model.tinhThanhs)
@@ -59,20 +59,39 @@
                             </div>
                             <div class="btn-wrap mt-30 d-flex flex-column">
                                 <a class="btn btn-primary mb-10" asp-action="EditRoom" asp-route-roomId="@item.Id">Sửa bài</a>
-                                <a class="btn btn-warning">Xóa</a>
+                                <a class="btn btn-warning" href="javascript:void(0)" onclick="DeleteRoom(@item.Id)">Xóa</a>
                             </div>
                         </div>
                     }
-
-
-                    
-
                 </div>
-
-
-
-
             </div>
         </div>
     </div>
 </div>
+
+
+@section Scripts{
+    <script>
+        function DeleteRoom(id){
+            var check = confirm("Bạn có chắc muốn xoá thông tin phòng này?");
+            if (check) {
+                $.ajax({
+                    url: "@Url.Action("DeleteRoom", "Room")",
+                    type: "POST",
+                    data: { roomId : id},
+                    success: function (res) {
+                        console.log(res)
+                        if (res.statusCode == 200) {
+                            alert("Xoá thành công!")
+                            $("#" + id).remove();
+                        }
+                        else {
+                            alert("Có lỗi xảy ra!");
+                        }
+                    },
+                    
+                })
+            }
+        }
+    </script>
+}

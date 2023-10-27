@@ -12,6 +12,7 @@ namespace QuanLyPhongTro.Models.Domain
         public DateTime? NgayTao { get; set; }
         public string? NoiDung { get; set; }
         public string? Anh { get; set; }
+        public bool flag { get; set; }
         public byte? TrangThai { get; set; }
         public int NguoiDungID { get; set; }
         public ApplicationUser ApplicationUser { get; set; } = null!;

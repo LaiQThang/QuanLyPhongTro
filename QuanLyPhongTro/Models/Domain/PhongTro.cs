@@ -17,6 +17,7 @@ namespace QuanLyPhongTro.Models.Domain
         public string? SDT { get; set; }
         public int YeuThich { get; set; }
         public byte TinhTrang { get; set; }
+        public bool flag { get; set; }
         public int TinhThanhId { get; set; }
         public TinhThanh TinhThanh { get; set; } = null!;
         public string NguoiDungID { get; set; }

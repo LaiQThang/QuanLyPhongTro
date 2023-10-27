@@ -260,6 +260,9 @@ namespace QuanLyPhongTro.Migrations
                     b.Property<byte?>("TrangThai")
                         .HasColumnType("tinyint");
 
+                    b.Property<bool>("flag")
+                        .HasColumnType("bit");
+
                     b.HasKey("Id");
 
                     b.HasIndex("ApplicationUserId");
@@ -298,6 +301,9 @@ namespace QuanLyPhongTro.Migrations
 
                     b.Property<DateTime?>("ThoiGianKT")
                         .HasColumnType("datetime2");
+
+                    b.Property<bool>("flag")
+                        .HasColumnType("bit");
 
                     b.HasKey("Id");
 
@@ -347,6 +353,9 @@ namespace QuanLyPhongTro.Migrations
 
                     b.Property<int>("YeuThich")
                         .HasColumnType("int");
+
+                    b.Property<bool>("flag")
+                        .HasColumnType("bit");
 
                     b.HasKey("Id");
 

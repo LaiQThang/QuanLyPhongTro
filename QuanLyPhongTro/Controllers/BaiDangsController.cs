@@ -57,7 +57,7 @@ namespace QuanLyPhongTro.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,TieuDe,NgayTao,NoiDung,Anh,TrangThai,NguoiDungID,PhongTroId")] BaiDang baiDang)
+        public async Task<IActionResult> Create([Bind("Id,TieuDe,NgayTao,NoiDung,Anh,flag,TrangThai,NguoiDungID,PhongTroId")] BaiDang baiDang)
         {
             if (ModelState.IsValid)
             {
@@ -91,7 +91,7 @@ namespace QuanLyPhongTro.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,TieuDe,NgayTao,NoiDung,Anh,TrangThai,NguoiDungID,PhongTroId")] BaiDang baiDang)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,TieuDe,NgayTao,NoiDung,Anh,flag,TrangThai,NguoiDungID,PhongTroId")] BaiDang baiDang)
         {
             if (id != baiDang.Id)
             {

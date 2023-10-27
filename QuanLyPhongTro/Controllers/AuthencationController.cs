@@ -116,9 +116,10 @@ namespace QuanLyPhongTro.Controllers
 				{
 					Expires = DateTime.Now.AddMinutes(20),
 				};
-				Response.Cookies.Append(cookieUser, modelLogin.UserName, cookieOptions);
-				Response.Cookies.Append(cookieId, modelLogin.Id, cookieOptions);
-
+                var user = await _userManager.FindByNameAsync(modelLogin.UserName);
+                Response.Cookies.Append(cookieUser, modelLogin.UserName, cookieOptions);
+				Response.Cookies.Append(cookieId, user.Id, cookieOptions);
+				System.Diagnostics.Debug.WriteLine(user.Id, "ThangLog");
                 return RedirectToAction("Index", "Home");
 			}
 			ViewData["ValidateMessage"] = "Login Faild";

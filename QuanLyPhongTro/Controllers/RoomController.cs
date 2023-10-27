@@ -76,6 +76,7 @@ namespace QuanLyPhongTro.Controllers
             {
                 var model = new RoomModel(_roomManagementContext);
                 var cookieId = GetValueCoookie("AccountId");
+
                 string pathfile = "";
                 if (Anh != null)
                 {
@@ -120,6 +121,7 @@ namespace QuanLyPhongTro.Controllers
         [HttpPost]
         public async Task<IActionResult> EditRoom(int Id,RoomModel.RoomInput roomModel, IFormFile Anh)
         {
+            Authencation();
             var viewModel = ViewModelRoomEdit(Id);
 
             if (roomModel == null || Id == null)
@@ -130,7 +132,8 @@ namespace QuanLyPhongTro.Controllers
             {
                 var model = new RoomModel(_roomManagementContext);
                 string pathfile = "";
-                if (Anh != null)
+                System.Diagnostics.Debug.WriteLine(Anh, "LogThang");
+                if (Anh != null && Anh.Length > 0)
                 {
                     // Tạo đường dẫn lưu file dựa trên thư mục wwwroot/images và tên file gốc
                     string uploadsFolder = Path.Combine(_env.WebRootPath, "imgUp");
@@ -172,12 +175,27 @@ namespace QuanLyPhongTro.Controllers
             return View(viewModel);
         }
 
+        public async Task<JsonResult> DeleteRoom(int roomId)
+        {
+            if(roomId == 0)
+            {
+                return new JsonResult(new { errors = "Có lỗi xảy ra" })
+                {
+                    StatusCode = 500
+                };
+            }
+            var model = new RoomModel(_roomManagementContext);
+            await model.DeleteRoom(roomId);
+            
+            return new JsonResult(Ok());
+        }
 
         public RoomModel.RoomInput ViewModelRoom()
         {
+            var user = GetValueCoookie("AccountId");
             var room = new RoomModel(_roomManagementContext);
             var listProvince = GetAllProvince();
-            var listRoom = room.GetAllRoom();
+            var listRoom = room.GetAllRoom(user);
             var viewModel = new RoomModel.RoomInput
             {
                 tinhThanhs = listProvince,
