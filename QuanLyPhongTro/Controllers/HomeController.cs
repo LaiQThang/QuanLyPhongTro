@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 using QuanLyPhongTro.Data;
 using QuanLyPhongTro.Models.ViewModels;
 using QuanLyPhongTro.Models.Domain;
+using Microsoft.EntityFrameworkCore;
 
 namespace QuanLyPhongTro.Controllers
 {
@@ -39,6 +40,15 @@ namespace QuanLyPhongTro.Controllers
 
             return RedirectToAction("Login", "Authencation");
 		}
+
+        public IActionResult SearchHome(string searchName)
+        {
+            Authencation();
+            var model = new HomeModel(_roomManagementContext);
+            var list = model.SearchHome(searchName);
+            var viewModel = viewModelHome(list);
+            return View(viewModel);
+        }
 
         public HomeModel.HomeInput viewModelHome(List<Models.Domain.BaiDang> baiDangs)
         {

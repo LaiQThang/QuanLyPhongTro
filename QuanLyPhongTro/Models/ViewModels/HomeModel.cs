@@ -52,5 +52,28 @@ namespace QuanLyPhongTro.Models.ViewModels
             var result = posters.Select(poster => poster.BaiDang).ToList();
             return result;
         }
+
+        public List<BaiDang> SearchHome(string searchHome)
+        {
+            var posters = _context.baiDangs
+            .Join(
+                    _context.phongTros,
+                    bd => bd.PhongTroId,
+                    pt => pt.Id,
+                    (bd, pt) => new { BaiDang = bd, PhongTro = pt })
+            .Join(
+                    _context.tinhThanhs,
+                    tfk => tfk.PhongTro.TinhThanhId,
+                    tpk => tpk.Id,
+                    (tfk, tpk) => new { BaiDang = tfk.BaiDang, PhongTro = tfk.PhongTro, TinhThanh = tpk })
+                .Where(res => res.BaiDang.PhongTro.TinhThanh.TenTinh.Contains(searchHome) && res.BaiDang.flag == false)
+                .ToList();
+            if (posters.Count == 0)
+            {
+                return null;
+            }
+            var result = posters.Select(poster => poster.BaiDang).ToList();
+            return result;
+        }
     }
 }

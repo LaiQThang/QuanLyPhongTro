@@ -14,8 +14,8 @@
 
 <div class="container-fluid main d-flex justify-content-center align-items-center" style="background: url(https://www.luxstay.me/wp-content/uploads/2018/05/bg-action.jpeg); background-size: cover; background-repeat: no-repeat;">
     <div class="banner-search d-flex justify-content-center align-items-center">
-        <form action="" class="d-flex flex-column w-100">
-            <input type="text" placeholder="Bạn muốn thuê phòng ở đâu?" class="search-input" />
+        <form asp-action="SearchHome" asp-controller="Home" method="get" class="d-flex flex-column w-100">
+            <input type="text" placeholder="Bạn muốn thuê phòng ở đâu?" name="searchName" class="search-input" />
             <input type="submit" value="Tìm kiếm" class="search-submit">
         </form>
     </div>

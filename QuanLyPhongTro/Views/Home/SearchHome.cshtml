@@ -1,0 +1,61 @@
+﻿@model QuanLyPhongTro.Models.ViewModels.HomeModel.HomeInput
+@{
+    string cookieValue = ViewBag.CookieValue;
+    ViewData["AccountUser"] = cookieValue;
+}
+
+@section StyleCss {
+    <link rel="stylesheet" href="~/css/ketquatimkiem.css" />
+}
+
+<div class="container-fluid d-flex justify-content-center align-items-center app_body">
+    <div class="row w-100 mw-1200">
+
+        <!-- ===== Hộp tìm kiếm ====== -->
+        @Html.Partial("SidebarHome")
+        <!-- ===== List Destination ===== -->
+        <div class="col-lg-9 col-md-12">
+
+            <div class="list-destination d-flex flex-column w-100">
+                <p class="title-search">@ViewData["Content"]</p>
+                <div class="input-group arrangeBox">
+                    <span class="input-group-text">
+                        <span class="fa-solid fa-arrow-right-arrow-left"></span>
+                    </span>
+                    <select class="form-select choose-condition" id="validationCustom04" required>
+                        <option selected disabled value="">Sắp xếp theo ngày đăng mới nhất</option>
+                        <option selected disabled value="">Sắp xếp theo lượt xem cao nhất</option>
+                        <option selected disabled value="">Sắp xếp theo bài đăng có user xem gần nhất</option>
+                    </select>
+
+                </div>
+
+                @if (Model != null && Model.baiDangs != null)
+                    {
+                    @foreach (var item in Model.baiDangs)
+                    {
+                        <div class="destination-item mt-30 d-flex flex-row">
+                            <img src="~/imgUp/@item.PhongTro.Anh" alt="" class="destination-img">
+                            <div class="destination--info">
+                                <a href=""><h3 class="destination--title">@item.TieuDe</h3></a>
+                                <p class="destination--posting-date">Ngày đăng: @item.NgayTao</p>
+                                <p class="destination--price">Giá: @item.PhongTro.Gia VNĐ</p>
+                                <p class="destination--content">
+                                    @item.NoiDung
+                                </p>
+                            </div>
+                            <div class="d-flex flex-column justify-content-between" style="width: 22%; margin-top: 12px;">
+                                <ul style="list-style: none; padding: 0; color: #04AA6D; font-weight: 500;">
+                                    <li><i class="fa-solid fa-check"></i> Miễn phí huỷ</li>
+                                    <li><i class="fa-solid fa-check"></i> Thanh toán tại chỗ nghỉ</li>
+                                </ul>
+                                <a class="btn btn-primary" asp-route-id="@item.Id" asp-action="PosterDetail" asp-controller="Search" style="margin-bottom: 12px;">Xem phòng <i class="fa-solid fa-angle-right" style="font-size: 19px;"></i></a>
+
+                            </div>
+                        </div>
+                    }
+                }
+            </div>
+        </div>
+    </div>
+</div>
