@@ -135,7 +135,7 @@ namespace QuanLyPhongTro.Controllers
             return userID;
         }
 
-        public PosterModel.PosterInput getViewModel(List<BaiDang> baiDangs, BaiDang baiDang)
+        public PosterModel.PosterInput getViewModel(List<Models.Domain.BaiDang> baiDangs, Models.Domain.BaiDang baiDang)
         {
             var userID = getUserID();
             var modelRoom = new RoomModel(_roomManagementContext);

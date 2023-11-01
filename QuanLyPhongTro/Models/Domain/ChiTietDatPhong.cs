@@ -11,11 +11,12 @@ namespace QuanLyPhongTro.Models.Domain
         public DateTime? ThoiGianBD { get; set; }
         public DateTime? ThoiGianKT { get; set; }
         public int? SoNguoi { get; set; }
-        public string GhiChu { get; set; } = null!;
+        public string? GhiChu { get; set; } = null!;
         public bool flag { get; set; }
         public int PhongTroId { get; set; }
         public PhongTro PhongTro { get; set; } = null!;
         public string NguoiDungID { get; set; }
+        public string ApplicationUserId { get; set; }
         public ApplicationUser ApplicationUser { get; set; } = null!;
 
     }

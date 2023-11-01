@@ -30,9 +30,9 @@
             @foreach(var item in Model.baiDangs)
             {
                 <div class="col-lg-4  col-md-6">
-                    <a href="#" style="text-decoration: none; color: #000;">
+                    <a asp-action="PosterDetail" asp-controller="Search" asp-route-id="@item.Id" style="text-decoration: none; color: #000;">
                         <div class="info-img d-flex flex-column">
-                            <div class="w-100 info-img--css" style="background-image: url('@Url.Content("~/imgUp/" + @item.PhongTro.Anh)');">
+                            <div class="w-100 info-img--css" style="background-image: url('@Url.Content("~/imgUp/" + @item.PhongTro.Anh)'); border-radius: 6px;">
                             </div>
                             <span>@item.TieuDe</span>
                             <p style="font-size: 18px;"> @item.PhongTro.TinhThanh.TenTinh <br> @item.NgayTao</p>
@@ -46,6 +46,6 @@
         
     </div>
     <div class="row text-center">
-        <span class="main-content"><a href="#">Xem thêm</a></span>
+        <span class="main-content"><a asp-action="TopPoster" asp-controller="Search">Xem thêm</a></span>
     </div>
 </div>

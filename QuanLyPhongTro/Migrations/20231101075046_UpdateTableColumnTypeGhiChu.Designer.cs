@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using QuanLyPhongTro.Data;
 
@@ -11,9 +12,11 @@ using QuanLyPhongTro.Data;
 namespace QuanLyPhongTro.Migrations
 {
     [DbContext(typeof(RoomManagementContext))]
-    partial class RoomManagementContextModelSnapshot : ModelSnapshot
+    [Migration("20231101075046_UpdateTableColumnTypeGhiChu")]
+    partial class UpdateTableColumnTypeGhiChu
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -271,7 +274,7 @@ namespace QuanLyPhongTro.Migrations
 
                     b.HasIndex("PhongTroId");
 
-                    b.ToTable("baiDangs", (string)null);
+                    b.ToTable("baiDangs");
                 });
 
             modelBuilder.Entity("QuanLyPhongTro.Models.Domain.ChiTietDatPhong", b =>
@@ -314,7 +317,7 @@ namespace QuanLyPhongTro.Migrations
 
                     b.HasIndex("PhongTroId");
 
-                    b.ToTable("chiTietDatPhongs", (string)null);
+                    b.ToTable("chiTietDatPhongs");
                 });
 
             modelBuilder.Entity("QuanLyPhongTro.Models.Domain.PhongTro", b =>
@@ -365,7 +368,7 @@ namespace QuanLyPhongTro.Migrations
 
                     b.HasIndex("TinhThanhId");
 
-                    b.ToTable("phongTros", (string)null);
+                    b.ToTable("phongTros");
                 });
 
             modelBuilder.Entity("QuanLyPhongTro.Models.Domain.TinhThanh", b =>
@@ -386,7 +389,7 @@ namespace QuanLyPhongTro.Migrations
 
                     b.HasIndex("VungMienId");
 
-                    b.ToTable("tinhThanhs", (string)null);
+                    b.ToTable("tinhThanhs");
                 });
 
             modelBuilder.Entity("QuanLyPhongTro.Models.Domain.VungMien", b =>
@@ -402,7 +405,7 @@ namespace QuanLyPhongTro.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("VungMiens", (string)null);
+                    b.ToTable("VungMiens");
                 });
 
             modelBuilder.Entity("QuanLyPhongTro.Models.Domain.ApplicationUser", b =>

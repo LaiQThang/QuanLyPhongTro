@@ -1,4 +1,6 @@
-﻿@{
+﻿@model QuanLyPhongTro.Models.ViewModels.BookedModel
+
+@{
     string cookieValue = ViewBag.CookieValue;
     ViewData["AccountUser"] = cookieValue;
 }
@@ -28,36 +30,25 @@
                         </div>
                     </div>
 
-
-                    <div class="posts-item d-flex flex-row align-items-center mt-30">
-                        <img src="./assets/img/phong.jpg" alt="" class="posts-img">
-                        <div class="posts--info">
-                            <p class="posts--province mt-15">Hồ Chí Minh</p>
-                            <h5 class="posts--title"><a href="">Cho thuê phòng mới thiết kế như homestay</a></h5>
-                            <p class="posts--price">Giá: 1.500.000 VNĐ</p>
-                            <p class="posts--address">Thống Nhất, 15, Gò Vấp, Bình Chánh</p>
-                        </div>
-                        <div class="btn-wrap mt-30 d-flex flex-column">
-                            <button class="btn btn-primary mb-10">Sửa bài</button>
-                            <button class="btn btn-warning">Xóa</button>
-                        </div>
-                    </div>
-
-                    <div class="posts-item d-flex flex-row align-items-center mt-30">
-                        <img src="./assets/img/phong.jpg" alt="" class="posts-img">
-                        <div class="posts--info">
-                            <p class="posts--province mt-15">Hồ Chí Minh</p>
-                            <h5 class="posts--title"><a href="">Cho thuê phòng mới thiết kế như homestay</a></h5>
-                            <p class="posts--price">Giá: 1.500.000 VNĐ</p>
-                            <p class="posts--address">Thống Nhất, 15, Gò Vấp, Bình Chánh</p>
-                        </div>
-                        <div class="btn-wrap mt-30 d-flex flex-column">
-                            <a class="btn btn-primary mb-10" asp-action="BookedRoomInformation" asp-controller="BookedRoom">Thông tin</a>
-                            <button class="btn btn-warning">Xoá</button>
-                        </div>
-                    </div>
-
-
+                    @if( Model != null && Model.chiTietDatPhongs != null)
+                    {
+                        @foreach(var item in Model.chiTietDatPhongs)
+                        {
+                            <div class="posts-item d-flex flex-row align-items-center mt-30" id="@item.Id">
+                                <img src="~/imgUp/@item.PhongTro.Anh" alt="" class="posts-img">
+                                <div class="posts--info">
+                                    <p class="posts--province mt-15">@item.PhongTro.TinhThanh.TenTinh</p>
+                                    <h5 class="posts--title"><a asp-action="BookedDetail" asp-route-roomId="@item.Id">@item.PhongTro.DiaChi</a></h5>
+                                    <p class="posts--price">Giá: @item.PhongTro.Gia VNĐ</p>
+                                    <p class="posts--address">Diện tích: @item.PhongTro.Gia </p>
+                                </div>
+                                <div class="btn-wrap mt-30 d-flex flex-column" style="margin-right:20px;">
+                                    <a class="btn btn-primary mb-10" asp-action="BookedDetail" asp-controller="BookedRoom" asp-route-roomId="@item.Id">Thông tin phòng</a>
+                                    @* <a class="btn btn-warning" href="javascript:void(0)" onclick="DeleteRoom(@item.Id)">Xóa</a> *@
+                                </div>
+                            </div>
+                        }
+                    }
                 </div>
             </div>
         </div>

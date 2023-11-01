@@ -10,11 +10,11 @@ using QuanLyPhongTro.Models.Domain;
 
 namespace QuanLyPhongTro.Controllers
 {
-    public class BaiDangsController : Controller
+    public class BaiDang : Controller
     {
         private readonly RoomManagementContext _context;
 
-        public BaiDangsController(RoomManagementContext context)
+        public BaiDang(RoomManagementContext context)
         {
             _context = context;
         }
@@ -57,7 +57,7 @@ namespace QuanLyPhongTro.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,TieuDe,NgayTao,NoiDung,Anh,flag,TrangThai,NguoiDungID,PhongTroId")] BaiDang baiDang)
+        public async Task<IActionResult> Create([Bind("Id,TieuDe,NgayTao,NoiDung,Anh,flag,TrangThai,NguoiDungID,PhongTroId")] Models.Domain.BaiDang baiDang)
         {
             if (ModelState.IsValid)
             {
@@ -91,7 +91,7 @@ namespace QuanLyPhongTro.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,TieuDe,NgayTao,NoiDung,Anh,flag,TrangThai,NguoiDungID,PhongTroId")] BaiDang baiDang)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,TieuDe,NgayTao,NoiDung,Anh,flag,TrangThai,NguoiDungID,PhongTroId")] Models.Domain.BaiDang baiDang)
         {
             if (id != baiDang.Id)
             {

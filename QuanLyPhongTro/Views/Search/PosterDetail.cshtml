@@ -1,0 +1,122 @@
+﻿@model QuanLyPhongTro.Models.ViewModels.SearchModel
+@{
+    string cookieValue = ViewBag.CookieValue;
+    ViewData["AccountUser"] = cookieValue;
+}
+
+
+@section StyleCss {
+    <link rel="stylesheet" href="~/css/chitietdatphong.css" />
+    <link rel="stylesheet" href="~/css/ketquatimkiem.css" />
+}
+
+
+<div class="container-fluid d-flex justify-content-center align-items-center app_body">
+    <div class="row w-100 mw-1200">
+        @Html.Partial("SidebarHome")
+
+        <div class="col-lg-9 col-md-12">
+            @if (ViewData["MessangeError"] != null)
+            {
+                <div class="alert alert-danger">
+                    @ViewData["MessangeError"]
+                </div>
+            }
+            @if (Model.baiDang != null)
+            {
+            <div class="box-info">
+                <h4 class="title-detail">@Model.baiDang.TieuDe</h4>
+                <div style="background-image: url('@Url.Content("~/imgUp/" + Model.baiDang.PhongTro.Anh)'); width:100%; height: 400px; background-size: contain; background-position:center; background-repeat: no-repeat;" ></div>
+                <div class="box-content mt-30">
+                    <table class="table" width="100%" border="1">
+                        <tbody>
+                            <tr>
+                                <td colspan="1"><b>Địa chỉ</b></td>
+                                <td colspan="4">@Model.baiDang.PhongTro.DiaChi</td>
+                            </tr>
+                            <tr>
+                                <td colspan="1"><b>Giá</b></td>
+                                <td colspan="4">@Model.baiDang.PhongTro.Gia VNĐ/tháng</td>
+                            </tr>
+
+                            <tr>
+
+                                <td colspan="1"><b>Diện tích</b></td>
+                                <td>@Model.baiDang.PhongTro.DienTich</td>
+                                <td colspan="1"><b>Người đăng</b></td>
+                                <td>@Model.baiDang.ApplicationUser.HoTen</td>
+                            </tr>
+
+                            <tr>
+                                <td colspan="1"><b>Tình trạng</b></td>
+                                <td>Còn phòng</td>
+                                <td colspan="1"><b>Điện thoại</b></td>
+                                <td>@Model.baiDang.PhongTro.SDT</td>
+                            </tr>
+
+                            <tr>
+                                <td colspan="1"><b>Tỉnh thành</b></td>
+                                <td>@Model.baiDang.PhongTro.TinhThanh.TenTinh</td>
+                                <td colspan="1"><b>Ngày cập nhật</b>
+                                <td>@Model.baiDang.NgayTao</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="wrap-content--detail mt-30">
+                <h5 class="title-detail">THÔNG TIN CHI TIẾT</h5>
+                <div class="box-content">
+                    <p>Diện tích mỗi phòng: @Model.baiDang.PhongTro.DienTich</p>
+                    <p>
+                        @Model.baiDang.NoiDung
+                    </p>
+                </div>
+            </div>
+
+            <div class="box-info--bottom mt-30 mb-30">
+                <h5 class="title-detail">Liên hệ chính chủ</h5>
+                <dl class="d-flex flex-row">
+                    <dt><i class="fa-solid fa-user mr-20"></i></dt>
+                    <dd>@Model.baiDang.ApplicationUser.HoTen</dd>
+                </dl>
+                <dl class="d-flex flex-row">
+                    <dt><i class="fa-solid fa-phone mr-20"></i></dt>
+                    <dd>@Model.baiDang.PhongTro.SDT</dd>
+                </dl>
+            </div>
+
+            <div class="btn-wrap mt-30 d-flex justify-content-center">
+                 <button type="button" class="btn btn-primary mr-20" data-bs-toggle="modal" data-bs-target="#datphong">Đặt phòng</button>
+                <button type="button" class="btn btn-warning">Hủy</button>
+            </div>
+
+                <div class="modal fade" id="datphong" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <form class="modal-content" method="post" asp-action="OrderRoom" asp-controller="Search">
+                        <div class="modal-header">
+                            <h1 class="modal-title fs-5" id="exampleModalLabel">Điền thông tin đặt phòng</h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <input name="idRoom" value="@Model.baiDang.PhongTro.Id" hidden />
+                            <input name="poster" value="@Model.baiDang.Id" hidden />
+                            <label id="ngayBD" class="form-label">Ngày bắt đầu thuê</label>
+                            <input type="date" name="ngayBD" id="ngayBD" class="form-control" />
+                            <label id="ngayKT" class="form-label">Ngày trả phòng</label>
+                            <input type="date" name="ngayKT" id="ngayKT" class="form-control" />
+                            <label id="ghiChu" name="ghichu" class="form-label">Ghi chú</label>
+                            <textarea type="text" name="ghiChu" id="ghiChu" class="form-control" ></textarea>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Thoát</button>
+                            <button type="submit" class="btn btn-primary">Đặt phòng</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            }
+
+        </div>
+    </div>
+</div>

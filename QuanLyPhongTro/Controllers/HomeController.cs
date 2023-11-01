@@ -40,7 +40,7 @@ namespace QuanLyPhongTro.Controllers
             return RedirectToAction("Login", "Authencation");
 		}
 
-        public HomeModel.HomeInput viewModelHome(List<BaiDang> baiDangs)
+        public HomeModel.HomeInput viewModelHome(List<Models.Domain.BaiDang> baiDangs)
         {
             var model = new HomeModel.HomeInput
             {
