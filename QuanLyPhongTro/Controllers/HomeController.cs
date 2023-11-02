@@ -8,6 +8,10 @@ using QuanLyPhongTro.Data;
 using QuanLyPhongTro.Models.ViewModels;
 using QuanLyPhongTro.Models.Domain;
 using Microsoft.EntityFrameworkCore;
+using Azure.Core;
+using Microsoft.AspNetCore.Http;
+using NuGet.Protocol.Core.Types;
+using System.IO;
 
 namespace QuanLyPhongTro.Controllers
 {
@@ -22,16 +26,23 @@ namespace QuanLyPhongTro.Controllers
             _roomManagementContext = roomManagementContext;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
             Authencation();
-            var model = new HomeModel(_roomManagementContext);
-            var list = model.getPosterPageHome();
+            string ipAddress = HttpContext.Connection.RemoteIpAddress.ToString();
+            var model = new IpAddressModel(_roomManagementContext);
+            var check = await model.getIpAddress(Convert.ToString(ipAddress));
+            if (check == false)
+            {
+                 await model.AddIpAddress2(ipAddress);
+            }
+            var modelHome = new HomeModel(_roomManagementContext);
+            var list = await modelHome.getPosterPageHome();
             var viewModel = viewModelHome(list);
             return View(viewModel);
         }
-		public async Task<IActionResult> Logout()
-		{
+        public async Task<IActionResult> Logout()
+        {
 			await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
             foreach (var cookie in Request.Cookies.Keys)
             {
@@ -62,7 +73,15 @@ namespace QuanLyPhongTro.Controllers
         public bool Authencation()
         {
             var user = GetValueCoookie("AccountUser");
-
+            var model = new FooterModel(_roomManagementContext);
+            var countBooked = model.CountBooked();
+            var countCustomer = model.CountCustomer();
+            var CountPartner = model.CountPartner(); 
+            var CountAccess = model.CountAccess(); 
+            ViewBag.CountBooked = countBooked;
+            ViewBag.CountCustomer = countCustomer;
+            ViewBag.CountPartner = CountPartner;
+            ViewBag.CountAccess = CountAccess;
             if (user != null)
             {
                 ViewBag.CookieValue = user;

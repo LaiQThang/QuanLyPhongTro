@@ -17,5 +17,6 @@ namespace QuanLyPhongTro.Data
         public DbSet<PhongTro> phongTros { get; set; }
         public DbSet<TinhThanh> tinhThanhs { get; set; }
         public DbSet<VungMien> VungMiens { get; set; }
+        public DbSet<IpAddress> ipAddresses { get; set; }
     }
 }

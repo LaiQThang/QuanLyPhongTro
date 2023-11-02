@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using QuanLyPhongTro.Data;
+using QuanLyPhongTro.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,6 +12,7 @@ builder.Services.AddControllersWithViews();
 
 builder.Services.AddDbContext<RoomManagementContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("ConnectionRoomManagement")));
+
 
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(option =>
@@ -21,6 +23,8 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
   //      option.Cookie.Name = "Authentication";
 		//option.Cookie.HttpOnly = true;
 	});
+
+
 
 
 builder.Services.AddIdentityCore<IdentityUser>()
@@ -34,6 +38,12 @@ builder.Services.Configure<IdentityOptions>(options =>
 	options.Password.RequireNonAlphanumeric = false; // Yêu cầu ít nhất một ký tự không thuộc bảng chữ cái hoặc chữ số
 	options.Password.RequireUppercase = false; // Yêu cầu ít nhất một ký tự viết hoa
 	options.Password.RequireLowercase = false; 
+});
+
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("Admin", policy => policy.RequireRole("Admin"));
+    options.AddPolicy("Client", policy => policy.RequireRole("Client"));
 });
 
 var app = builder.Build();
@@ -60,5 +70,7 @@ app.UseAuthorization();
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
+
+//app.UseMiddleware<LogMiddleware>();
 
 app.Run();

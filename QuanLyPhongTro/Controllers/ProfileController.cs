@@ -8,7 +8,7 @@ using System.Net;
 
 namespace QuanLyPhongTro.Controllers
 {
-	[Authorize]
+	[Authorize(Roles = "Client")]
 	public class ProfileController : Controller
 	{
         // GET: ProfileController
@@ -23,7 +23,7 @@ namespace QuanLyPhongTro.Controllers
         public ActionResult Index()
 		{
             string cookieName = "AccountUser";
-
+            Authencation();
             if (Request.Cookies.TryGetValue(cookieName, out string cookieValue))
             {
                 ViewBag.CookieValue = cookieValue;
@@ -101,6 +101,20 @@ namespace QuanLyPhongTro.Controllers
             }
             TempData["MessangeError"] = "Sửa thất bại";
             return RedirectToAction("Index");
+        }
+
+        public bool Authencation()
+        {
+            var model = new FooterModel(_roomManagementContext);
+            var countBooked = model.CountBooked();
+            var countCustomer = model.CountCustomer();
+            var CountPartner = model.CountPartner();
+            var CountAccess = model.CountAccess();
+            ViewBag.CountBooked = countBooked;
+            ViewBag.CountCustomer = countCustomer;
+            ViewBag.CountPartner = CountPartner;
+            ViewBag.CountAccess = CountAccess;
+            return true;
         }
 	}
 }

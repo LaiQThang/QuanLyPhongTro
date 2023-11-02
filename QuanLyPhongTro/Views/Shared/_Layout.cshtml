@@ -174,28 +174,65 @@
                         <div class="footer-action d-flex flex-column justify-content-center align-items-center">
                             <i class="fa-solid fa-handshake"></i>
                             <span>Đối tác</span>
-                            <p>100</p>
+                            @if (ViewData["CountPartner"] != null)
+                            {
+                                <p>
+                                    @ViewData["CountPartner"]
+                                </p>
+                            }
+                            else
+                            {
+                                <p>NAN</p>
+                            }
                         </div>
                     </div>
                     <div class="col-lg-3  col-md-6">
                         <div class="footer-action d-flex flex-column justify-content-center align-items-center">
                             <i class="fa-solid fa-users"></i>
                             <span>Khách hàng</span>
-                            <p>100</p>
+                            @if (ViewData["CountCustomer"] != null)
+                            {
+                                <p>
+                                    @ViewData["CountCustomer"]
+                                </p>
+                            }
+                            else
+                            {
+                                <p>NAN</p>
+                            }
                         </div>
                     </div>
                     <div class="col-lg-3  col-md-6">
                         <div class="footer-action d-flex flex-column justify-content-center align-items-center">
                             <i class="fa-solid fa-cloud-arrow-down"></i>
                             <span>Truy cập</span>
-                            <p>100</p>
+                            @if (ViewData["CountAccess"] != null)
+                            {
+                                <p>
+                                    @ViewData["CountAccess"]
+                                </p>
+                            }
+                            else
+                            {
+                                <p>NAN</p>
+                            }
+                        
                         </div>
                     </div>
                     <div class="col-lg-3  col-md-6">
                         <div class="footer-action d-flex flex-column justify-content-center align-items-center">
                             <i class="fa-solid fa-life-ring"></i>
                             <span>Đặt phòng</span>
-                            <p>100</p>
+                            @if (ViewData["CountBooked"] != null)
+                            {
+                                <p>
+                                    @ViewData["CountBooked"]
+                                </p>
+                            }
+                            else
+                            {
+                                <p>NAN</p>
+                            }
                         </div>
                     </div>
                 </div>

@@ -84,7 +84,15 @@ namespace QuanLyPhongTro.Controllers
         public bool Authencation()
         {
             var user = GetValueCoookie("AccountUser");
-
+            var model = new FooterModel(_context);
+            var countBooked = model.CountBooked();
+            var countCustomer = model.CountCustomer();
+            var CountPartner = model.CountPartner();
+            var CountAccess = model.CountAccess();
+            ViewBag.CountBooked = countBooked;
+            ViewBag.CountCustomer = countCustomer;
+            ViewBag.CountPartner = CountPartner;
+            ViewBag.CountAccess = CountAccess;
             if (user != null)
             {
                 ViewBag.CookieValue = user;

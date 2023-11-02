@@ -21,7 +21,7 @@ namespace QuanLyPhongTro.Models.ViewModels
             public List<BaiDang> baiDangs { get; set; }
         }
 
-        public List<BaiDang> getPosterPageHome()
+        public async Task<List<BaiDang>> getPosterPageHome()
         {
             var model = _context.baiDangs.Where(res => res.flag == false && res != null).ToList();
             var num = 0;

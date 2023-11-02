@@ -2,6 +2,14 @@
 @{
     string cookieValue = ViewBag.CookieValue;
     ViewData["AccountUser"] = cookieValue;
+    int CountBooked = ViewBag.CountBooked;
+    ViewData["CountBooked"] = CountBooked;
+    int CountCustomer = ViewBag.CountCustomer;
+    ViewData["CountCustomer"] = CountCustomer;
+    int CountPartner = ViewBag.CountPartner;
+    ViewData["CountPartner"] = CountPartner;
+    int CountAccess = ViewBag.CountAccess;
+    ViewData["CountAccess"] = CountAccess;
 }
 
 @section StyleCss {
