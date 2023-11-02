@@ -1,0 +1,70 @@
+﻿@model QuanLyPhongTro.Models.ViewModels.Admin.RoomManagerModel
+
+@{
+    Layout = "_LayoutAdmin";
+    ViewData["Tittle"] = "Room list";
+}
+
+<div class="content-header">
+    <div class="container-fluid">
+      <div class="row mb-2">
+        <div class="col-sm-6">
+          <h1 class="m-0 text-dark">ROOM LIST</h1>
+        </div>
+        <div class="col-sm-6">
+          <ol class="breadcrumb float-sm-right">
+          <a href="#" class="btn btn-primary mr-3" style="color: #FFF;"><i class="fa-solid fa-plus"></i></a>
+                    <li class="breadcrumb-item"><a asp-action="Index" asp-controller="DashBoard">Home</a></li>
+            <li class="breadcrumb-item active">Permission</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+    <div class="container-fluid" style="border: 1px solid #ccc;">
+        <div class="row d-flex align-items-center p-2">
+            <i class="fa-solid fa-list m-2"></i>
+            <h4 class="mb-0 ml-2">LIST</h4>
+        </div>
+     @*  @if (session('msg'))
+          <div class="alert alert-success">{{session('msg')}}</div>
+      @endif *@
+      <table class="table table-bordered">
+        <thead class="row" style="display: table-row-group">
+          <tr>
+            <th class="col-1" scope="col">ID</th>
+            <th class="col-2" scope="col">Addres</th>
+            <th class="col-2" scope="col">Price</th>
+            <th class="col-2" scope="col">Acreage</th>
+            <th class="col-2" scope="col">Phone</th>
+            <th class="col-1" scope="col">Status</th>
+            <th class="col-1" scope="col">Image</th>
+            <th class="col-1" scope="col">Hided</th>
+            <th class="col-1" scope="col">Lựa chọn</th>
+          </tr>
+        </thead>
+        <tbody>
+            @if(Model != null && Model.phongTros != null){
+
+              @foreach (var item in Model.phongTros)
+              {
+              <tr>
+                <td>@item.Id</td>
+                <td>@item.DiaChi</td>
+                <td>@item.Gia</td>
+                <td>@item.DienTich</td>
+                <td>@item.SDT</td>
+                <td>@item.TinhTrang</td>
+                <td> <img style="width: 30px; height:30px;" src="~/imgUp/@item.Anh" /></td>
+                <td>@item.flag</td>
+                <td>
+                  <a href="{{route('category.edit',['id' => $category->id_category])}}" class="btn btn-primary mt-2">Edit</a>
+                  <a href="{{route('category.delete', ['id' => $category->id_category])}}"  class="btn btn-danger mt-2 delete_user">Delete</a>
+                </td>
+              </tr>
+              }
+            }
+        </tbody>
+      </table>
+    </div>
+    
+</div>

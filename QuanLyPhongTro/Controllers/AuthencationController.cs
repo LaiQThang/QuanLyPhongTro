@@ -120,9 +120,22 @@ namespace QuanLyPhongTro.Controllers
                 Response.Cookies.Append(cookieUser, modelLogin.UserName, cookieOptions);
 				Response.Cookies.Append(cookieId, user.Id, cookieOptions);
 				System.Diagnostics.Debug.WriteLine(user.Id, "ThangLog");
+
+                var userRoles = await _userManager.GetRolesAsync(user);
+				foreach (var role in userRoles)
+				{
+					if(role == "Client")
+					{
+						return RedirectToAction("Index", "Home");
+					}
+                    if(role == "Admin")
+                    {
+                        return RedirectToAction("Index", "DashBoard");
+                    }
+                }
                 return RedirectToAction("Index", "Home");
-			}
-			ViewData["ValidateMessage"] = "Login Faild";
+            }
+            ViewData["ValidateMessage"] = "Login Faild";
 			return View();
 		}
 	}

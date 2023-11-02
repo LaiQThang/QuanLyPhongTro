@@ -12,6 +12,7 @@ using Azure.Core;
 using Microsoft.AspNetCore.Http;
 using NuGet.Protocol.Core.Types;
 using System.IO;
+using Microsoft.AspNetCore.Identity;
 
 namespace QuanLyPhongTro.Controllers
 {
@@ -20,15 +21,24 @@ namespace QuanLyPhongTro.Controllers
     {
         private readonly ILogger<HomeController> _logger;
         private readonly RoomManagementContext _roomManagementContext;
-        public HomeController(ILogger<HomeController> logger, RoomManagementContext roomManagementContext)
+        private readonly UserManager<IdentityUser> _userManager;
+
+        public HomeController(ILogger<HomeController> logger, RoomManagementContext roomManagementContext, UserManager<IdentityUser> userManager)
         {
             _logger = logger;
             _roomManagementContext = roomManagementContext;
+            _userManager = userManager;
+
+            
         }
 
         public async Task<IActionResult> Index()
         {
-            Authencation();
+            await Authencation();
+            if(await CheckRole() == true)
+            {
+                return RedirectToAction("Index", "DashBoard");
+            }
             string ipAddress = HttpContext.Connection.RemoteIpAddress.ToString();
             var model = new IpAddressModel(_roomManagementContext);
             var check = await model.getIpAddress(Convert.ToString(ipAddress));
@@ -52,9 +62,9 @@ namespace QuanLyPhongTro.Controllers
             return RedirectToAction("Login", "Authencation");
 		}
 
-        public IActionResult SearchHome(string searchName)
+        public async Task<IActionResult> SearchHome(string searchName)
         {
-            Authencation();
+            await Authencation();
             var model = new HomeModel(_roomManagementContext);
             var list = model.SearchHome(searchName);
             var viewModel = viewModelHome(list);
@@ -70,7 +80,23 @@ namespace QuanLyPhongTro.Controllers
             return model;
         }
 
-        public bool Authencation()
+        public async Task<bool> CheckRole()
+        {
+            var user = GetValueCoookie("AccountUser");
+            var userCheck = await _userManager.FindByNameAsync(user);
+            var userRoles = await _userManager.GetRolesAsync(userCheck);
+            foreach (var role in userRoles)
+            {
+                if (role == "Admin")
+                {
+                    System.Diagnostics.Debug.WriteLine(userRoles.ToString(),"ThangLog");
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        public async Task<bool> Authencation()
         {
             var user = GetValueCoookie("AccountUser");
             var model = new FooterModel(_roomManagementContext);
