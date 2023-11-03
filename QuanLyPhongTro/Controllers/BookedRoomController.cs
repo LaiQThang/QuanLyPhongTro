@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using QuanLyPhongTro.Data;
 using QuanLyPhongTro.Models.Domain;
 using QuanLyPhongTro.Models.ViewModels;
@@ -8,14 +9,21 @@ namespace QuanLyPhongTro.Controllers
     public class BookedRoomController : Controller
     {
         private readonly RoomManagementContext _context;
+        private readonly UserManager<IdentityUser> _userManager;
 
-        public BookedRoomController(RoomManagementContext roomManagementContext)
+        public BookedRoomController(RoomManagementContext roomManagementContext, UserManager<IdentityUser> userManager)
         {
             _context = roomManagementContext;
+            _userManager = userManager;
+
         }
-        public IActionResult BookedRoomIndex()
+        public async Task<IActionResult> BookedRoomIndex()
         {
             Authencation();
+            if (await CheckRole() == true)
+            {
+                return RedirectToAction("Index", "DashBoard");
+            }
             var model = new BookedModel(_context);
             var userID = getUserID();
             var list = model.GetAllRoomBooked(userID);
@@ -66,6 +74,21 @@ namespace QuanLyPhongTro.Controllers
             return model;
         }
 
+        public async Task<bool> CheckRole()
+        {
+            var user = GetValueCoookie("AccountUser");
+            var userCheck = await _userManager.FindByNameAsync(user);
+            var userRoles = await _userManager.GetRolesAsync(userCheck);
+            foreach (var role in userRoles)
+            {
+                if (role == "Admin")
+                {
+                    System.Diagnostics.Debug.WriteLine(userRoles.ToString(), "ThangLog");
+                    return true;
+                }
+            }
+            return false;
+        }
 
         public string GetValueCoookie(string cookieName)
         {

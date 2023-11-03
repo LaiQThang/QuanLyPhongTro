@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using QuanLyPhongTro.Data;
 using QuanLyPhongTro.Models.Domain;
@@ -12,15 +13,22 @@ namespace QuanLyPhongTro.Controllers
     {
         private readonly RoomManagementContext _roomManagementContext;
         private readonly IWebHostEnvironment _env;
+        private readonly UserManager<IdentityUser> _userManager;
 
-        public PosterController(RoomManagementContext roomManagementContext, IWebHostEnvironment env)
+
+        public PosterController(RoomManagementContext roomManagementContext, IWebHostEnvironment env, UserManager<IdentityUser> userManager)
         {
             _roomManagementContext = roomManagementContext;
             _env = env;
+            _userManager = userManager;
         }
-        public IActionResult PosterIndex()
+        public async Task<IActionResult> PosterIndex()
         {
             Authencation();
+            if (await CheckRole() == true)
+            {
+                return RedirectToAction("Index", "DashBoard");
+            }
             var model = new PosterModel(_roomManagementContext);
             var userID = getUserID();
 
@@ -108,6 +116,21 @@ namespace QuanLyPhongTro.Controllers
             return viewModel;
         }
 
+        public async Task<bool> CheckRole()
+        {
+            var user = GetValueCoookie("AccountUser");
+            var userCheck = await _userManager.FindByNameAsync(user);
+            var userRoles = await _userManager.GetRolesAsync(userCheck);
+            foreach (var role in userRoles)
+            {
+                if (role == "Admin")
+                {
+                    System.Diagnostics.Debug.WriteLine(userRoles.ToString(), "ThangLog");
+                    return true;
+                }
+            }
+            return false;
+        }
         public string GetValueCoookie(string cookieName)
         {
 

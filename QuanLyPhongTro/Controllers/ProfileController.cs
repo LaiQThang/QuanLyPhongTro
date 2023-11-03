@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using QuanLyPhongTro.Data;
 using QuanLyPhongTro.Models.Domain;
@@ -8,22 +9,29 @@ using System.Net;
 
 namespace QuanLyPhongTro.Controllers
 {
-	[Authorize(Roles = "Client")]
+	[Authorize]
 	public class ProfileController : Controller
 	{
         // GET: ProfileController
         private readonly RoomManagementContext _roomManagementContext;
         private readonly IWebHostEnvironment _env;
+        private readonly UserManager<IdentityUser> _userManager;
+
         //private readonly ILogger _logger;	
-        public ProfileController(RoomManagementContext roomManagementContext, IWebHostEnvironment env)
+        public ProfileController(RoomManagementContext roomManagementContext, IWebHostEnvironment env, UserManager<IdentityUser> userManager )
         {
             _roomManagementContext = roomManagementContext;
             _env = env;
+            _userManager = userManager;
         }
-        public ActionResult Index()
+        public async Task<ActionResult> Index()
 		{
             string cookieName = "AccountUser";
             Authencation();
+            if (await CheckRole() == true)
+            {
+                return RedirectToAction("Index", "DashBoard");
+            }
             if (Request.Cookies.TryGetValue(cookieName, out string cookieValue))
             {
                 ViewBag.CookieValue = cookieValue;
@@ -103,6 +111,31 @@ namespace QuanLyPhongTro.Controllers
             return RedirectToAction("Index");
         }
 
+        public async Task<bool> CheckRole()
+        {
+            var user = GetValueCoookie("AccountUser");
+            var userCheck = await _userManager.FindByNameAsync(user);
+            var userRoles = await _userManager.GetRolesAsync(userCheck);
+            foreach (var role in userRoles)
+            {
+                if (role == "Admin")
+                {
+                    System.Diagnostics.Debug.WriteLine(userRoles.ToString(), "ThangLog");
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        public string GetValueCoookie(string cookieName)
+        {
+
+            if (!string.IsNullOrEmpty(cookieName) && Request != null && Request.Cookies.TryGetValue(cookieName, out string cookieValue))
+            {
+                return cookieValue;
+            }
+            return null;
+        }
         public bool Authencation()
         {
             var model = new FooterModel(_roomManagementContext);

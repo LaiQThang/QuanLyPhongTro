@@ -3,6 +3,9 @@
 @{
     Layout = "_LayoutAdmin";
     ViewData["Tittle"] = "Permission list";
+    string accountUser = ViewBag.CookieValue;
+    ViewData["AccountUser"] = accountUser;
+    ViewData["Tittle"] = "Dash Board";
 }
 
 <div class="content-header">

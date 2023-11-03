@@ -89,6 +89,7 @@ namespace QuanLyPhongTro.Models.ViewModels
                         }
                     }
                     modelRoom.flag = false;
+                    modelRoom.TinhTrang = 1;
                 }
                 model.flag = true;
                 await _roomManagementContext.SaveChangesAsync();

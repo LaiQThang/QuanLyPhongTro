@@ -3,6 +3,8 @@
 @{
     Layout = "_LayoutAdmin";
     ViewData["Tittle"] = "Room list";
+    string accountUser = ViewBag.CookieValue;
+    ViewData["AccountUser"] = accountUser;
 }
 
 <div class="content-header">

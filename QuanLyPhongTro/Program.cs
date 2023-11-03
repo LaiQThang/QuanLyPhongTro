@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
+using QuanLyPhongTro.Controllers.Admin;
 using QuanLyPhongTro.Data;
 using QuanLyPhongTro.Middleware;
 
@@ -45,6 +46,8 @@ builder.Services.AddAuthorization(options =>
     options.AddPolicy("Admin", policy => policy.RequireRole("Admin"));
     options.AddPolicy("Client", policy => policy.RequireRole("Client"));
 });
+
+//builder.Services.AddSingleton<ComponentInterface>();
 
 var app = builder.Build();
 

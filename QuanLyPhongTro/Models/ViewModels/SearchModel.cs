@@ -99,7 +99,7 @@ namespace QuanLyPhongTro.Models.ViewModels
             var roomFirst = _context.phongTros.FirstOrDefault(res => res.Id == room);
             if (roomFirst != null)
             {
-                roomFirst.flag = true;
+                roomFirst.TinhTrang = 2;
             }
             var posterFirst = _context.baiDangs.FirstOrDefault(res => res.Id == poster);
             if(posterFirst != null)

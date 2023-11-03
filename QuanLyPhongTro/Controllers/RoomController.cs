@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -13,13 +14,16 @@ namespace QuanLyPhongTro.Controllers
     {
         private readonly RoomManagementContext _roomManagementContext;
         private readonly IWebHostEnvironment _env;
+        private readonly UserManager<IdentityUser> _userManager;
+
         //private readonly ILogger _logger;	
 
-        
-        public RoomController(RoomManagementContext roomManagementContext, IWebHostEnvironment env)
+
+        public RoomController(RoomManagementContext roomManagementContext, IWebHostEnvironment env, UserManager<IdentityUser> userManager)
         {
             _roomManagementContext = roomManagementContext;
             _env = env;
+            _userManager = userManager;
         }
         public string GetValueCoookie(string cookieName)
         {
@@ -50,9 +54,13 @@ namespace QuanLyPhongTro.Controllers
             }
             return false;
         }
-        public IActionResult RoomIndex()
+        public async Task<IActionResult> RoomIndex()
         {
             Authencation();
+            if (await CheckRole() == true)
+            {
+                return RedirectToAction("Index", "DashBoard");
+            }
             var viewModel = ViewModelRoom();
 
             return View(viewModel);
@@ -206,6 +214,21 @@ namespace QuanLyPhongTro.Controllers
             return viewModel;
         }
 
+        public async Task<bool> CheckRole()
+        {
+            var user = GetValueCoookie("AccountUser");
+            var userCheck = await _userManager.FindByNameAsync(user);
+            var userRoles = await _userManager.GetRolesAsync(userCheck);
+            foreach (var role in userRoles)
+            {
+                if (role == "Admin")
+                {
+                    System.Diagnostics.Debug.WriteLine(userRoles.ToString(), "ThangLog");
+                    return true;
+                }
+            }
+            return false;
+        }
         public List<TinhThanh> GetAllProvince()
         {
             var province = new ProvinceModel(_roomManagementContext);

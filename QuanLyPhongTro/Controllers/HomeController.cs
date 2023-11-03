@@ -83,17 +83,25 @@ namespace QuanLyPhongTro.Controllers
         public async Task<bool> CheckRole()
         {
             var user = GetValueCoookie("AccountUser");
-            var userCheck = await _userManager.FindByNameAsync(user);
-            var userRoles = await _userManager.GetRolesAsync(userCheck);
-            foreach (var role in userRoles)
+            var userName = "";
+            if (user != null)
             {
-                if (role == "Admin")
+                userName = user;
+            }
+            var userCheck = await _userManager.FindByNameAsync(userName);
+            if (userCheck != null)
+            {
+                var userRoles = await _userManager.GetRolesAsync(userCheck);
+                foreach (var role in userRoles)
                 {
-                    System.Diagnostics.Debug.WriteLine(userRoles.ToString(),"ThangLog");
-                    return true;
+                    if (role == "Admin")
+                    {
+                        System.Diagnostics.Debug.WriteLine(userRoles.ToString(),"ThangLog");
+                        return true;
+                    }
                 }
             }
-            return false;
+                return false;
         }
 
         public async Task<bool> Authencation()

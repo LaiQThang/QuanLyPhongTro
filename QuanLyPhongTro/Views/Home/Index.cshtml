@@ -33,11 +33,7 @@
         <span class="main-content">Mới cập nhật</span>
     </div>
     <div class="row mw-1200 w-100">
-        aaaa
-        @if (User.IsInRole("Client"))
-        {
-            <p>Quyền admin</p>
-        }
+        
         @if(Model != null && Model.baiDangs != null)
         {
             @foreach(var item in Model.baiDangs)
