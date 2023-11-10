@@ -2,7 +2,9 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
+using QuanLyPhongTro.ActionFilter;
 using QuanLyPhongTro.Controllers.Admin;
+using QuanLyPhongTro.Controllers.Components;
 using QuanLyPhongTro.Data;
 using QuanLyPhongTro.Middleware;
 
@@ -25,9 +27,6 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
 		//option.Cookie.HttpOnly = true;
 	});
 
-
-
-
 builder.Services.AddIdentityCore<IdentityUser>()
 	//.AddDefaultTokenProviders()
 	.AddRoles<IdentityRole>()
@@ -48,6 +47,9 @@ builder.Services.AddAuthorization(options =>
 });
 
 //builder.Services.AddSingleton<ComponentInterface>();
+
+builder.Services.AddScoped<ComponentsFilterController>();
+builder.Services.AddScoped<FilterRole>();
 
 var app = builder.Build();
 

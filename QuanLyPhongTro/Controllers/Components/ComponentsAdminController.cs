@@ -24,6 +24,8 @@ namespace QuanLyPhongTro.Controllers.Components
         protected void Authencation()
         {
             var user = GetValueFromCookie("AccountUser");
+            //System.Diagnostics.Debug.WriteLine(user, "thang");
+
             var model = new DashBoardModel(_context);
             var result = model.GetUserKey(user);
             ViewBag.CookieValue = result.HoTen;

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using QuanLyPhongTro.Data;
 using QuanLyPhongTro.Models.StoredProcedure;
 using QuanLyPhongTro.Models.ViewModels;
@@ -8,6 +9,7 @@ namespace QuanLyPhongTro.Controllers.Components
     public class ComponentsController : Controller
     {
         private readonly RoomManagementContext _roomManagementContext;
+
         public ComponentsController(RoomManagementContext roomManagementContext)
         {
             _roomManagementContext = roomManagementContext;
@@ -43,5 +45,7 @@ namespace QuanLyPhongTro.Controllers.Components
             var userID = GetValueFromCookie("AccountId");
             return userID;
         }
+        
+
     }
 }

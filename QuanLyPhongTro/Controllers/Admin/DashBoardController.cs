@@ -8,10 +8,13 @@ using QuanLyPhongTro.Models.ViewModels.Admin;
 using QuanLyPhongTro.Data;
 using Microsoft.AspNetCore.Identity;
 using QuanLyPhongTro.Controllers.Components;
+using Microsoft.AspNetCore.Mvc.Filters;
+using QuanLyPhongTro.ActionFilter;
 
 namespace QuanLyPhongTro.Controllers.Admin
 {
     [Authorize]
+    [ServiceFilter(typeof(FilterRole))]
     public class DashBoardController : ComponentsAdminController
     {
         private readonly UserManager<IdentityUser> _userManager;
@@ -26,10 +29,6 @@ namespace QuanLyPhongTro.Controllers.Admin
         public async Task<IActionResult> Index()
         {
             Authencation();
-            if (await CheckRole() == true)
-            {
-                return RedirectToAction("Denied", "Authencation");
-            }
             return View("Index");
         }
 
