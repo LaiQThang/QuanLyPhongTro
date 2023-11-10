@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using QuanLyPhongTro.Controllers.Components;
 using QuanLyPhongTro.Data;
 using QuanLyPhongTro.Models.Domain;
 using QuanLyPhongTro.Models.ViewModels.Admin;
@@ -8,13 +9,13 @@ using QuanLyPhongTro.Models.ViewModels.Admin;
 namespace QuanLyPhongTro.Controllers.Admin
 {
     [Authorize]
-    public class UserManagerController : Controller
+    public class UserManagerController : ComponentsAdminController
     {
         private readonly RoomManagementContext _context;
         private readonly UserManager<IdentityUser> _userManager;
 
 
-        public UserManagerController(RoomManagementContext room, UserManager<IdentityUser> userManager)
+        public UserManagerController(RoomManagementContext room, UserManager<IdentityUser> userManager) : base(room)
         {
             _context = room;
             _userManager = userManager;
@@ -42,7 +43,7 @@ namespace QuanLyPhongTro.Controllers.Admin
         }
         public async Task<bool> CheckRole()
         {
-            var user = GetValueCoookie("AccountUser");
+            var user = GetValueFromCookie("AccountUser");
             var userName = "";
             if (user != null)
             {
@@ -63,26 +64,6 @@ namespace QuanLyPhongTro.Controllers.Admin
             }
             return false;
         }
-        public string GetValueCoookie(string cookieName)
-        {
-
-            if (!string.IsNullOrEmpty(cookieName) && Request != null && Request.Cookies.TryGetValue(cookieName, out string cookieValue))
-            {
-                return cookieValue;
-            }
-            return null;
-        }
-        public bool Authencation()
-        {
-            var user = GetValueCoookie("AccountUser");
-            if (user != null)
-            {
-                var model = new DashBoardModel(_context);
-                var result = model.GetUserKey(user);
-                ViewBag.CookieValue = result.HoTen;
-                return true;
-            }
-            return false;
-        }
+        
     }
 }

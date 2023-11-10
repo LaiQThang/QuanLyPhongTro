@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using QuanLyPhongTro.Models.Domain;
+using QuanLyPhongTro.Models.StoredProcedure;
 
 namespace QuanLyPhongTro.Data
 {
@@ -18,5 +19,8 @@ namespace QuanLyPhongTro.Data
         public DbSet<TinhThanh> tinhThanhs { get; set; }
         public DbSet<VungMien> VungMiens { get; set; }
         public DbSet<IpAddress> ipAddresses { get; set; }
+
+        public DbSet<ApiGetPosters> apiGetPosters { get; set;}
+        public DbSet<ApiLiveSearch> apiLiveSearches { get; set; }
     }
 }

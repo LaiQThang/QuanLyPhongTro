@@ -1,14 +1,15 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using QuanLyPhongTro.Controllers.Components;
 using QuanLyPhongTro.Data;
 using QuanLyPhongTro.Models.ViewModels;
 
 namespace QuanLyPhongTro.Controllers
 {
-    public class SideBarSearchController : Controller
+    public class SideBarSearchController : ComponentsController
     {
         private readonly ILogger<HomeController> _logger;
         private readonly RoomManagementContext _roomManagementContext;
-        public SideBarSearchController(ILogger<HomeController> logger, RoomManagementContext roomManagementContext)
+        public SideBarSearchController(ILogger<HomeController> logger, RoomManagementContext roomManagementContext) : base(roomManagementContext)
         {
             _logger = logger;
             _roomManagementContext = roomManagementContext;
@@ -32,34 +33,7 @@ namespace QuanLyPhongTro.Controllers
             return model;
             
         }
-        public bool Authencation()
-        {
-            var user = GetValueCoookie("AccountUser");
-            var model = new FooterModel(_roomManagementContext);
-            var countBooked = model.CountBooked();
-            var countCustomer = model.CountCustomer();
-            var CountPartner = model.CountPartner();
-            var CountAccess = model.CountAccess();
-            ViewBag.CountBooked = countBooked;
-            ViewBag.CountCustomer = countCustomer;
-            ViewBag.CountPartner = CountPartner;
-            ViewBag.CountAccess = CountAccess;
-            if (user != null)
-            {
-                ViewBag.CookieValue = user;
-                return true;
-            }
-            return false;
-        }
-        public string GetValueCoookie(string cookieName)
-        {
-
-            if (!string.IsNullOrEmpty(cookieName) && Request != null && Request.Cookies.TryGetValue(cookieName, out string cookieValue))
-            {
-                return cookieValue;
-            }
-            return null;
-        }
+       
 
     }
 }

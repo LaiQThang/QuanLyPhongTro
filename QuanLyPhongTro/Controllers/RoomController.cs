@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using QuanLyPhongTro.Controllers.Components;
 using QuanLyPhongTro.Data;
 using QuanLyPhongTro.Models.Domain;
 using QuanLyPhongTro.Models.ViewModels;
@@ -10,7 +11,7 @@ using QuanLyPhongTro.Models.ViewModels;
 namespace QuanLyPhongTro.Controllers
 {
     [Authorize]
-    public class RoomController : Controller
+    public class RoomController : ComponentsController
     {
         private readonly RoomManagementContext _roomManagementContext;
         private readonly IWebHostEnvironment _env;
@@ -19,41 +20,15 @@ namespace QuanLyPhongTro.Controllers
         //private readonly ILogger _logger;	
 
 
-        public RoomController(RoomManagementContext roomManagementContext, IWebHostEnvironment env, UserManager<IdentityUser> userManager)
+        public RoomController(RoomManagementContext roomManagementContext, IWebHostEnvironment env, UserManager<IdentityUser> userManager) : base(roomManagementContext)
         {
             _roomManagementContext = roomManagementContext;
             _env = env;
             _userManager = userManager;
         }
-        public string GetValueCoookie(string cookieName)
-        {
+        
 
-            if (!string.IsNullOrEmpty(cookieName) && Request != null && Request.Cookies.TryGetValue(cookieName, out string cookieValue))
-            {
-                return cookieValue;
-            }
-            return null;
-        }
-
-        public bool Authencation()
-        {
-            var user = GetValueCoookie("AccountUser");
-            var model = new FooterModel(_roomManagementContext);
-            var countBooked = model.CountBooked();
-            var countCustomer = model.CountCustomer();
-            var CountPartner = model.CountPartner();
-            var CountAccess = model.CountAccess();
-            ViewBag.CountBooked = countBooked;
-            ViewBag.CountCustomer = countCustomer;
-            ViewBag.CountPartner = CountPartner;
-            ViewBag.CountAccess = CountAccess;
-            if (user != null)
-            {
-                ViewBag.CookieValue = user;
-                return true;
-            }
-            return false;
-        }
+        
         public async Task<IActionResult> RoomIndex()
         {
             Authencation();
@@ -85,7 +60,7 @@ namespace QuanLyPhongTro.Controllers
             if (roomModel != null)
             {
                 var model = new RoomModel(_roomManagementContext);
-                var cookieId = GetValueCoookie("AccountId");
+                var cookieId = GetValueFromCookie("AccountId");
 
                 string pathfile = "";
                 if (Anh != null)
@@ -202,7 +177,7 @@ namespace QuanLyPhongTro.Controllers
 
         public RoomModel.RoomInput ViewModelRoom()
         {
-            var user = GetValueCoookie("AccountId");
+            var user = GetValueFromCookie("AccountId");
             var room = new RoomModel(_roomManagementContext);
             var listProvince = GetAllProvince();
             var listRoom = room.GetAllRoom(user);
@@ -216,7 +191,7 @@ namespace QuanLyPhongTro.Controllers
 
         public async Task<bool> CheckRole()
         {
-            var user = GetValueCoookie("AccountUser");
+            var user = GetValueFromCookie("AccountUser");
             var userCheck = await _userManager.FindByNameAsync(user);
             var userRoles = await _userManager.GetRolesAsync(userCheck);
             foreach (var role in userRoles)

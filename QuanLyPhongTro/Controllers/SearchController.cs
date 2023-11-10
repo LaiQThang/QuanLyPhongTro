@@ -1,14 +1,18 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using QuanLyPhongTro.Data;
 using QuanLyPhongTro.Models.Domain;
 using QuanLyPhongTro.Models.ViewModels;
+using System.Text.Json.Serialization;
+using System.Text.Json;
+using QuanLyPhongTro.Controllers.Components;
 
 namespace QuanLyPhongTro.Controllers
 {
-    public class SearchController : Controller
+    public class SearchController : ComponentsController
     {
         private readonly RoomManagementContext _context;
-        public SearchController(RoomManagementContext roomManagementContext)
+        public SearchController(RoomManagementContext roomManagementContext) : base(roomManagementContext)
         {
             _context = roomManagementContext;
         }
@@ -18,8 +22,26 @@ namespace QuanLyPhongTro.Controllers
             var model = new SearchModel(_context);
             var list = model.getPosterSeeMore();
             var viewModel = viewModelSearch(list, null);
-            ViewData["Content"] = "Bài đăng mới nhất";
+            ViewData["Content"] = "Bài đăng";
             return View(viewModel);
+        }
+
+        [Route("api/getposters")]
+        public async Task<JsonResult> GetPoster()
+        {
+            var model = new SearchModel(_context);
+            var list = model.getPoster();
+            if (list == null)
+            {
+                return Json(null);
+            }
+
+            //var options = new JsonSerializerOptions
+            //{
+            //    ReferenceHandler = ReferenceHandler.Preserve
+            //};
+
+            return Json(await list);
         }
 
         public IActionResult PosterDetail(int id) 
@@ -51,39 +73,6 @@ namespace QuanLyPhongTro.Controllers
             return RedirectToAction("PosterDetail");
         }
 
-        public string GetValueCoookie(string cookieName)
-        {
-
-            if (!string.IsNullOrEmpty(cookieName) && Request != null && Request.Cookies.TryGetValue(cookieName, out string cookieValue))
-            {
-                return cookieValue;
-            }
-            return null;
-        }
-        public string getUserID()
-        {
-            var userID = GetValueCoookie("AccountId");
-            return userID;
-        }
-        public bool Authencation()
-        {
-            var user = GetValueCoookie("AccountUser");
-            var model = new FooterModel(_context);
-            var countBooked = model.CountBooked();
-            var countCustomer = model.CountCustomer();
-            var CountPartner = model.CountPartner();
-            var CountAccess = model.CountAccess();
-            ViewBag.CountBooked = countBooked;
-            ViewBag.CountCustomer = countCustomer;
-            ViewBag.CountPartner = CountPartner;
-            ViewBag.CountAccess = CountAccess;
-            if (user != null)
-            {
-                ViewBag.CookieValue = user;
-                return true;
-            }
-            return false;
-        }
 
         public SearchModel viewModelSearch(List<Models.Domain.BaiDang> baiDangList, Models.Domain.BaiDang baiDang) 
         {

@@ -13,17 +13,18 @@ using Microsoft.AspNetCore.Http;
 using NuGet.Protocol.Core.Types;
 using System.IO;
 using Microsoft.AspNetCore.Identity;
+using QuanLyPhongTro.Controllers.Components;
 
 namespace QuanLyPhongTro.Controllers
 {
     //[Authorize]
-    public class HomeController : Controller
+    public class HomeController : ComponentsController
     {
         private readonly ILogger<HomeController> _logger;
         private readonly RoomManagementContext _roomManagementContext;
         private readonly UserManager<IdentityUser> _userManager;
 
-        public HomeController(ILogger<HomeController> logger, RoomManagementContext roomManagementContext, UserManager<IdentityUser> userManager)
+        public HomeController(ILogger<HomeController> logger, RoomManagementContext roomManagementContext, UserManager<IdentityUser> userManager) : base(roomManagementContext)
         {
             _logger = logger;
             _roomManagementContext = roomManagementContext;
@@ -34,7 +35,7 @@ namespace QuanLyPhongTro.Controllers
 
         public async Task<IActionResult> Index()
         {
-            await Authencation();
+            Authencation();
             if(await CheckRole() == true)
             {
                 return RedirectToAction("Index", "DashBoard");
@@ -64,11 +65,29 @@ namespace QuanLyPhongTro.Controllers
 
         public async Task<IActionResult> SearchHome(string searchName)
         {
-            await Authencation();
+            Authencation();
             var model = new HomeModel(_roomManagementContext);
             var list = model.SearchHome(searchName);
             var viewModel = viewModelHome(list);
             return View(viewModel);
+        }
+
+        [Route("api/livesearch/{searchName?}")]
+        public async Task<IActionResult> LiveSearch(string searchName)
+        {
+            try
+            {
+                var model = new HomeModel(_roomManagementContext);
+                var list = await model.LiveSearch(searchName);
+
+                return Json(list);
+            }
+            catch (Exception ex)
+            {
+                // Ghi log hoặc trả về lỗi cụ thể
+                System.Diagnostics.Debug.WriteLine("Lỗi: " + ex.Message);
+                return StatusCode(500, "Đã xảy ra lỗi trong quá trình tìm kiếm.");
+            }
         }
 
         public HomeModel.HomeInput viewModelHome(List<Models.Domain.BaiDang> baiDangs)
@@ -82,7 +101,7 @@ namespace QuanLyPhongTro.Controllers
 
         public async Task<bool> CheckRole()
         {
-            var user = GetValueCoookie("AccountUser");
+            var user = GetValueFromCookie("AccountUser");
             var userName = "";
             if (user != null)
             {
@@ -104,34 +123,8 @@ namespace QuanLyPhongTro.Controllers
                 return false;
         }
 
-        public async Task<bool> Authencation()
-        {
-            var user = GetValueCoookie("AccountUser");
-            var model = new FooterModel(_roomManagementContext);
-            var countBooked = model.CountBooked();
-            var countCustomer = model.CountCustomer();
-            var CountPartner = model.CountPartner(); 
-            var CountAccess = model.CountAccess(); 
-            ViewBag.CountBooked = countBooked;
-            ViewBag.CountCustomer = countCustomer;
-            ViewBag.CountPartner = CountPartner;
-            ViewBag.CountAccess = CountAccess;
-            if (user != null)
-            {
-                ViewBag.CookieValue = user;
-                return true;
-            }
-            return false;
-        }
-        public string GetValueCoookie(string cookieName)
-        {
-
-            if (!string.IsNullOrEmpty(cookieName) && Request != null && Request.Cookies.TryGetValue(cookieName, out string cookieValue))
-            {
-                return cookieValue;
-            }
-            return null;
-        }
+        
+        
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()

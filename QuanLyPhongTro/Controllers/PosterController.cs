@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using QuanLyPhongTro.Controllers.Components;
 using QuanLyPhongTro.Data;
 using QuanLyPhongTro.Models.Domain;
 using QuanLyPhongTro.Models.ViewModels;
@@ -9,14 +10,14 @@ using static QuanLyPhongTro.Models.ViewModels.PosterModel;
 namespace QuanLyPhongTro.Controllers
 {
     [Authorize]
-    public class PosterController : Controller
+    public class PosterController : ComponentsController
     {
         private readonly RoomManagementContext _roomManagementContext;
         private readonly IWebHostEnvironment _env;
         private readonly UserManager<IdentityUser> _userManager;
 
 
-        public PosterController(RoomManagementContext roomManagementContext, IWebHostEnvironment env, UserManager<IdentityUser> userManager)
+        public PosterController(RoomManagementContext roomManagementContext, IWebHostEnvironment env, UserManager<IdentityUser> userManager) : base(roomManagementContext)
         {
             _roomManagementContext = roomManagementContext;
             _env = env;
@@ -118,7 +119,7 @@ namespace QuanLyPhongTro.Controllers
 
         public async Task<bool> CheckRole()
         {
-            var user = GetValueCoookie("AccountUser");
+            var user = GetValueFromCookie("AccountUser");
             var userCheck = await _userManager.FindByNameAsync(user);
             var userRoles = await _userManager.GetRolesAsync(userCheck);
             foreach (var role in userRoles)
@@ -131,41 +132,7 @@ namespace QuanLyPhongTro.Controllers
             }
             return false;
         }
-        public string GetValueCoookie(string cookieName)
-        {
-
-            if (!string.IsNullOrEmpty(cookieName) && Request != null && Request.Cookies.TryGetValue(cookieName, out string cookieValue))
-            {
-                return cookieValue;
-            }
-            return null;
-        }
-
-        public bool Authencation()
-        {
-            var user = GetValueCoookie("AccountUser");
-            var model = new FooterModel(_roomManagementContext);
-            var countBooked = model.CountBooked();
-            var countCustomer = model.CountCustomer();
-            var CountPartner = model.CountPartner();
-            var CountAccess = model.CountAccess();
-            ViewBag.CountBooked = countBooked;
-            ViewBag.CountCustomer = countCustomer;
-            ViewBag.CountPartner = CountPartner;
-            ViewBag.CountAccess = CountAccess;
-            if (user != null)
-            {
-                ViewBag.CookieValue = user;
-                return true;
-            }
-            return false;
-        }
-        public string getUserID()
-        {
-            var userID = GetValueCoookie("AccountId");
-            return userID;
-        }
-
+        
         public PosterModel.PosterInput getViewModel(List<Models.Domain.BaiDang> baiDangs, Models.Domain.BaiDang baiDang)
         {
             var userID = getUserID();

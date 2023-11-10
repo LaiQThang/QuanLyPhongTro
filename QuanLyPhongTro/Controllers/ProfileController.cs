@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using QuanLyPhongTro.Controllers.Components;
 using QuanLyPhongTro.Data;
 using QuanLyPhongTro.Models.Domain;
 using QuanLyPhongTro.Models.ViewModels;
@@ -10,7 +11,7 @@ using System.Net;
 namespace QuanLyPhongTro.Controllers
 {
 	[Authorize]
-	public class ProfileController : Controller
+	public class ProfileController : ComponentsController
 	{
         // GET: ProfileController
         private readonly RoomManagementContext _roomManagementContext;
@@ -18,7 +19,7 @@ namespace QuanLyPhongTro.Controllers
         private readonly UserManager<IdentityUser> _userManager;
 
         //private readonly ILogger _logger;	
-        public ProfileController(RoomManagementContext roomManagementContext, IWebHostEnvironment env, UserManager<IdentityUser> userManager )
+        public ProfileController(RoomManagementContext roomManagementContext, IWebHostEnvironment env, UserManager<IdentityUser> userManager ) : base( roomManagementContext )
         {
             _roomManagementContext = roomManagementContext;
             _env = env;
@@ -113,7 +114,7 @@ namespace QuanLyPhongTro.Controllers
 
         public async Task<bool> CheckRole()
         {
-            var user = GetValueCoookie("AccountUser");
+            var user = GetValueFromCookie("AccountUser");
             var userCheck = await _userManager.FindByNameAsync(user);
             var userRoles = await _userManager.GetRolesAsync(userCheck);
             foreach (var role in userRoles)
@@ -127,27 +128,6 @@ namespace QuanLyPhongTro.Controllers
             return false;
         }
 
-        public string GetValueCoookie(string cookieName)
-        {
-
-            if (!string.IsNullOrEmpty(cookieName) && Request != null && Request.Cookies.TryGetValue(cookieName, out string cookieValue))
-            {
-                return cookieValue;
-            }
-            return null;
-        }
-        public bool Authencation()
-        {
-            var model = new FooterModel(_roomManagementContext);
-            var countBooked = model.CountBooked();
-            var countCustomer = model.CountCustomer();
-            var CountPartner = model.CountPartner();
-            var CountAccess = model.CountAccess();
-            ViewBag.CountBooked = countBooked;
-            ViewBag.CountCustomer = countCustomer;
-            ViewBag.CountPartner = CountPartner;
-            ViewBag.CountAccess = CountAccess;
-            return true;
-        }
+        
 	}
 }

@@ -7,16 +7,17 @@ using Microsoft.AspNetCore.Authorization;
 using QuanLyPhongTro.Models.ViewModels.Admin;
 using QuanLyPhongTro.Data;
 using Microsoft.AspNetCore.Identity;
+using QuanLyPhongTro.Controllers.Components;
 
 namespace QuanLyPhongTro.Controllers.Admin
 {
     [Authorize]
-    public class DashBoardController : Controller
+    public class DashBoardController : ComponentsAdminController
     {
         private readonly UserManager<IdentityUser> _userManager;
         private readonly RoomManagementContext _context;
 
-        public DashBoardController(RoomManagementContext room, UserManager<IdentityUser> userManager)
+        public DashBoardController(RoomManagementContext room, UserManager<IdentityUser> userManager) : base(room)
         {
             _context = room;
             _userManager = userManager;
@@ -32,19 +33,9 @@ namespace QuanLyPhongTro.Controllers.Admin
             return View("Index");
         }
 
-        public string GetValueCoookie(string cookieName)
-        {
-
-            if (!string.IsNullOrEmpty(cookieName) && Request != null && Request.Cookies.TryGetValue(cookieName, out string cookieValue))
-            {
-                return cookieValue;
-            }
-            return null;
-        }
-
         public async Task<bool> CheckRole()
         {
-            var user = GetValueCoookie("AccountUser");
+            var user = GetValueFromCookie("AccountUser");
             var userName = "";
             if (user != null)
             {
@@ -66,18 +57,6 @@ namespace QuanLyPhongTro.Controllers.Admin
             return false;
         }
 
-        public bool Authencation()
-        {
-            var user = GetValueCoookie("AccountUser");
-            if (user != null)
-            {
-                var model = new DashBoardModel(_context);
-                var result = model.GetUserKey(user);
-                ViewBag.CookieValue = result.HoTen;
-                return true;
-            }
-            return false;
-        }
 
     }
 }

@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using QuanLyPhongTro.Data;
 using QuanLyPhongTro.Models.Domain;
+using QuanLyPhongTro.Models.StoredProcedure;
 
 namespace QuanLyPhongTro.Models.ViewModels
 {
@@ -49,6 +50,14 @@ namespace QuanLyPhongTro.Models.ViewModels
             }
             var result = posters.Select(poster => poster.BaiDang).ToList();
             return result;
+        }
+
+        public async Task<List<ApiGetPosters>> getPoster()
+        {
+
+            var posters = _context.apiGetPosters.FromSqlRaw("GET_POSTERS");
+
+            return await posters.ToListAsync();
         }
 
         public BaiDang GetPosterID( int id)

@@ -166,7 +166,16 @@
     background-repeat: no-repeat;
 }
 
-
+.destination--content {
+    text-align: justify;
+    line-height: 1.5rem;
+    overflow: hidden;
+    display: block;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    margin-right: 20px;
+}
 
 
 @media(max-width: 415px){

@@ -17,7 +17,7 @@
 }
 
 <div class="container-fluid d-flex justify-content-center align-items-center app_body">
-    <div class="row mw-1200">
+    <div class="row w-100 mw-1200">
 
         <!-- ===== Hộp tìm kiếm ====== -->
 
@@ -31,14 +31,15 @@
                     <span class="input-group-text">
                         <span class="fa-solid fa-arrow-right-arrow-left"></span>
                     </span>
-                    <select class="form-select choose-condition" id="validationCustom04" required>
-                        <option selected disabled value="">Sắp xếp theo ngày đăng mới nhất</option>
-                        <option selected disabled value="">Sắp xếp theo lượt xem cao nhất</option>
-                        <option selected disabled value="">Sắp xếp theo bài đăng có user xem gần nhất</option>
+                    <select class="form-select choose-condition" id="validationCustom04" onchange="SortData(this)" required>
+                        <option selected  value="0">Sắp xếp bài đăng</option>
+                        <option value="1">Bài đăng mới nhất</option>
+                        <option value="2">Phòng có giá cao nhất</option>
                     </select>
 
                 </div>
-
+                <div id="renderPoster">
+                    @* <span id="messageLoading">Vui lòng chờ...</span> *@
                 @if (Model != null)
                 {
                     @foreach (var item in Model.baiDangs)
@@ -64,7 +65,123 @@
                         </div>
                     }
                 }
+
+                </div>
             </div>
         </div>
     </div>
 </div>
+
+                                  
+
+@section Scripts {
+    <script>
+
+
+        function getData(callback, obj) {
+            const url = "@Url.Action("GetPoster","Search")";
+            // Call Ajax
+            var xhr = new XMLHttpRequest();
+            xhr.open("GET", url, true);
+
+            xhr.onload = function () {
+                if (xhr.status >= 200 && xhr.status < 300) {
+                    var responseObject = JSON.parse(xhr.responseText);
+                    callback(responseObject, obj);
+                } else {
+                    console.error("Request failed with status: " + xhr.status);
+                }
+            };
+
+            xhr.onerror = function () {
+                console.error("Request failed");
+            };
+
+            xhr.send();
+
+
+        }
+
+        function getHtml(arr) {
+            var html = "";
+            arr.map(val => {
+                return html +=
+                `
+                <div class="destination-item mt-30 d-flex flex-row">
+                        <img src="/imgUp/${val.anh}" alt="" class="destination-img">
+                        <div class="destination--info">
+                            <a href=""><h3 class="destination--title">${val.tieuDe}</h3></a>
+                            <p class="destination--posting-date">Ngày đăng: ${val.ngayTao}</p>
+                            <p class="destination--price">Giá:${val.gia} VNĐ</p>
+                            <p class="destination--content">
+                                ${val.noiDung}
+                            </p>
+                        </div>
+                        <div class="d-flex flex-column justify-content-between" style="width: 22%; margin-top: 12px;">
+                            <ul style="list-style: none; padding: 0; color: #04AA6D; font-weight: 500;">
+                                <li><i class="fa-solid fa-check"></i> Miễn phí huỷ</li>
+                                <li><i class="fa-solid fa-check"></i> Thanh toán tại chỗ nghỉ</li>
+                            </ul>
+                            <a class="btn btn-primary" href="/Search/PosterDetail/${val.id}" style="margin-bottom: 12px;">Xem phòng <i class="fa-solid fa-angle-right" style="font-size: 19px;"></i></a>
+
+                        </div>
+                    </div>
+                `
+            })
+            return html;
+        }
+        
+
+        function SortPoster(res, obj) {
+            console.log(res);
+            console.log(obj.value);
+            if (obj.value == 1) {
+                res.sort(function (a, b) {
+                    var dateA = new Date(a.ngayTao);
+                    var dateB = new Date(b.ngayTao);
+                    return dateB - dateA;
+                });
+                // res.map(val => {
+                //     return html +=
+                //     `
+                //     <div class="destination-item mt-30 d-flex flex-row">
+                //             <img src="/imgUp/${val.anh}" alt="" class="destination-img">
+                //             <div class="destination--info">
+                //                 <a href=""><h3 class="destination--title">${val.tieuDe}</h3></a>
+                //                 <p class="destination--posting-date">Ngày đăng: ${val.ngayTao}</p>
+                //                 <p class="destination--price">Giá:${val.gia} VNĐ</p>
+                //                 <p class="destination--content">
+                //                     ${val.noiDung}
+                //                 </p>
+                //             </div>
+                //             <div class="d-flex flex-column justify-content-between" style="width: 22%; margin-top: 12px;">
+                //                 <ul style="list-style: none; padding: 0; color: #04AA6D; font-weight: 500;">
+                //                     <li><i class="fa-solid fa-check"></i> Miễn phí huỷ</li>
+                //                     <li><i class="fa-solid fa-check"></i> Thanh toán tại chỗ nghỉ</li>
+                //                 </ul>
+                //                 <a class="btn btn-primary" asp-route-id="${val.id}" asp-action="PosterDetail" asp-controller="Search" style="margin-bottom: 12px;">Xem phòng <i class="fa-solid fa-angle-right" style="font-size: 19px;"></i></a>
+
+                //             </div>
+                //         </div>
+                //     `
+                // })
+                // console.log(html);
+                var html = getHtml(res);
+                document.getElementById("renderPoster").innerHTML = html;
+                // document.getElementById("messageLoading").style.display = "none";
+            }
+            if (obj.value == 2) {
+                res.sort(function (a, b) {
+                    return b.gia - a.gia;
+                });
+                var html = getHtml(res);
+                document.getElementById("renderPoster").innerHTML = html;
+            }
+        }
+
+
+        function SortData(obj) {
+            getData(SortPoster, obj);
+        }
+    </script>
+}
