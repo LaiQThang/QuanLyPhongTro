@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using QuanLyPhongTro.ActionFilter;
 using QuanLyPhongTro.Controllers.Components;
 using QuanLyPhongTro.Data;
 using QuanLyPhongTro.Models.Domain;
@@ -10,6 +11,8 @@ using static QuanLyPhongTro.Models.ViewModels.PosterModel;
 namespace QuanLyPhongTro.Controllers
 {
     [Authorize]
+    [ServiceFilter(typeof(FilterRoleClient))]
+
     public class PosterController : ComponentsController
     {
         private readonly RoomManagementContext _roomManagementContext;

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using Castle.MicroKernel;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using QuanLyPhongTro.ActionFilter;
@@ -10,7 +11,9 @@ using QuanLyPhongTro.Models.ViewModels.Admin;
 namespace QuanLyPhongTro.Controllers.Admin
 {
     [Authorize]
-    [ServiceFilter(typeof(FilterRole))]
+    //[ServiceFilter(typeof(FilterRole))]
+    //[FilterRole("Admin")]
+    [ServiceFilter(typeof(FilterRole)) ]
 
     public class BookedManagerController : ComponentsAdminController
     {

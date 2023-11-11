@@ -14,10 +14,13 @@ using NuGet.Protocol.Core.Types;
 using System.IO;
 using Microsoft.AspNetCore.Identity;
 using QuanLyPhongTro.Controllers.Components;
+using QuanLyPhongTro.ActionFilter;
 
 namespace QuanLyPhongTro.Controllers
 {
     //[Authorize]
+    [ServiceFilter(typeof(FilterRoleClient))]
+
     public class HomeController : ComponentsController
     {
         private readonly ILogger<HomeController> _logger;

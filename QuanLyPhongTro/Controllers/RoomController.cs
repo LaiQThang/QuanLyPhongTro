@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using QuanLyPhongTro.ActionFilter;
 using QuanLyPhongTro.Controllers.Components;
 using QuanLyPhongTro.Data;
 using QuanLyPhongTro.Models.Domain;
@@ -11,6 +12,8 @@ using QuanLyPhongTro.Models.ViewModels;
 namespace QuanLyPhongTro.Controllers
 {
     [Authorize]
+    [ServiceFilter(typeof(FilterRoleClient))]
+
     public class RoomController : ComponentsController
     {
         private readonly RoomManagementContext _roomManagementContext;

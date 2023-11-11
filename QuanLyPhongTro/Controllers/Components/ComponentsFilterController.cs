@@ -8,44 +8,63 @@ namespace QuanLyPhongTro.Controllers.Components
     {
         private readonly RoomManagementContext _roomManagementContext;
         private readonly UserManager<IdentityUser> _userManager;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public ComponentsFilterController(RoomManagementContext roomManagementContext, UserManager<IdentityUser> userManager)
+        public ComponentsFilterController(RoomManagementContext roomManagementContext, UserManager<IdentityUser> userManager, IHttpContextAccessor httpContextAccessor)
         {
             _roomManagementContext = roomManagementContext;
             _userManager = userManager;
+            _httpContextAccessor = httpContextAccessor;
         }
-        protected string GetValueFromCookie(string cookieName)
+
+        protected async Task<string> GetValueFromCookie(string cookieName)
         {
-            if (!string.IsNullOrEmpty(cookieName) && Request != null && Request.Cookies.TryGetValue(cookieName, out string cookieValue))
+
+            if (_httpContextAccessor.HttpContext?.Request != null)
             {
-                return cookieValue;
+                if (_httpContextAccessor.HttpContext.Request.Cookies.TryGetValue(cookieName, out string cookieValue))
+                {
+                    System.Diagnostics.Debug.WriteLine(cookieValue, "thang3");
+                    return cookieValue;
+                }
             }
+
             return null;
         }
-        protected async Task<bool> CheckRole()
+
+        //Nếu action dùng chung thì là protected còn dùng để gọi lại hàm thì public
+        public async Task<bool> CallFunctionCheckRoleAdmin()
         {
-            var user = GetValueFromCookie("AccountUser");
+            var user = await GetValueFromCookie("AccountUser");
+            var roleName = "Admin";
             if (user == null)
             {
                 return false;
             }
-            System.Diagnostics.Debug.WriteLine(user, "thang");
+            return await IsRole(roleName, user);
+        }
+        public async Task<bool> CallFunctionCheckRoleClient()
+        {
+            var user = await GetValueFromCookie("AccountUser");
+            var roleName = "Client";
+            if (user == null)
+            {
+                return false;
+            }
+            return await IsRole(roleName, user);
+        }
+
+        public async Task<bool> IsRole(string roleName, string user)
+        {
             var userCheck = await _userManager.FindByNameAsync(user);
             var userRoles = await _userManager.GetRolesAsync(userCheck);
-            foreach (var role in userRoles)
+            if (!userRoles.Contains(roleName))
             {
-                if (role == "Admin")
-                {
-                    return true;
-                }
+                return true;
             }
             return false;
         }
 
-        public async Task<bool> CallFunctionFromBaseController()
-        {
-            var check = await CheckRole();
-            return check;
-        }
+
     }
 }

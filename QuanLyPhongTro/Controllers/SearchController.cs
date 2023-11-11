@@ -6,9 +6,12 @@ using QuanLyPhongTro.Models.ViewModels;
 using System.Text.Json.Serialization;
 using System.Text.Json;
 using QuanLyPhongTro.Controllers.Components;
+using QuanLyPhongTro.ActionFilter;
 
 namespace QuanLyPhongTro.Controllers
 {
+    [ServiceFilter(typeof(FilterRoleClient))]
+
     public class SearchController : ComponentsController
     {
         private readonly RoomManagementContext _context;

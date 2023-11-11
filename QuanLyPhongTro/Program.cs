@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using QuanLyPhongTro.ActionFilter;
@@ -50,6 +51,7 @@ builder.Services.AddAuthorization(options =>
 
 builder.Services.AddScoped<ComponentsFilterController>();
 builder.Services.AddScoped<FilterRole>();
+builder.Services.AddScoped<FilterRoleClient>();
 
 var app = builder.Build();
 

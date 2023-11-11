@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using QuanLyPhongTro.ActionFilter;
 using QuanLyPhongTro.Controllers.Components;
 using QuanLyPhongTro.Data;
 using QuanLyPhongTro.Models.Domain;
@@ -7,6 +8,7 @@ using QuanLyPhongTro.Models.ViewModels;
 
 namespace QuanLyPhongTro.Controllers
 {
+    [ServiceFilter(typeof(FilterRoleClient))]
     public class BookedRoomController : ComponentsController
     {
         private readonly RoomManagementContext _context;

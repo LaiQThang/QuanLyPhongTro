@@ -1,10 +1,13 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using QuanLyPhongTro.ActionFilter;
 using QuanLyPhongTro.Models.ViewModels;
 
 namespace QuanLyPhongTro.Controllers
 {
+    [ServiceFilter(typeof(FilterRoleClient))]
+
     public class RoleController : Controller
     {
         private readonly UserManager<IdentityUser> _userManager;

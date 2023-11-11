@@ -1,10 +1,13 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using QuanLyPhongTro.ActionFilter;
 using QuanLyPhongTro.Controllers.Components;
 using QuanLyPhongTro.Data;
 using QuanLyPhongTro.Models.ViewModels;
 
 namespace QuanLyPhongTro.Controllers
 {
+    [ServiceFilter(typeof(FilterRoleClient))]
+
     public class SideBarSearchController : ComponentsController
     {
         private readonly ILogger<HomeController> _logger;

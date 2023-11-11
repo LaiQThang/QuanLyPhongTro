@@ -1,15 +1,13 @@
-﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using QuanLyPhongTro.Controllers.Components;
 
 namespace QuanLyPhongTro.ActionFilter
 {
-    public class FilterRole : IAsyncActionFilter
+    public class FilterRoleClient : IAsyncActionFilter
     {
         private readonly ComponentsFilterController _componentsController;
-
-        public FilterRole(ComponentsFilterController componentsController)
+        public FilterRoleClient(ComponentsFilterController componentsController)
         {
             _componentsController = componentsController;
 
@@ -23,18 +21,16 @@ namespace QuanLyPhongTro.ActionFilter
             //var controllerName = context.Controller.ToString();
             // Gọi hàm từ một controller khác
             //await CallFunctionFromAnotherController();
-            bool check = await _componentsController.CallFunctionCheckRoleAdmin();
-                System.Diagnostics.Debug.WriteLine("thang", check.ToString());
+            bool check = await _componentsController.CallFunctionCheckRoleClient();
             if (check == true)
             {
                 context.Result = new RedirectToActionResult("Denied", "Authencation", null);
                 return;
             }
-            
+
             // Tiếp tục thực hiện hành động
             var resultContext = await next();
 
         }
-
     }
 }
