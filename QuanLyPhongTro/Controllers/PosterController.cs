@@ -5,6 +5,7 @@ using QuanLyPhongTro.ActionFilter;
 using QuanLyPhongTro.Controllers.Components;
 using QuanLyPhongTro.Data;
 using QuanLyPhongTro.Models.Domain;
+using QuanLyPhongTro.Models.Pagination;
 using QuanLyPhongTro.Models.ViewModels;
 using static QuanLyPhongTro.Models.ViewModels.PosterModel;
 
@@ -26,18 +27,28 @@ namespace QuanLyPhongTro.Controllers
             _env = env;
             _userManager = userManager;
         }
-        public async Task<IActionResult> PosterIndex()
+        public async Task<IActionResult> PosterIndex(int pg = 1)
         {
             Authencation();
-            if (await CheckRole() == true)
+
+            const int pageSize = 3;
+            if (pg < 1)
             {
-                return RedirectToAction("Index", "DashBoard");
+                pg = 1;
             }
+
             var model = new PosterModel(_roomManagementContext);
             var userID = getUserID();
 
-            var listPoster = model.getAllPosters(userID);
+            int recsCount = await model.CountPosterUser(userID);
+
+            var pager = new Pager(recsCount, pg, pageSize);
+            int recSkip = (pg - 1) * pageSize;
+
+            var listPoster = model.getAllPosters(userID, recSkip, pageSize);
+
             var viewModel = getViewModel(listPoster,null);
+            this.ViewBag.Pager = pager;
             return View(viewModel);
         }
 
@@ -140,7 +151,7 @@ namespace QuanLyPhongTro.Controllers
         {
             var userID = getUserID();
             var modelRoom = new RoomModel(_roomManagementContext);
-            var listRoom = modelRoom.GetAllRoom(userID);
+            var listRoom = modelRoom.GetAllRoomPoster(userID);
             var viewModel = new PosterModel.PosterInput
             {
                 phongTros = listRoom,

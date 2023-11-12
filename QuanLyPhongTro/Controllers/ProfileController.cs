@@ -32,10 +32,7 @@ namespace QuanLyPhongTro.Controllers
 		{
             string cookieName = "AccountUser";
             Authencation();
-            if (await CheckRole() == true)
-            {
-                return RedirectToAction("Index", "DashBoard");
-            }
+            
             if (Request.Cookies.TryGetValue(cookieName, out string cookieValue))
             {
                 ViewBag.CookieValue = cookieValue;
@@ -113,22 +110,6 @@ namespace QuanLyPhongTro.Controllers
             }
             TempData["MessangeError"] = "Sửa thất bại";
             return RedirectToAction("Index");
-        }
-
-        public async Task<bool> CheckRole()
-        {
-            var user = GetValueFromCookie("AccountUser");
-            var userCheck = await _userManager.FindByNameAsync(user);
-            var userRoles = await _userManager.GetRolesAsync(userCheck);
-            foreach (var role in userRoles)
-            {
-                if (role == "Admin")
-                {
-                    System.Diagnostics.Debug.WriteLine(userRoles.ToString(), "ThangLog");
-                    return true;
-                }
-            }
-            return false;
         }
 
         

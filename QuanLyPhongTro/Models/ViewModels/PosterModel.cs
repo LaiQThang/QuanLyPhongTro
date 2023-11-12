@@ -1,4 +1,5 @@
-﻿using QuanLyPhongTro.Data;
+﻿using Microsoft.EntityFrameworkCore;
+using QuanLyPhongTro.Data;
 using QuanLyPhongTro.Models.Domain;
 using System.Data.SqlTypes;
 
@@ -57,8 +58,14 @@ namespace QuanLyPhongTro.Models.ViewModels
             return true;
         }
 
+        public async Task<int> CountPosterUser(string userID)
+        {
+            return await _context.baiDangs
+                .Where(res => res.ApplicationUserId == userID && res.flag == false)
+                .CountAsync();
+        }
 
-        public List<BaiDang> getAllPosters(string userID)
+        public List<BaiDang> getAllPosters(string userID, int recSkip, int pageSize)
         {
             var posters = _context.baiDangs
                 .Join(
@@ -72,6 +79,8 @@ namespace QuanLyPhongTro.Models.ViewModels
                     tpk => tpk.Id,
                     (tfk, tpk) => new { BaiDang = tfk.BaiDang, PhongTro = tfk.PhongTro , TinhThanh = tpk})
                 .Where(res => res.BaiDang.ApplicationUserId == userID && res.BaiDang.flag == false)
+                .Skip(recSkip)
+                .Take(pageSize)
                 .ToList();
             if (posters.Count == 0)
             {

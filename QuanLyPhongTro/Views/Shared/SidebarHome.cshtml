@@ -9,7 +9,7 @@
                 <span class="input-group-text">
                     <span class="fa-solid fa-magnifying-glass"></span>
                 </span>
-                <input type="text" class="form-control" name="name" placeholder="Nhập điểm đến">
+                <input type="text" value="@ViewData["ValueSearch"]" class="form-control" name="name" placeholder="Nhập điểm đến">
             </div>
 
             <p>Ngày nhận phòng</p>
@@ -17,7 +17,7 @@
                 <span class="input-group-text">
                     <span class="fa-regular fa-calendar"></span>
                 </span>
-                <input type="date" class="form-control" name="ngayBD" id="checkInDate">
+                <input type="date" value="@ViewData["ValueDateS"]" class="form-control" name="ngayBD" id="checkInDate">
             </div>
 
             <p>Ngày trả phòng</p>
@@ -25,7 +25,7 @@
                 <span class="input-group-text">
                     <span class="fa-regular fa-calendar"></span>
                 </span>
-                <input type="date" class="form-control" name="ngayKT" id="checkOutDate">
+                <input type="date" value="@ViewData["ValueDateE"]" class="form-control" name="ngayKT" id="checkOutDate">
             </div>
             <button class="btn btn-primary" type="submit">Tìm</button>
 

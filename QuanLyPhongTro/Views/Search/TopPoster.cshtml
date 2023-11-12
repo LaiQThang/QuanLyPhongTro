@@ -1,4 +1,5 @@
 ﻿@model QuanLyPhongTro.Models.ViewModels.SearchModel
+@using QuanLyPhongTro.Models.Pagination;
 @{
     string cookieValue = ViewBag.CookieValue;
     ViewData["AccountUser"] = cookieValue;
@@ -10,13 +11,27 @@
     ViewData["CountPartner"] = CountPartner;
     int CountAccess = ViewBag.CountAccess;
     ViewData["CountAccess"] = CountAccess;
+
+
+    ViewData["Action"] = "TopPoster";
+    ViewData["Controller"] = "Search";
+
+    Pager pager = new Pager();
+    int pageNo = 0;
+
+    if(ViewBag.Pager != null)
+    {
+        pager = ViewBag.Pager;
+        pageNo = pager.CurentPage;
+    }
+
 }
 
 @section StyleCss {
     <link rel="stylesheet" href="~/css/ketquatimkiem.css" />
 }
 
-<div class="container-fluid d-flex justify-content-center align-items-center app_body">
+<div class="container-fluid d-flex flex-column justify-content-center align-items-center app_body">
     <div class="row w-100 mw-1200">
 
         <!-- ===== Hộp tìm kiếm ====== -->
@@ -70,6 +85,8 @@
             </div>
         </div>
     </div>
+
+    @Html.Partial("_Pagination", pager)
 </div>
 
                                   
@@ -79,7 +96,10 @@
 
 
         function getData(callback, obj) {
-            const url = "@Url.Action("GetPoster","Search")";
+            // const url = "@Url.Action("GetPoster","Search")";
+            var path = '/api/posters';
+            var query = window.location.search;
+            var url = path + query;
             // Call Ajax
             var xhr = new XMLHttpRequest();
             xhr.open("GET", url, true);
@@ -87,6 +107,7 @@
             xhr.onload = function () {
                 if (xhr.status >= 200 && xhr.status < 300) {
                     var responseObject = JSON.parse(xhr.responseText);
+                    console.log(responseObject);
                     callback(responseObject, obj);
                 } else {
                     console.error("Request failed with status: " + xhr.status);

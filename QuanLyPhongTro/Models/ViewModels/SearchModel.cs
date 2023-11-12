@@ -16,17 +16,13 @@ namespace QuanLyPhongTro.Models.ViewModels
         public List<BaiDang> baiDangs { get; set; }
         public BaiDang baiDang { get; set; }
 
-        public int Id { get; set; }
-        public string? TieuDe { get; set; }
-        public DateTime? NgayTao { get; set; }
-        public string? NoiDung { get; set; }
-        public string? Anh { get; set; }
-        public bool flag { get; set; }
-        public byte? TrangThai { get; set; }
-        public string NguoiDungId { get; set; }
-        public string ApplicationUserId { get; set; }
-        public int PhongTroId { get; set; }
-        public List<BaiDang> getPosterSeeMore()
+        public async Task<int> getCountPoster()
+        {
+            var poster = await _context.baiDangs.Where(res => res.flag == false).CountAsync();
+            return poster;
+        }
+
+        public List<BaiDang> getPosterSeeMore(int recSkip, int pageSize)
         {
             var model = _context.baiDangs.Where(res => res.flag == false && res != null).ToList();
             
@@ -42,7 +38,9 @@ namespace QuanLyPhongTro.Models.ViewModels
                     tpk => tpk.Id,
                     (tfk, tpk) => new { BaiDang = tfk.BaiDang, PhongTro = tfk.PhongTro, TinhThanh = tpk })
                 .Where(res => res.BaiDang.flag == false)
-                .OrderByDescending(res => res.BaiDang.NgayTao)
+                .Skip(recSkip)
+                .Take(pageSize)
+                //.OrderByDescending(res => res.BaiDang.NgayTao)
                 .ToList();
             if (posters.Count == 0)
             {
@@ -52,10 +50,11 @@ namespace QuanLyPhongTro.Models.ViewModels
             return result;
         }
 
-        public async Task<List<ApiGetPosters>> getPoster()
+        public async Task<List<ApiGetPosters>> getPoster(int pageSize, int recsSkip)
         {
 
-            var posters = _context.apiGetPosters.FromSqlRaw("GET_POSTERS");
+            var posters = _context.apiGetPosters
+                .FromSqlRaw("GET_POSTERS @pageSize={0}, @recSkip={1}", pageSize, recsSkip);
 
             return await posters.ToListAsync();
         }

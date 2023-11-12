@@ -2,6 +2,7 @@
 using QuanLyPhongTro.ActionFilter;
 using QuanLyPhongTro.Controllers.Components;
 using QuanLyPhongTro.Data;
+using QuanLyPhongTro.Models.Pagination;
 using QuanLyPhongTro.Models.ViewModels;
 
 namespace QuanLyPhongTro.Controllers
@@ -18,12 +19,29 @@ namespace QuanLyPhongTro.Controllers
             _roomManagementContext = roomManagementContext;
         }
 
-        public IActionResult SearchAll(string name, DateTime ngayBD, DateTime ngayKT) 
+        public async Task <IActionResult> SearchAll(string name, DateTime ngayBD, DateTime ngayKT, int pg = 1) 
         {
             Authencation();
+
+            const int pageSize = 3;
+            if (pg < 1)
+            {
+                pg = 1;
+            }
+
             var model = new SideBarSearchModel(_roomManagementContext);
-            var list = model.getPosterSearch(name, ngayBD, ngayKT);
+
+            int recsCount = await model.getCountSearch(name, ngayBD);
+            var pager = new Pager(recsCount, pg, pageSize);
+
+            int recSkip = (pg - 1) * pageSize;
+
+            var list = model.getPosterSearch(name, ngayBD, ngayKT, recSkip, pageSize);
             var viewModel = viewModelSide(list);
+            this.ViewBag.Pager = pager;
+            ViewBag.ValueSearch = name;
+            ViewBag.ValueDateS = ngayBD;
+            ViewBag.ValueDateE = ngayKT;
             return View(viewModel);
         }
 

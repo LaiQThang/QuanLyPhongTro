@@ -7,6 +7,7 @@ using QuanLyPhongTro.ActionFilter;
 using QuanLyPhongTro.Controllers.Components;
 using QuanLyPhongTro.Data;
 using QuanLyPhongTro.Models.Domain;
+using QuanLyPhongTro.Models.Pagination;
 using QuanLyPhongTro.Models.ViewModels;
 
 namespace QuanLyPhongTro.Controllers
@@ -32,14 +33,33 @@ namespace QuanLyPhongTro.Controllers
         
 
         
-        public async Task<IActionResult> RoomIndex()
+        public async Task<IActionResult> RoomIndex(int pg = 1)
         {
             Authencation();
-            if (await CheckRole() == true)
+            
+
+            const int pageSize = 3;
+            if (pg < 1)
             {
-                return RedirectToAction("Index", "DashBoard");
+                pg = 1;
             }
-            var viewModel = ViewModelRoom();
+
+            var user = getUserID();
+            var room = new RoomModel(_roomManagementContext);
+            var listProvince = GetAllProvince();
+            int recsCount = await room.CountRoomUser(user);
+
+            var pager = new Pager(recsCount, pg, pageSize);
+            int recSkip = (pg - 1) * pageSize;
+
+
+            var listRoom = room.GetAllRoom(user, recSkip, pageSize);
+            var viewModel = new RoomModel.RoomInput
+            {
+                tinhThanhs = listProvince,
+                phongTro = listRoom,
+            };
+            this.ViewBag.Pager = pager;
 
             return View(viewModel);
         }
@@ -180,10 +200,10 @@ namespace QuanLyPhongTro.Controllers
 
         public RoomModel.RoomInput ViewModelRoom()
         {
-            var user = GetValueFromCookie("AccountId");
+            var user = getUserID();
             var room = new RoomModel(_roomManagementContext);
             var listProvince = GetAllProvince();
-            var listRoom = room.GetAllRoom(user);
+            var listRoom = room.GetAllRoomPoster(user);
             var viewModel = new RoomModel.RoomInput
             {
                 tinhThanhs = listProvince,
@@ -192,21 +212,6 @@ namespace QuanLyPhongTro.Controllers
             return viewModel;
         }
 
-        public async Task<bool> CheckRole()
-        {
-            var user = GetValueFromCookie("AccountUser");
-            var userCheck = await _userManager.FindByNameAsync(user);
-            var userRoles = await _userManager.GetRolesAsync(userCheck);
-            foreach (var role in userRoles)
-            {
-                if (role == "Admin")
-                {
-                    System.Diagnostics.Debug.WriteLine(userRoles.ToString(), "ThangLog");
-                    return true;
-                }
-            }
-            return false;
-        }
         public List<TinhThanh> GetAllProvince()
         {
             var province = new ProvinceModel(_roomManagementContext);

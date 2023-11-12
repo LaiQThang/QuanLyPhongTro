@@ -31,31 +31,16 @@ namespace QuanLyPhongTro.Controllers.Admin
             Authencation();
             return View("Index");
         }
-
-        public async Task<bool> CheckRole()
+        public async Task<IActionResult> Logout()
         {
-            var user = GetValueFromCookie("AccountUser");
-            var userName = "";
-            if (user != null)
+            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+            foreach (var cookie in Request.Cookies.Keys)
             {
-                userName = user;
+                Response.Cookies.Delete(cookie);
             }
-            var userCheck = await _userManager.FindByNameAsync(userName);
-            if (userCheck != null)
-            {
-                var userRoles = await _userManager.GetRolesAsync(userCheck);
-                foreach (var role in userRoles)
-                {
-                    if (role == "Client")
-                    {
-                        System.Diagnostics.Debug.WriteLine(userRoles.ToString(), "ThangLog");
-                        return true;
-                    }
-                }
-            }
-            return false;
-        }
 
+            return RedirectToAction("Login", "Authencation");
+        }
 
     }
 }

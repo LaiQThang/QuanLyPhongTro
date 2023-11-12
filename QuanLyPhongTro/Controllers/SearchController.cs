@@ -7,6 +7,8 @@ using System.Text.Json.Serialization;
 using System.Text.Json;
 using QuanLyPhongTro.Controllers.Components;
 using QuanLyPhongTro.ActionFilter;
+using QuanLyPhongTro.Models.Pagination;
+using System.Drawing.Printing;
 
 namespace QuanLyPhongTro.Controllers
 {
@@ -19,21 +21,39 @@ namespace QuanLyPhongTro.Controllers
         {
             _context = roomManagementContext;
         }
-        public IActionResult TopPoster()
+        public async Task<IActionResult> TopPoster(int pg = 1)
         {
             Authencation();
+            const int pageSize = 3;
+            if(pg < 1)
+            {
+                pg = 1;
+            }
             var model = new SearchModel(_context);
-            var list = model.getPosterSeeMore();
+            int recsCount = await model.getCountPoster();
+            var pager = new Pager(recsCount, pg, pageSize);
+
+            int recSkip = (pg - 1) * pageSize;
+
+            var list = model.getPosterSeeMore(recSkip, pageSize);
+
             var viewModel = viewModelSearch(list, null);
+
+            this.ViewBag.Pager = pager;
             ViewData["Content"] = "Bài đăng";
             return View(viewModel);
         }
 
-        [Route("api/getposters")]
-        public async Task<JsonResult> GetPoster()
+        [Route("api/posters/{pg?}")]
+        public async Task<JsonResult> GetPoster(int pg = 1)
         {
+            const int pageSize = 3;
             var model = new SearchModel(_context);
-            var list = model.getPoster();
+            int recSkip = (pg - 1) * pageSize;
+
+
+            var list = model.getPoster(pageSize, recSkip);
+
             if (list == null)
             {
                 return Json(null);

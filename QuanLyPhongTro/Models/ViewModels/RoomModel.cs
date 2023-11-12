@@ -1,4 +1,5 @@
-﻿using QuanLyPhongTro.Data;
+﻿using Microsoft.EntityFrameworkCore;
+using QuanLyPhongTro.Data;
 using QuanLyPhongTro.Models.Domain;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
@@ -56,9 +57,22 @@ namespace QuanLyPhongTro.Models.ViewModels
             [DisplayName("Anh")]
             public string Anh { get; set; }
         }
-        public List<PhongTro> GetAllRoom(string id)
+
+        public List<PhongTro> GetAllRoomPoster(string id)
         {
             return _context.phongTros.Where(res => res.NguoiDungID == id && res.flag == false).ToList();
+        }
+        public List<PhongTro> GetAllRoom(string id, int recSkip, int pageSize)
+        {
+            return _context.phongTros.Where(res => res.NguoiDungID == id && res.flag == false)
+                .Skip(recSkip)
+                .Take(pageSize)
+                .ToList();
+        }
+
+        public async Task<int> CountRoomUser(string id)
+        {
+            return await _context.phongTros.Where(res => res.NguoiDungID == id && res.flag == false).CountAsync();
         }
 
         public PhongTro GetFirstID(int? id)

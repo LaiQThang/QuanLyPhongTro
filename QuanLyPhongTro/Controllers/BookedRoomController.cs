@@ -23,10 +23,7 @@ namespace QuanLyPhongTro.Controllers
         public async Task<IActionResult> BookedRoomIndex()
         {
             Authencation();
-            if (await CheckRole() == true)
-            {
-                return RedirectToAction("Index", "DashBoard");
-            }
+            
             var model = new BookedModel(_context);
             var userID = getUserID();
             var list = model.GetAllRoomBooked(userID);
@@ -75,22 +72,6 @@ namespace QuanLyPhongTro.Controllers
                 chiTietDatPhong = chiTietDatPhong
             };
             return model;
-        }
-
-        public async Task<bool> CheckRole()
-        {
-            var user = GetValueFromCookie("AccountUser");
-            var userCheck = await _userManager.FindByNameAsync(user);
-            var userRoles = await _userManager.GetRolesAsync(userCheck);
-            foreach (var role in userRoles)
-            {
-                if (role == "Admin")
-                {
-                    System.Diagnostics.Debug.WriteLine(userRoles.ToString(), "ThangLog");
-                    return true;
-                }
-            }
-            return false;
         }
 
         

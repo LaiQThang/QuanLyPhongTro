@@ -1,4 +1,5 @@
-﻿@model QuanLyPhongTro.Models.ViewModels.PosterModel.PosterInput
+﻿@using QuanLyPhongTro.Models.Pagination;
+@model QuanLyPhongTro.Models.ViewModels.PosterModel.PosterInput
 @{
     string cookieValue = ViewBag.CookieValue;
     ViewData["AccountUser"] = cookieValue;
@@ -10,6 +11,20 @@
     ViewData["CountPartner"] = CountPartner;
     int CountAccess = ViewBag.CountAccess;
     ViewData["CountAccess"] = CountAccess;
+
+    ViewData["Action"] = "PosterIndex";
+    ViewData["Controller"] = "Poster";
+
+
+
+    Pager pager = new Pager();
+    int pageNo = 0;
+
+    if (ViewBag.Pager != null)
+    {
+        pager = ViewBag.Pager;
+        pageNo = pager.CurentPage;
+    }
 }
 @section StyleCss {
     <link rel="stylesheet" href="~/css/quanlybaidang.css" />
@@ -61,6 +76,8 @@
                 </div>
             </div>
         </div>
+        
+        @Html.Partial("_Pagination", pager)
     </div>
 </div>
 
