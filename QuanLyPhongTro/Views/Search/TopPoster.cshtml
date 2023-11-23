@@ -205,4 +205,25 @@
             getData(SortPoster, obj);
         }
     </script>
+
+    <script>
+        function validateForm() {
+            var checkin = document.getElementById('checkInDate').value;
+            var checkout = document.getElementById('checkOutDate').value;
+
+            var date1 = new Date(checkin);
+            var date2 = new Date(checkout);
+
+            if (date1 > date2) {
+                document.getElementById('error').innerText = "Ngày nhận không được lớn hơn ngày trả";
+
+                return false;
+            }
+            return true;
+
+        }
+    </script>
+
+
+
 }

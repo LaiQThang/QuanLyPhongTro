@@ -38,7 +38,14 @@
 
             <div class="col-lg-9 col-md-12">
                 <div class="list-destination d-flex flex-column w-100">
-                    <p class="title-search">Số bài đã đăng: 3 </p>
+                    @if (ViewData["CountPoster"] != null)
+                    {
+                        <p class="title-search">Số bài đã đăng: @ViewData["CountPoster"] </p>
+                    }
+                    else
+                    {
+                        <p class="title-search">Số bài đã đăng: 0 </p>
+                    }
                     <div class="input-group arrangeBox">
                         <div class="wrap_arrange d-flex">
                             <span class="input-group-text">

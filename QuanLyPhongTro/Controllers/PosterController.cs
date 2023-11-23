@@ -49,6 +49,7 @@ namespace QuanLyPhongTro.Controllers
 
             var viewModel = getViewModel(listPoster,null);
             this.ViewBag.Pager = pager;
+            ViewData["CountPoster"] = recsCount;
             return View(viewModel);
         }
 
@@ -131,21 +132,6 @@ namespace QuanLyPhongTro.Controllers
             return viewModel;
         }
 
-        public async Task<bool> CheckRole()
-        {
-            var user = GetValueFromCookie("AccountUser");
-            var userCheck = await _userManager.FindByNameAsync(user);
-            var userRoles = await _userManager.GetRolesAsync(userCheck);
-            foreach (var role in userRoles)
-            {
-                if (role == "Admin")
-                {
-                    System.Diagnostics.Debug.WriteLine(userRoles.ToString(), "ThangLog");
-                    return true;
-                }
-            }
-            return false;
-        }
         
         public PosterModel.PosterInput getViewModel(List<Models.Domain.BaiDang> baiDangs, Models.Domain.BaiDang baiDang)
         {

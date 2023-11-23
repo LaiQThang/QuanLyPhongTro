@@ -32,7 +32,18 @@ namespace QuanLyPhongTro.Models.ViewModels
 			_signInManager = signInManager;
 			_userManager = user;
         }
-        
+
+		public async Task<bool> AccessFailCount(string user)
+		{
+            var model = await _userManager.FindByEmailAsync(user);
+			if(model.AccessFailedCount >= 3)
+			{
+				return true;
+			}
+			return false;
+
+        }
+
         public async Task<bool> CheckAccount(string user,  string password, bool KeepLogin)
         {
 			var res = _roomManagementContext.applicationUsers.FirstOrDefault(p => p.UserName == user);
@@ -60,6 +71,11 @@ namespace QuanLyPhongTro.Models.ViewModels
 					if (result.Succeeded)
 					{
 						return true;
+					}
+					else
+					{
+                        user2.AccessFailedCount = user2.AccessFailedCount + 1;
+						await _roomManagementContext.SaveChangesAsync();
 					}
 				}
 				System.Diagnostics.Debug.WriteLine(user, "Logcheck1");

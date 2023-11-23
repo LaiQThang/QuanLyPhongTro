@@ -1,4 +1,5 @@
-﻿using QuanLyPhongTro.Data;
+﻿using Microsoft.EntityFrameworkCore;
+using QuanLyPhongTro.Data;
 using QuanLyPhongTro.Models.Domain;
 
 namespace QuanLyPhongTro.Models.ViewModels
@@ -15,7 +16,11 @@ namespace QuanLyPhongTro.Models.ViewModels
         public List<ChiTietDatPhong> chiTietDatPhongs { get; set; }
         public ChiTietDatPhong chiTietDatPhong { get; set; }
 
-        public List<ChiTietDatPhong> GetAllRoomBooked(string userID)
+        public async Task<int> GetCountBooked(string userID)
+        {
+            return await _roomManagementContext.chiTietDatPhongs.Where(res => res.ApplicationUserId == userID && res.flag == false).CountAsync();
+        }
+        public List<ChiTietDatPhong> GetAllRoomBooked(string userID, int skip, int size)
         {
             var result = _roomManagementContext.chiTietDatPhongs
                 .Join(
@@ -34,6 +39,8 @@ namespace QuanLyPhongTro.Models.ViewModels
                     tt =>  tt.Id,
                     (ctp, tt) => new {ChiTietDatPhong = ctp.ChiTietDatPhong, PhongTro = ctp.PhongTro, ApplicationUser = ctp.ApplicationUser, TinhThanh = tt})
                 .Where(res => res.ChiTietDatPhong.ApplicationUserId == userID && res.ChiTietDatPhong.flag == false)
+                .Skip(skip)
+                .Take(size)
                 .ToList();
             if(result.Count == 0)
             {

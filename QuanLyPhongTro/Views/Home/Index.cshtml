@@ -20,11 +20,12 @@
     <link rel="stylesheet" href="~/css/trangchu.css">
 }
 
+
 <div class="container-fluid main d-flex justify-content-center align-items-center" style="background: url(https://www.luxstay.me/wp-content/uploads/2018/05/bg-action.jpeg); background-size: cover; background-repeat: no-repeat;">
     <div class="banner-search d-flex justify-content-center align-items-center">
         <form asp-action="SearchHome" asp-controller="Home" method="get" class="d-flex flex-column w-100">
             <div class="search-input w-100 p-0 m-0 position-relative">
-                <input type="text" autocomplete="off" placeholder="Bạn muốn thuê phòng ở đâu?"  name="searchName" id="searchName" class="search-input w-100" />
+                <input type="text" autocomplete="off" placeholder="Bạn muốn thuê phòng ở đâu?"  name="name" id="searchName" class="search-input w-100" />
                 <div class="position-absolute" style="top: 54px; width: 100%;" >
                     <div id="result">
 
@@ -32,6 +33,9 @@
                 </div>
 
             </div>
+            <input type="date" hidden value="@ViewData["DateNow"]" class="form-control" name="ngayBD" id="checkInDate">
+            <input type="date" hidden value="" class="form-control" name="ngayKT" id="checkOutDate">
+
             <input type="submit" value="Tìm kiếm" class="search-submit">
         </form>
     </div>
@@ -102,5 +106,9 @@
                 }
             });
         });
+
+
     </script>
+
+    
 }

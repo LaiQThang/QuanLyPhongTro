@@ -4,6 +4,7 @@ using QuanLyPhongTro.ActionFilter;
 using QuanLyPhongTro.Controllers.Components;
 using QuanLyPhongTro.Data;
 using QuanLyPhongTro.Models.Domain;
+using QuanLyPhongTro.Models.Pagination;
 using QuanLyPhongTro.Models.ViewModels;
 
 namespace QuanLyPhongTro.Controllers
@@ -20,19 +21,32 @@ namespace QuanLyPhongTro.Controllers
             _userManager = userManager;
 
         }
-        public async Task<IActionResult> BookedRoomIndex()
+        public async Task<IActionResult> BookedRoomIndex(int pg = 1)
         {
             Authencation();
-            
+
+            const int pageSize = 3;
+            if (pg < 1)
+            {
+                pg = 1;
+            }
+
             var model = new BookedModel(_context);
             var userID = getUserID();
-            var list = model.GetAllRoomBooked(userID);
+            var resCount = await model.GetCountBooked(userID);
+            ViewData["CountBooked"] = resCount;
+
+            var pager = new Pager(resCount, pg, pageSize);
+            int recSkip = (pg - 1) * pageSize;
+
+            var list = model.GetAllRoomBooked(userID, recSkip, pageSize);
+
             if (list == null)
             {
                 return View();
             }
             var viewModel = viewModelBooked(list, null);
-            System.Diagnostics.Debug.WriteLine(list.Any(), "ThangLog");
+            this.ViewBag.Pager = pager;
             return View(viewModel);
         }
 

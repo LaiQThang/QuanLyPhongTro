@@ -39,7 +39,14 @@
 
             <div class="col-lg-9 col-md-12">
                 <div class="list-destination d-flex flex-column w-100">
-                    <p class="title-search">Phòng trọ có kết quả: 3 </p>
+                    @if (ViewData["CountRoom"] != null)
+                    {
+                        <p class="title-search">Phòng trọ có kết quả: @ViewData["CountRoom"] </p>
+                    }
+                    else
+                    {
+                        <p class="title-search">Phòng trọ có kết quả: 0 </p>
+                    }
                     <div class="input-group arrangeBox">
                         <div class="wrap_arrange d-flex">
                             <span class="input-group-text">

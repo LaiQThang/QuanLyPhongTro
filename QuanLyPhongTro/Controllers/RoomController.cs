@@ -60,7 +60,7 @@ namespace QuanLyPhongTro.Controllers
                 phongTro = listRoom,
             };
             this.ViewBag.Pager = pager;
-
+            ViewData["CountRoom"] = recsCount;
             return View(viewModel);
         }
 

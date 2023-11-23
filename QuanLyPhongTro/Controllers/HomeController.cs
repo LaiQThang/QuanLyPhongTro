@@ -15,6 +15,7 @@ using System.IO;
 using Microsoft.AspNetCore.Identity;
 using QuanLyPhongTro.Controllers.Components;
 using QuanLyPhongTro.ActionFilter;
+using QuanLyPhongTro.Models.Pagination;
 
 namespace QuanLyPhongTro.Controllers
 {
@@ -39,10 +40,7 @@ namespace QuanLyPhongTro.Controllers
         public async Task<IActionResult> Index()
         {
             Authencation();
-            if(await CheckRole() == true)
-            {
-                return RedirectToAction("Index", "DashBoard");
-            }
+            
             string ipAddress = HttpContext.Connection.RemoteIpAddress.ToString();
             var model = new IpAddressModel(_roomManagementContext);
             var check = await model.getIpAddress(Convert.ToString(ipAddress));
@@ -53,6 +51,9 @@ namespace QuanLyPhongTro.Controllers
             var modelHome = new HomeModel(_roomManagementContext);
             var list = await modelHome.getPosterPageHome();
             var viewModel = viewModelHome(list);
+            DateTime date = DateTime.Now;
+            string sqlFormattedDate = date.ToString("yyyy-MM-dd");
+            ViewData["DateNow"] = sqlFormattedDate;
             return View(viewModel);
         }
         public async Task<IActionResult> Logout()
@@ -66,12 +67,29 @@ namespace QuanLyPhongTro.Controllers
             return RedirectToAction("Login", "Authencation");
 		}
 
-        public async Task<IActionResult> SearchHome(string searchName)
+        public async Task<IActionResult> SearchHome(string name, DateTime ngayBD, DateTime ngayKT, int pg = 1)
         {
             Authencation();
-            var model = new HomeModel(_roomManagementContext);
-            var list = model.SearchHome(searchName);
+
+            const int pageSize = 3;
+            if (pg < 1)
+            {
+                pg = 1;
+            }
+            
+            var model = new SideBarSearchModel(_roomManagementContext);
+
+            int recsCount = await model.getCountSearch(name, ngayBD);
+            var pager = new Pager(recsCount, pg, pageSize);
+
+            int recSkip = (pg - 1) * pageSize;
+
+            var list = model.getPosterSearch(name, ngayBD, ngayKT, recSkip, pageSize);
             var viewModel = viewModelHome(list);
+            this.ViewBag.Pager = pager;
+            ViewBag.ValueSearch = name;
+            ViewBag.ValueDateS = ngayBD;
+            ViewBag.ValueDateE = ngayKT;
             return View(viewModel);
         }
 
@@ -101,33 +119,6 @@ namespace QuanLyPhongTro.Controllers
             };
             return model;
         }
-
-        public async Task<bool> CheckRole()
-        {
-            var user = GetValueFromCookie("AccountUser");
-            var userName = "";
-            if (user != null)
-            {
-                userName = user;
-            }
-            var userCheck = await _userManager.FindByNameAsync(userName);
-            if (userCheck != null)
-            {
-                var userRoles = await _userManager.GetRolesAsync(userCheck);
-                foreach (var role in userRoles)
-                {
-                    if (role == "Admin")
-                    {
-                        System.Diagnostics.Debug.WriteLine(userRoles.ToString(),"ThangLog");
-                        return true;
-                    }
-                }
-            }
-                return false;
-        }
-
-        
-        
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()

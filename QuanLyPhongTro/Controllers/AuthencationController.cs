@@ -89,9 +89,16 @@ namespace QuanLyPhongTro.Controllers
 		public async Task<IActionResult> Login(ApplicationUser modelLogin)
 		{
 			var access = new AccessAuthModel(_roomManagementContext, _passwordHasher, _signInManager, _userManager);
-			var check = access.CheckAccount(modelLogin.UserName, modelLogin.PasswordHash, modelLogin.KeepLogin);
+			var accessFaile = await access.AccessFailCount(modelLogin.UserName);
 
-            if(await check == true)
+			if(accessFaile == true)
+			{
+                ViewData["ValidateMessage"] = "Access Login Fail Pass More Than 5 times!";
+                return View();
+            }
+			var check = await access.CheckAccount(modelLogin.UserName, modelLogin.PasswordHash, modelLogin.KeepLogin);
+
+            if (check == true)
             {
                 List<Claim> claims  = new List<Claim>()
                 {

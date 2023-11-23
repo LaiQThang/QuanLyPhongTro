@@ -1,4 +1,5 @@
-﻿@model QuanLyPhongTro.Models.ViewModels.BookedModel
+﻿@using QuanLyPhongTro.Models.Pagination;
+@model QuanLyPhongTro.Models.ViewModels.BookedModel
 
 @{
     string cookieValue = ViewBag.CookieValue;
@@ -11,6 +12,21 @@
     ViewData["CountPartner"] = CountPartner;
     int CountAccess = ViewBag.CountAccess;
     ViewData["CountAccess"] = CountAccess;
+
+    ViewData["Action"] = "BookedRoomIndex";
+    ViewData["Controller"] = "BookedRoom";
+
+
+
+    Pager pager = new Pager();
+    int pageNo = 0;
+
+    if (ViewBag.Pager != null)
+    {
+        pager = ViewBag.Pager;
+        pageNo = pager.CurentPage;
+    }
+
 }
 @section StyleCss {
     <link rel="stylesheet" href="~/css/quanlybaidang.css" />
@@ -24,7 +40,14 @@
 
             <div class="col-lg-9 col-md-12">
                 <div class="list-destination d-flex flex-column w-100">
-                    <p class="title-search">Số bài đã đăng: 3 </p>
+                    @if (ViewData["CountBooked"] != null)
+                    {
+                        <p class="title-search">Số bài đã đăng: @ViewData["CountBooked"] </p>
+                    }
+                    else
+                    {
+                        <p class="title-search">Số bài đã đăng: 0 </p>
+                    }
                     <div class="input-group arrangeBox">
                         <div class="wrap_arrange d-flex w-100">
                             <span class="input-group-text">
@@ -59,6 +82,10 @@
                     }
                 </div>
             </div>
+
+
         </div>
+
+        @Html.Partial("_Pagination", pager)
     </div>
 </div>

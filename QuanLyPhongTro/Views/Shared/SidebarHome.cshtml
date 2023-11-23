@@ -1,7 +1,7 @@
 ﻿
 <div class="col-lg-3 col-md-12">
     <div class="body__searchbox">
-        <form method="get" asp-action="SearchAll" asp-controller="SidebarSearch" class="d-flex flex-column w-100">
+        <form method="get" asp-action="SearchAll" asp-controller="SidebarSearch" onsubmit="return validateForm()" class="d-flex flex-column w-100">
             <h4>Tìm kiếm</h4>
 
             <p>Tên chỗ nghỉ/điểm đến</p>
@@ -18,6 +18,7 @@
                     <span class="fa-regular fa-calendar"></span>
                 </span>
                 <input type="date" value="@ViewData["ValueDateS"]" class="form-control" name="ngayBD" id="checkInDate">
+                <span id="error" class="toast-message danger" style="color:red;"></span>
             </div>
 
             <p>Ngày trả phòng</p>
@@ -55,3 +56,4 @@
         </div>
     </div>
 </div>
+
