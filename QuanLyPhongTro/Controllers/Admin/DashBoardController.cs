@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Identity;
 using QuanLyPhongTro.Controllers.Components;
 using Microsoft.AspNetCore.Mvc.Filters;
 using QuanLyPhongTro.ActionFilter;
+using QuanLyPhongTro.Models.Domain;
 
 namespace QuanLyPhongTro.Controllers.Admin
 {
@@ -37,6 +38,22 @@ namespace QuanLyPhongTro.Controllers.Admin
             foreach (var cookie in Request.Cookies.Keys)
             {
                 Response.Cookies.Delete(cookie);
+            }
+
+            var userName = GetValueFromCookie("AccountUser");
+            var user = await _userManager.FindByNameAsync(userName);
+            user.TwoFactorEnabled = false;
+            await _context.SaveChangesAsync();
+
+            var userId = GetValueFromCookie("AccountId");
+            if (userId != null)
+            {
+                var del = await _context.activeUsers.Where(res => res.ApplicationUserId == userId).FirstAsync();
+                if (del is ActiveUser)
+                {
+                    _context.Remove(del);
+                    await _context.SaveChangesAsync();
+                }
             }
 
             return RedirectToAction("Login", "Authencation");

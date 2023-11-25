@@ -240,8 +240,14 @@
             <div class="container-fluid d-flex justify-content-center copyright">
                 <div class="mw-1200 w-100 d-flex justify-content-between">
                     <span class="">@@2023 Luxstay - Homestay - Copyright Nhom7</span>
-                    <span>Thời gian đăng nhập: 10</span>
-                    <span>Số người đang online: 10</span>
+                    <div class="d-flex flex-row p-0">
+                        <span>Thời gian đăng nhập: </span>
+                        <span id="elapsedTime">NAN</span>
+                    </div>
+                    <div class="d-flex flex-row p-0">
+                        <span>Số người đang online: </span>
+                        <span id="activeUser">NAN</span>
+                    </div>
                 </div>
             </div>
         </footer>
@@ -249,5 +255,71 @@
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
+
+    <script>
+        function getCurrentTime() {
+            return new Date();
+        }
+
+        // Hàm để gửi thời gian hiện tại về server
+        function sendLoginTime() {
+            var currentTime = getCurrentTime();
+            var url = '@Url.Action("LoginTime", "Home")';
+
+            var xhr = new XMLHttpRequest();
+            xhr.open('POST', url, true);
+            xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+
+            // Xử lý sự kiện khi yêu cầu hoàn thành
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState === 4) {
+                    if (xhr.status === 200) {
+                        // Phản hồi từ server
+                        var result = JSON.parse(xhr.responseText);
+                        document.getElementById("elapsedTime").innerText = result.time;
+                    } else {
+                        console.error('Lỗi yêu cầu:', xhr.status);
+                    }
+                }
+            };
+
+            // Chuyển đối tượng dữ liệu thành chuỗi query string
+            var data = 'TimeClient=' + encodeURIComponent(currentTime.toISOString());
+
+            // Gửi yêu cầu với dữ liệu đã chuẩn bị
+            xhr.send(data);
+           
+        }
+
+        function ActiveUserCount() {
+            var url = '/api/activeUser';
+
+            var xhr = new XMLHttpRequest();
+            var xhr = new XMLHttpRequest();
+            xhr.open("GET", url, true);
+
+            xhr.onload = function () {
+                if (xhr.status >= 200 && xhr.status < 300) {
+                    var responseObject = JSON.parse(xhr.responseText);
+                    document.getElementById("activeUser").innerText = responseObject.countUser;
+                } else {
+                    console.error("Request failed with status: " + xhr.status);
+                }
+            };
+
+            xhr.onerror = function () {
+                console.error("Request failed");
+            };
+
+            xhr.send();
+           
+        }
+
+        // Gọi hàm sendLoginTime khi trang được load
+        $(document).ready(function () {
+            sendLoginTime();
+            ActiveUserCount();
+        });
+    </script>
 </body>
 </html>

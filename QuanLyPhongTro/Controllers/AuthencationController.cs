@@ -100,6 +100,17 @@ namespace QuanLyPhongTro.Controllers
 
             if (check == true)
             {
+                var user = await _userManager.FindByNameAsync(modelLogin.UserName);
+                if (user.TwoFactorEnabled != false)
+                {
+                    ViewData["ValidateMessage"] = "Login Faild";
+                    return View();
+                }
+				else
+				{
+					user.TwoFactorEnabled = true;
+					await _roomManagementContext.SaveChangesAsync();
+				}
                 List<Claim> claims  = new List<Claim>()
                 {
                     new Claim(ClaimTypes.NameIdentifier, modelLogin.UserName),
@@ -119,14 +130,31 @@ namespace QuanLyPhongTro.Controllers
 
 				string cookieUser = "AccountUser";
 				string cookieId = "AccountId";
+				string cookieLoginTime = "LoginTime";
+				string cookieLActiveUser = "ActiveUser";
                 CookieOptions cookieOptions = new CookieOptions
 				{
+					//Expires = DateTime.Now.AddSeconds(10),
 					Expires = DateTime.Now.AddMinutes(20),
 				};
-                var user = await _userManager.FindByNameAsync(modelLogin.UserName);
+                
                 Response.Cookies.Append(cookieUser, modelLogin.UserName, cookieOptions);
 				Response.Cookies.Append(cookieId, user.Id, cookieOptions);
-				System.Diagnostics.Debug.WriteLine(user.Id, "ThangLog");
+				Response.Cookies.Append(cookieLoginTime, DateTime.Now.ToString(), cookieOptions);
+				Response.Cookies.Append(cookieLActiveUser, user.Id, new CookieOptions
+				{
+					Expires = DateTimeOffset.MaxValue
+                });
+                System.Diagnostics.Debug.WriteLine(user.Id, "ThangLog");
+
+				ActiveUser activeUser = new ActiveUser()
+				{
+					TimeLogin = DateTime.Now,
+					ApplicationUserId = user.Id
+				};
+
+				await _roomManagementContext.activeUsers.AddAsync(activeUser);
+				await _roomManagementContext.SaveChangesAsync();
 
                 var userRoles = await _userManager.GetRolesAsync(user);
 				foreach (var role in userRoles)

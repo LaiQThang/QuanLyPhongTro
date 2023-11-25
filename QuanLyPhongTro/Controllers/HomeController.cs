@@ -56,12 +56,52 @@ namespace QuanLyPhongTro.Controllers
             ViewData["DateNow"] = sqlFormattedDate;
             return View(viewModel);
         }
+
+        [HttpPost]
+        public async Task<IActionResult> LoginTime(string TimeClient)
+        {
+            DateTime loginDateTime = DateTime.Parse(TimeClient);
+            string loginTime = GetValueFromCookie("LoginTime");
+            DateTime loginTimeConvert = DateTime.Parse(loginTime);
+            TimeSpan elapsedTime = loginDateTime - loginTimeConvert;
+            //int hours = elapsedTime.Hours;
+            //int minutes = elapsedTime.Minutes;
+            //int seconds = elapsedTime.Seconds;
+            string formattedTime = elapsedTime.ToString(@"hh\:mm\:ss");
+
+            return Json(new { success = true, time = formattedTime });
+        }
+
+        [Route("api/activeUser")]
+        public async Task<IActionResult> ActiveUserCount()
+        {
+            var model = new ActiveUserModel(_roomManagementContext);
+            var num = await model.getCountUser();
+            return Json(new { countUser = num });   
+        }
         public async Task<IActionResult> Logout()
         {
 			await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+
             foreach (var cookie in Request.Cookies.Keys)
             {
                 Response.Cookies.Delete(cookie);
+            }
+
+            var userName = GetValueFromCookie("AccountUser");
+            var user = await _userManager.FindByNameAsync(userName);
+            user.TwoFactorEnabled = false;
+            await _roomManagementContext.SaveChangesAsync();
+
+            var userId = GetValueFromCookie("AccountId");
+            if (userId != null)
+            {
+                var del = await _roomManagementContext.activeUsers.Where(res => res.ApplicationUserId == userId).FirstAsync();
+                if(del is ActiveUser)
+                {
+                    _roomManagementContext.Remove(del);
+                    await _roomManagementContext.SaveChangesAsync();
+                }
             }
 
             return RedirectToAction("Login", "Authencation");

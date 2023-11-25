@@ -24,7 +24,9 @@ namespace QuanLyPhongTro.ActionFilter
             // Gọi hàm từ một controller khác
             //await CallFunctionFromAnotherController();
             bool check = await _componentsController.CallFunctionCheckRoleAdmin();
-                System.Diagnostics.Debug.WriteLine("thang", check.ToString());
+            bool activeUser = await _componentsController.CallFunctionCheckActiveUser();
+
+            System.Diagnostics.Debug.WriteLine("thang", check.ToString());
             if (check == true)
             {
                 context.Result = new RedirectToActionResult("Denied", "Authencation", null);
