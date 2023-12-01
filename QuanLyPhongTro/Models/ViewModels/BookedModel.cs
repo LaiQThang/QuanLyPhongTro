@@ -81,13 +81,13 @@ namespace QuanLyPhongTro.Models.ViewModels
 
         public async Task<bool> DeleteBooked(int id)
         {
-            var model = _roomManagementContext.chiTietDatPhongs.FirstOrDefault(res => res.Id == id);
+            var model = await _roomManagementContext.chiTietDatPhongs.FirstAsync(res => res.Id == id);
             if (model != null)
             {
-                var modelRoom = _roomManagementContext.phongTros.FirstOrDefault(res => res.Id == model.PhongTroId);
+                var modelRoom = await _roomManagementContext.phongTros.FirstAsync(res => res.Id == model.PhongTroId);
                 if(modelRoom != null )
                 {
-                var modelPoster = _roomManagementContext.baiDangs.Where(res => res.PhongTroId == modelRoom.Id).ToList();
+                var modelPoster = await _roomManagementContext.baiDangs.Where(res => res.PhongTroId == modelRoom.Id).ToListAsync();
                     if(modelPoster != null)
                     {
                         foreach (var item in modelPoster) 

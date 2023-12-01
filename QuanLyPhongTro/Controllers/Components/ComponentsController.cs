@@ -33,7 +33,6 @@ namespace QuanLyPhongTro.Controllers.Components
 
         protected string GetValueFromCookie(string cookieName)
         {
-            System.Diagnostics.Debug.WriteLine(Request, "thang3");
 
             if (!string.IsNullOrEmpty(cookieName) && Request != null && Request.Cookies.TryGetValue(cookieName, out string cookieValue))
             {

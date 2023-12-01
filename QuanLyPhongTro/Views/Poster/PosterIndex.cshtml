@@ -14,6 +14,8 @@
 
     ViewData["Action"] = "PosterIndex";
     ViewData["Controller"] = "Poster";
+    string status = ViewBag.Status;
+    ViewData["Status"] = status;
 
 
 
@@ -49,13 +51,16 @@
                     <div class="input-group arrangeBox">
                         <div class="wrap_arrange d-flex">
                             <span class="input-group-text">
-                                <span class="fa-solid fa-arrow-right-arrow-left"></span>
+                                <i class="fas fa-filter" style="margin-right:8px;"></i>Bộ lọc
                             </span>
-                            <select class="form-select choose-condition" id="validationCustom04" required>
-                                <option selected disabled value="">Sắp xếp theo ngày đăng mới nhất</option>
-                                <option selected disabled value="">Sắp xếp theo lượt xem cao nhất</option>
-                                <option selected disabled value="">Sắp xếp theo bài đăng có user xem gần nhất</option>
-                            </select>
+                            
+                            <div class="form-select dropdown choose-condition" style="margin-left:10px; width:20%;" id="formSelect">
+                                <span class="dropbtn" id="statusname">Tình trạng</span>
+                                <div class="dropdown-content flex-column justify-content-center align-items-center" id="formSelected">
+                                    <a asp-action="PosterIndex" asp-controller="Poster" asp-route-status="still">Còn phòng</a>
+                                    <a asp-action="PosterIndex" asp-controller="Poster" asp-route-status="unstill">Hết phòng</a>
+                                </div>
+                            </div>
                         </div>
                         <a class="btn btn-add--post" style=" padding: 7px 22px;" asp-action="CreatePoster" asp-controller="Poster">Thêm bài</a>
                     </div>
@@ -112,4 +117,71 @@
             }
         }
     </script>
+
+    <script>
+        var the1 = document.getElementById('formSelect');
+        var the2 = document.getElementById('formSelected');
+
+        the1.addEventListener('click', function () {
+            the2.style.display = 'flex';
+        });
+
+        document.addEventListener('click', function (event) {
+            // Kiểm tra xem sự kiện click có xuất phát từ #the1 hay không
+            var isClickInsideThe1 = the1.contains(event.target);
+
+            // Nếu click ra ngoài #the1, ẩn #the2
+            if (!isClickInsideThe1) {
+                the2.style.display = 'none';
+            }
+        });
+
+        // Lấy URL hiện tại
+        var currentUrl = document.location.search;
+
+        // Tạo đối tượng URLSearchParams từ URL
+        var urlSearchParams = new URLSearchParams(currentUrl);
+
+        // Lấy giá trị của tham số 'status'
+        var statusValue = urlSearchParams.get("status")
+        if (statusValue != null && statusValue == "still") {
+            document.getElementById("statusname").innerText = "Còn phòng";
+        }
+        else if (statusValue != null && statusValue == "unstill") {
+            document.getElementById("statusname").innerText = "Hết phòng";
+        }
+    </script>
 }
+
+<style>
+    /* Optional: Style for the dropdown */
+    .dropdown {
+        position: relative;
+        display: inline-block;
+        cursor:pointer;
+    }
+
+    .dropdown-content {
+        position: absolute;
+        display:none;
+        background-color: #f9f9f9;
+        top:40px;
+        left:0;
+        width: 100%;
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+        z-index: 1;
+        text-align:center;
+    }
+
+    .dropdown-content a {
+        text-decoration:none;
+        color:#000;
+        width: 100%;
+        padding:8px 0
+    }
+
+    .dropdown-content a:hover {
+        background-color:#ccc;
+    }
+
+</style>

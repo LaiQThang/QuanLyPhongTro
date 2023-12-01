@@ -1,0 +1,111 @@
+﻿@using QuanLyPhongTro.Models.Pagination;
+@model IEnumerable<QuanLyPhongTro.Models.Domain.BaiDang>
+@{
+    string cookieValue = ViewBag.CookieValue;
+    ViewData["AccountUser"] = cookieValue;
+    int CountBooked = ViewBag.CountBooked;
+    ViewData["CountBooked"] = CountBooked;
+    int CountCustomer = ViewBag.CountCustomer;
+    ViewData["CountCustomer"] = CountCustomer;
+    int CountPartner = ViewBag.CountPartner;
+    ViewData["CountPartner"] = CountPartner;
+    int CountAccess = ViewBag.CountAccess;
+    ViewData["CountAccess"] = CountAccess;
+
+    string[] relArr = ViewBag.ArrDateTime;
+
+    // ViewData["Action"] = "PosterIndex";
+    // ViewData["Controller"] = "Poster";
+    // string status = ViewBag.Status;
+    // ViewData["Status"] = status;
+
+
+
+    // Pager pager = new Pager();
+    // int pageNo = 0;
+
+    // if (ViewBag.Pager != null)
+    // {
+    //     pager = ViewBag.Pager;
+    //     pageNo = pager.CurentPage;
+    // }
+}
+@section StyleCss {
+    <link rel="stylesheet" href="~/css/quanlybaidang.css" />
+}
+
+<div class="container-fluid d-flex justify-content-center align-items-center">
+    <div class="container mw-1200">
+        <div class="row">
+
+            @Html.Partial("Sidebar")
+
+            <div class="col-lg-9 col-md-12">
+                <div class="list-destination d-flex flex-column w-100">
+                    @if (ViewData["CountPoster"] != null)
+                    {
+                        <p class="title-search">Số bài đã xem: @ViewData["CountPoster"] </p>
+                    }
+                    else
+                    {
+                        <p class="title-search">Số bài đã xem: 0 </p>
+                    }
+                    @* <div class="input-group arrangeBox"> *@
+                       @*  <div class="wrap_arrange d-flex">
+                            <span class="input-group-text">
+                                <i class="fas fa-filter" style="margin-right:8px;"></i>Bộ lọc
+                            </span>
+
+                            <div class="form-select dropdown choose-condition" style="margin-left:10px; width:20%;" id="formSelect">
+                                <span class="dropbtn" id="statusname">Tình trạng</span>
+                                <div class="dropdown-content flex-column justify-content-center align-items-center" id="formSelected">
+                                    <a asp-action="PosterIndex" asp-controller="Poster" asp-route-status="still">Còn phòng</a>
+                                    <a asp-action="PosterIndex" asp-controller="Poster" asp-route-status="unstill">Hết phòng</a>
+                                </div>
+                            </div>
+                        </div>
+                        <a class="btn btn-add--post" style=" padding: 7px 22px;" asp-action="CreatePoster" asp-controller="Poster">Thêm bài</a> *@
+                </div>
+                @if (Model != null)
+                {
+                    @foreach (var item in Model)
+                    {
+                    <div class="posts-item d-flex flex-row align-items-center mt-30" id="@item.Id">
+                        <img src="~/imgUp/@item.PhongTro.Anh" alt="" class="posts-img">
+                        <div class="posts--info">
+                            <p class="posts--province mt-15">@item.PhongTro.TinhThanh.TenTinh</p>
+                                <h5 class="posts--title"><a asp-route-id="@item.Id" asp-action="PosterDetail" asp-controller="Search">@item.TieuDe</a></h5>
+                            <p class="posts--price">Giá: @item.PhongTro.Gia VNĐ</p>
+                            <p class="posts--address">Địa chỉ: @item.PhongTro.DiaChi</p>
+                            @for(var i = relArr.Length - 2; i >= 0 ; i -= 2)
+                            {
+                                var value = relArr[i];
+                                value = value.Replace("\"", "");
+                                var id = int.Parse(value);
+                                @if(item.Id == id){
+                                <p class="posts--address" style="color: red">Thời gian xem: @relArr[i+1] </p>
+
+                                }
+                            }
+
+                        </div>
+                        <div class="btn-wrap mt-30 d-flex flex-column">
+                                <a class="btn btn-primary mb-10" asp-route-id="@item.Id" asp-action="PosterDetail" asp-controller="Search">Xem</a>
+                        </div>
+                    </div>
+                    }
+
+                }
+
+                </div>
+            </div>
+        </div>
+
+        @* @Html.Partial("_Pagination", pager) *@
+    </div>
+</div>
+
+@section Scripts{
+    
+
+}

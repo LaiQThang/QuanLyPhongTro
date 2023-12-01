@@ -58,14 +58,14 @@ namespace QuanLyPhongTro.Models.ViewModels
             return true;
         }
 
-        public async Task<int> CountPosterUser(string userID)
+        public async Task<int> CountPosterUser(string userID, bool status)
         {
             return await _context.baiDangs
-                .Where(res => res.ApplicationUserId == userID && res.flag == false)
+                .Where(res => res.ApplicationUserId == userID && res.flag == status)
                 .CountAsync();
         }
 
-        public List<BaiDang> getAllPosters(string userID, int recSkip, int pageSize)
+        public List<BaiDang> getAllPosters(string userID, int recSkip, int pageSize, bool status)
         {
             var posters = _context.baiDangs
                 .Join(
@@ -78,7 +78,7 @@ namespace QuanLyPhongTro.Models.ViewModels
                     tfk => tfk.PhongTro.TinhThanhId,
                     tpk => tpk.Id,
                     (tfk, tpk) => new { BaiDang = tfk.BaiDang, PhongTro = tfk.PhongTro , TinhThanh = tpk})
-                .Where(res => res.BaiDang.ApplicationUserId == userID && res.BaiDang.flag == false)
+                .Where(res => res.BaiDang.ApplicationUserId == userID && res.BaiDang.flag == status)
                 .Skip(recSkip)
                 .Take(pageSize)
                 .ToList();
@@ -105,6 +105,30 @@ namespace QuanLyPhongTro.Models.ViewModels
                     tpk => tpk.Id,
                     (tfk, tpk) => new { BaiDang = tfk.BaiDang, PhongTro = tfk.PhongTro, TinhThanh = tpk })
                 .Where(res => res.BaiDang.ApplicationUserId == userID && res.BaiDang.Id == id)
+                .ToList();
+            if (posters.Count == 0)
+            {
+                return null;
+            }
+            var result = posters.Select(poster => poster.BaiDang).First();
+            return result;
+        }
+
+        public BaiDang getPosterRecently( int id)
+        {
+
+            var posters = _context.baiDangs
+                .Join(
+                    _context.phongTros,
+                    bd => bd.PhongTroId,
+                    pt => pt.Id,
+                    (bd, pt) => new { BaiDang = bd, PhongTro = pt })
+                .Join(
+                    _context.tinhThanhs,
+                    tfk => tfk.PhongTro.TinhThanhId,
+                    tpk => tpk.Id,
+                    (tfk, tpk) => new { BaiDang = tfk.BaiDang, PhongTro = tfk.PhongTro, TinhThanh = tpk })
+                .Where(res => res.BaiDang.Id == id)
                 .ToList();
             if (posters.Count == 0)
             {

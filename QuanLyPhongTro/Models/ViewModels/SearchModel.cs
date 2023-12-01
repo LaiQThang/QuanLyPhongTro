@@ -16,16 +16,21 @@ namespace QuanLyPhongTro.Models.ViewModels
         public List<BaiDang> baiDangs { get; set; }
         public BaiDang baiDang { get; set; }
 
-        public async Task<int> getCountPoster()
+        public async Task<int> getCountPoster(int start, int end)
         {
-            var poster = await _context.baiDangs.Where(res => res.flag == false).CountAsync();
+            decimal decimalStart = (decimal)start;
+            decimal decimalEnd = (decimal)end;
+            var poster = await _context.baiDangs
+                .Include(b => b.PhongTro)
+                .Where(res => res.flag == false && res.PhongTro.Gia > decimalStart && res.PhongTro.Gia < decimalEnd).CountAsync();
             return poster;
         }
 
-        public List<BaiDang> getPosterSeeMore(int recSkip, int pageSize)
+        public List<BaiDang> getPosterSeeMore(int recSkip, int pageSize, int start, int end)
         {
+            decimal decimalStart = (decimal)start;
+            decimal decimalEnd = (decimal)end;
             var model = _context.baiDangs.Where(res => res.flag == false && res != null).ToList();
-            
             var posters = _context.baiDangs
                 .Join(
                     _context.phongTros,
@@ -37,7 +42,7 @@ namespace QuanLyPhongTro.Models.ViewModels
                     tfk => tfk.PhongTro.TinhThanhId,
                     tpk => tpk.Id,
                     (tfk, tpk) => new { BaiDang = tfk.BaiDang, PhongTro = tfk.PhongTro, TinhThanh = tpk })
-                .Where(res => res.BaiDang.flag == false)
+                .Where(res => res.BaiDang.flag == false && res.PhongTro.Gia > decimalStart && res.PhongTro.Gia < decimalEnd)
                 .Skip(recSkip)
                 .Take(pageSize)
                 //.OrderByDescending(res => res.BaiDang.NgayTao)
@@ -104,15 +109,18 @@ namespace QuanLyPhongTro.Models.ViewModels
                 PhongTroId = room,
                 GhiChu = ghichu
             };
-            var roomFirst = _context.phongTros.FirstOrDefault(res => res.Id == room);
+            var roomFirst = await _context.phongTros.FirstAsync(res => res.Id == room);
             if (roomFirst != null)
             {
                 roomFirst.TinhTrang = 2;
             }
-            var posterFirst = _context.baiDangs.FirstOrDefault(res => res.Id == poster);
+            var posterFirst = await _context.baiDangs.Where(res => res.PhongTroId == room).ToListAsync();
             if(posterFirst != null)
             {
-                posterFirst.flag = true;
+                foreach(var val in posterFirst)
+                {
+                    val.flag = true;
+                }
             }
             await _context.chiTietDatPhongs.AddAsync(model);
             await _context.SaveChangesAsync();

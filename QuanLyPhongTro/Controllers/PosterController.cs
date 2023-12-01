@@ -27,7 +27,7 @@ namespace QuanLyPhongTro.Controllers
             _env = env;
             _userManager = userManager;
         }
-        public async Task<IActionResult> PosterIndex(int pg = 1)
+        public async Task<IActionResult> PosterIndex(int pg = 1, string status = "still")
         {
             Authencation();
 
@@ -36,20 +36,29 @@ namespace QuanLyPhongTro.Controllers
             {
                 pg = 1;
             }
-
+            bool convertStatus = false;
+            if(status == "still")
+            {
+                convertStatus = false;
+            }
+            else if(status == "unstill")
+            {
+                convertStatus = true;
+            }
             var model = new PosterModel(_roomManagementContext);
             var userID = getUserID();
 
-            int recsCount = await model.CountPosterUser(userID);
+            int recsCount = await model.CountPosterUser(userID, convertStatus);
 
             var pager = new Pager(recsCount, pg, pageSize);
             int recSkip = (pg - 1) * pageSize;
 
-            var listPoster = model.getAllPosters(userID, recSkip, pageSize);
+            var listPoster = model.getAllPosters(userID, recSkip, pageSize, convertStatus);
 
             var viewModel = getViewModel(listPoster,null);
             this.ViewBag.Pager = pager;
             ViewData["CountPoster"] = recsCount;
+            this.ViewBag.Status = status;
             return View(viewModel);
         }
 

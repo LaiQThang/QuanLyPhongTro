@@ -12,6 +12,9 @@
     int CountAccess = ViewBag.CountAccess;
     ViewData["CountAccess"] = CountAccess;
 
+    string price = ViewBag.Price;
+    ViewData["Price"] = price;
+
 
     ViewData["Action"] = "TopPoster";
     ViewData["Controller"] = "Search";
@@ -53,9 +56,25 @@
                     </select>
 
                 </div>
+                <div class="input-group arrangeBox m-0">
+                    <div class="wrap_arrange d-flex w-100 flex-row">
+                        <span class="input-group-text">
+                            <i class="fas fa-filter" style="margin-right:8px;"></i>Bộ lọc
+                        </span>
+
+                        <div class="form-select dropdown choose-condition" style="margin-left:10px; width:100%;" id="formSelect">
+                            <span class="dropbtn" id="statusname">Giá phòng</span>
+                            <div class="dropdown-content flex-column justify-content-center align-items-center" id="formSelected">
+                                <a asp-action="TopPoster" asp-controller="Search" asp-route-price="low">1 triệu - 5 triệu</a>
+                                <a asp-action="TopPoster" asp-controller="Search" asp-route-price="medium">5 triệu - 10 triệu</a>
+                                <a asp-action="TopPoster" asp-controller="Search" asp-route-price="hight">Trên 10 triệu</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 <div id="renderPoster">
                     @* <span id="messageLoading">Vui lòng chờ...</span> *@
-                @if (Model != null)
+                @if (Model != null && Model.baiDangs != null)
                 {
                     @foreach (var item in Model.baiDangs)
                     {
@@ -224,6 +243,75 @@
         }
     </script>
 
+    <script>
+        var the1 = document.getElementById('formSelect');
+        var the2 = document.getElementById('formSelected');
 
+        the1.addEventListener('click', function () {
+            the2.style.display = 'flex';
+        });
+
+        document.addEventListener('click', function (event) {
+            // Kiểm tra xem sự kiện click có xuất phát từ #the1 hay không
+            var isClickInsideThe1 = the1.contains(event.target);
+
+            // Nếu click ra ngoài #the1, ẩn #the2
+            if (!isClickInsideThe1) {
+                the2.style.display = 'none';
+            }
+        });
+
+        // Lấy URL hiện tại
+        var currentUrl = document.location.search;
+
+        // Tạo đối tượng URLSearchParams từ URL
+        var urlSearchParams = new URLSearchParams(currentUrl);
+
+        // Lấy giá trị của tham số 'status'
+        var statusValue = urlSearchParams.get("price")
+        if (statusValue != null && statusValue == "low") {
+            document.getElementById("statusname").innerText = "1 triệu - 5 triệu";
+        }
+        else if (statusValue != null && statusValue == "medium") {
+            document.getElementById("statusname").innerText = "5 triệu - 10 triệu";
+        }
+        else if (statusValue != null && statusValue == "hight") {
+            document.getElementById("statusname").innerText = "Trên 10 triệu";
+        }
+    </script>
 
 }
+
+
+<style>
+    /* Optional: Style for the dropdown */
+    .dropdown {
+        position: relative;
+        display: inline-block;
+        cursor: pointer;
+    }
+
+    .dropdown-content {
+        position: absolute;
+        display: none;
+        background-color: #f9f9f9;
+        top: 40px;
+        left: 0;
+        width: 100%;
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+        z-index: 1;
+        text-align: center;
+    }
+
+        .dropdown-content a {
+            text-decoration: none;
+            color: #000;
+            width: 100%;
+            padding: 8px 0
+        }
+
+            .dropdown-content a:hover {
+                background-color: #ccc;
+            }
+
+</style>
