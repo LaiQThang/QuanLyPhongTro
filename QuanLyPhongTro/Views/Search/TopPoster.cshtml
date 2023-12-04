@@ -65,9 +65,16 @@
                         <div class="form-select dropdown choose-condition" style="margin-left:10px; width:100%;" id="formSelect">
                             <span class="dropbtn" id="statusname">Giá phòng</span>
                             <div class="dropdown-content flex-column justify-content-center align-items-center" id="formSelected">
-                                <a asp-action="TopPoster" asp-controller="Search" asp-route-price="low">1 triệu - 5 triệu</a>
-                                <a asp-action="TopPoster" asp-controller="Search" asp-route-price="medium">5 triệu - 10 triệu</a>
-                                <a asp-action="TopPoster" asp-controller="Search" asp-route-price="hight">Trên 10 triệu</a>
+                                <a asp-action="TopPoster" asp-controller="Search" asp-route-price="low" asp-route-quantity="@ViewData["quantity"]">1 triệu - 5 triệu</a>
+                                <a asp-action="TopPoster" asp-controller="Search" asp-route-price="medium" asp-route-quantity="@ViewData["quantity"]">5 triệu - 10 triệu</a>
+                                <a asp-action="TopPoster" asp-controller="Search" asp-route-price="hight" asp-route-quantity="@ViewData["quantity"]">Trên 10 triệu</a>
+                            </div>
+                        </div>
+                        <div class="form-select dropdown choose-condition" style="margin-left:10px; width:100%;" id="formSelect2">
+                            <span class="dropbtn" id="statusname2">Lượt xem</span>
+                            <div class="dropdown-content flex-column justify-content-center align-items-center" id="formSelected2">
+                                <a asp-action="TopPoster" asp-controller="Search" asp-route-price="@ViewData["price"]" asp-route-quantity="low">Từ trên xuống</a>
+                                <a asp-action="TopPoster" asp-controller="Search" asp-route-price="@ViewData["price"]" asp-route-quantity="hight">Từ dưới lên</a>
                             </div>
                         </div>
                     </div>
@@ -78,7 +85,7 @@
                 {
                     @foreach (var item in Model.baiDangs)
                     {
-                        <div class="destination-item mt-30 d-flex flex-row">
+                        <div class="destination-item mt-30 d-flex flex-row" style="max-height:224px;">
                             <img src="~/imgUp/@item.PhongTro.Anh" alt="" class="destination-img">
                             <div class="destination--info">
                                 <a href=""><h3 class="destination--title">@item.TieuDe</h3></a>
@@ -89,6 +96,7 @@
                                 </p>
                             </div>
                             <div class="d-flex flex-column justify-content-between" style="width: 22%; margin-top: 12px;">
+                                <span style="text-align: right;">Lượt xem: @item.LuotXem</span>
                                 <ul style="list-style: none; padding: 0; color: #04AA6D; font-weight: 500;">
                                     <li><i class="fa-solid fa-check"></i> Miễn phí huỷ</li>
                                     <li><i class="fa-solid fa-check"></i> Thanh toán tại chỗ nghỉ</li>
@@ -138,8 +146,6 @@
             };
 
             xhr.send();
-
-
         }
 
         function getHtml(arr) {
@@ -147,7 +153,7 @@
             arr.map(val => {
                 return html +=
                 `
-                <div class="destination-item mt-30 d-flex flex-row">
+                <div class="destination-item mt-30 d-flex flex-row" style="max-height:224px;">
                         <img src="/imgUp/${val.anh}" alt="" class="destination-img">
                         <div class="destination--info">
                             <a href=""><h3 class="destination--title">${val.tieuDe}</h3></a>
@@ -158,6 +164,7 @@
                             </p>
                         </div>
                         <div class="d-flex flex-column justify-content-between" style="width: 22%; margin-top: 12px;">
+                            <span style="text-align: right;">Lượt xem: ${val.luotXem}</span>
                             <ul style="list-style: none; padding: 0; color: #04AA6D; font-weight: 500;">
                                 <li><i class="fa-solid fa-check"></i> Miễn phí huỷ</li>
                                 <li><i class="fa-solid fa-check"></i> Thanh toán tại chỗ nghỉ</li>
@@ -279,7 +286,41 @@
             document.getElementById("statusname").innerText = "Trên 10 triệu";
         }
     </script>
+    <script>
+        var the3 = document.getElementById('formSelect2');
+        var the4 = document.getElementById('formSelected2');
 
+        the3.addEventListener('click', function () {
+            the4.style.display = 'flex';
+        });
+
+        document.addEventListener('click', function (event) {
+            // Kiểm tra xem sự kiện click có xuất phát từ #the1 hay không
+            var isClickInsideThe2 = the3.contains(event.target);
+
+            // Nếu click ra ngoài #the1, ẩn #the2
+            if (!isClickInsideThe2) {
+                the4.style.display = 'none';
+            }
+        });
+
+        // Lấy URL hiện tại
+        var currentUrl = document.location.search;
+
+        // Tạo đối tượng URLSearchParams từ URL
+        var urlSearchParams = new URLSearchParams(currentUrl);
+
+        // Lấy giá trị của tham số 'status'
+        var statusValue = urlSearchParams.get("quantity")
+        if (statusValue != null && statusValue == "low") {
+            document.getElementById("statusname2").innerText = "Từ trên xuống";
+        }
+        else if (statusValue != null && statusValue == "hight") {
+            document.getElementById("statusname2").innerText = "Từ dưới lên";
+        }
+    </script>
+
+    
 }
 
 

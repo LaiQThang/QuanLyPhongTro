@@ -9,27 +9,27 @@
             {
                
                 <li class="page-item">
-        <a class="page-link" asp-action="@ViewData["Action"]" asp-controller="@ViewData["Controller"]" asp-route-pg="1" asp-route-status="@ViewData["Status"]" asp-route-price="@ViewData["Price"]">First</a>
+                    <a class="page-link" asp-action="@ViewData["Action"]" asp-controller="@ViewData["Controller"]" asp-route-pg="1" asp-route-status="@ViewData["Status"]" asp-route-price="@ViewData["Price"]" asp-route-quantity="@ViewData["Quantity"]">First</a>
                 </li>
                 <li class="page-item">
-                    <a class="page-link" asp-action="@ViewData["Action"]" asp-controller="@ViewData["Controller"]" asp-route-pg="@(Model.CurentPage - 1)" asp-route-status="@ViewData["Status"]" asp-route-price="@ViewData["Price"]">Previous</a>
+                    <a class="page-link" asp-action="@ViewData["Action"]" asp-controller="@ViewData["Controller"]" asp-route-pg="@(Model.CurentPage - 1)" asp-route-status="@ViewData["Status"]" asp-route-price="@ViewData["Price"]" asp-route-quantity="@ViewData["Quantity"]">Previous</a>
                 </li>
             }
 
             @for (var pge = Model.StartPage; pge <= Model.EndPage; pge++)
             {
                 <li class="page-item @(pge == Model.CurentPage ? "active" : "")">
-                    <a class="page-link" asp-action="@ViewData["Action"]" asp-controller="@ViewData["Controller"]" asp-route-pg="@pge" asp-route-status="@ViewData["Status"]" asp-route-price="@ViewData["Price"]">@pge</a>
+                    <a class="page-link" asp-action="@ViewData["Action"]" asp-controller="@ViewData["Controller"]" asp-route-pg="@pge" asp-route-status="@ViewData["Status"]" asp-route-price="@ViewData["Price"]" asp-route-quantity="@ViewData["Quantity"]">@pge</a>
                 </li>
             }
 
             @if (Model.CurentPage < Model.TotalPage)
             {
                 <li class="page-item">
-                    <a class="page-link" asp-action="@ViewData["Action"]" asp-controller="@ViewData["Controller"]" asp-route-pg="@(Model.CurentPage + 1)" asp-route-status="@ViewData["Status"]" asp-route-price="@ViewData["Price"]">Next</a>
+                    <a class="page-link" asp-action="@ViewData["Action"]" asp-controller="@ViewData["Controller"]" asp-route-pg="@(Model.CurentPage + 1)" asp-route-status="@ViewData["Status"]" asp-route-price="@ViewData["Price"]" asp-route-quantity="@ViewData["Quantity"]">Next</a>
                 </li>
                 <li class="page-item">
-                    <a class="page-link" asp-action="@ViewData["Action"]" asp-controller="@ViewData["Controller"]" asp-route-pg="@Model.TotalPage" asp-route-status="@ViewData["Status"]" asp-route-price="@ViewData["Price"]">Last</a>
+                    <a class="page-link" asp-action="@ViewData["Action"]" asp-controller="@ViewData["Controller"]" asp-route-pg="@Model.TotalPage" asp-route-status="@ViewData["Status"]" asp-route-price="@ViewData["Price"]" asp-route-quantity="@ViewData["Quantity"]">Last</a>
                 </li>
             }
         </ul>

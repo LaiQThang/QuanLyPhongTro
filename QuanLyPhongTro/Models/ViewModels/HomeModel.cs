@@ -42,7 +42,7 @@ namespace QuanLyPhongTro.Models.ViewModels
                     tfk => tfk.PhongTro.TinhThanhId,
                     tpk => tpk.Id,
                     (tfk, tpk) => new { BaiDang = tfk.BaiDang, PhongTro = tfk.PhongTro, TinhThanh = tpk })
-                .Where(res => res.BaiDang.flag == false)
+                .Where(res => res.BaiDang.flag == false && res.BaiDang.PhongTro.TinhTrang == 1)
                 .OrderByDescending(res => res.BaiDang.NgayTao)
                 .Take(num)
                 .ToList();

@@ -1,9 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using QuanLyPhongTro.ActionFilter;
 using QuanLyPhongTro.Controllers.Components;
 using QuanLyPhongTro.Data;
 using QuanLyPhongTro.Models.Pagination;
 using QuanLyPhongTro.Models.ViewModels;
+using System.Drawing.Printing;
 
 namespace QuanLyPhongTro.Controllers
 {
@@ -39,9 +41,11 @@ namespace QuanLyPhongTro.Controllers
             var list = model.getPosterSearch(name, ngayBD, ngayKT, recSkip, pageSize);
             var viewModel = viewModelSide(list);
             this.ViewBag.Pager = pager;
+            string formatNgayBD = ngayBD.ToString("yyyy-MM-dd");
+            string formatNgayKT = ngayKT.ToString("yyyy-MM-dd");
             ViewBag.ValueSearch = name;
-            ViewBag.ValueDateS = ngayBD;
-            ViewBag.ValueDateE = ngayKT;
+            ViewBag.ValueDateS = formatNgayBD;
+            ViewBag.ValueDateE = formatNgayKT;
             return View(viewModel);
         }
 
@@ -69,7 +73,16 @@ namespace QuanLyPhongTro.Controllers
             return model;
             
         }
-       
+
+        [HttpPost]       
+        public async Task<IActionResult> GetPosterAjax(string address, string price)
+        {
+            var priceConvert = int.Parse(price);
+            var model = new SideBarSearchModel(_roomManagementContext);
+            var rel = await model.GetPosterAjax(address, priceConvert);
+            
+            return Json(new { success = true, posters = rel });
+        }
 
     }
 }

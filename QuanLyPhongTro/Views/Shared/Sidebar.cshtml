@@ -1,30 +1,71 @@
-﻿@section StyleCss {
-    
-}
+﻿
 
 <div class="col-lg-3 col-md-12">
     <nav class="nav-box--title">
         <ul class="nav-list">
-            <li class="nav-item action d-flex flex-row">
+            <li class="nav-item action d-flex flex-row" id="idProfile">
                 <i class="fa-regular fa-user"></i>
                 <p><a asp-action="Index" asp-controller="Profile">Thông tin cá nhân</a></p>
             </li>
-            <li class="nav-item d-flex flex-row">
+            <li class="nav-item d-flex flex-row" id="idRoom">
                 <i class="fa-solid fa-list"></i>
                 <p><a asp-action="RoomIndex" asp-controller="Room">Quản lý phòng</a></p>
             </li>
-            <li class="nav-item d-flex flex-row">
+            <li class="nav-item d-flex flex-row" id="idPoster">
                 <i class="fa-solid fa-lock"></i>
                 <p><a asp-action="PosterIndex" asp-controller="Poster">Quản lý bài đăng</a></p>
             </li>
-            <li class="nav-item d-flex flex-row">
+            <li class="nav-item d-flex flex-row" id="idBooked">
                 <i class="fa-solid fa-bars-progress"></i>
                 <p><a asp-action="BookedRoomIndex" asp-controller="BookedRoom">Phòng trọ đã thuê</a></p>
             </li>
-            <li class="nav-item d-flex flex-row">
+            <li class="nav-item d-flex flex-row" id="idRecently">
                 <i class="fas fa-history"></i>
                 <p><a asp-action="Recently" asp-controller="PosterRecently">Phòng vừa xem</a></p>
             </li>
         </ul>
     </nav>
 </div>
+
+
+<style>
+    .active{
+        color: #3063f0;
+    }
+    .active p a{
+        color: #3063f0 !important;
+        font-weight: 500;
+    }
+</style>
+
+
+<script>
+    var currentURL = window.location.href;
+
+    // Sử dụng đối tượng URL để phân tích địa chỉ URL
+    var urlObject = new URL(currentURL);
+
+    // Lấy phần path của URL
+    var pathName = urlObject.pathname;
+
+    // Tách các phần path thành mảng dựa trên dấu "/"
+    var pathArray = pathName.split('/');
+
+    // Lấy phần cụ thể (ví dụ: "Room")
+    var specificPart = pathArray[1];
+    if (specificPart == "Room") {
+        document.getElementById('idRoom').classList.add('active');
+    }
+    if (specificPart == "Profile") {
+        document.getElementById('idProfile').classList.add('active');
+    }
+    if (specificPart == "Poster") {
+        document.getElementById('idPoster').classList.add('active');
+    }
+    if (specificPart == "BookedRoom") {
+        document.getElementById('idBooked').classList.add('active');
+    }
+    if (specificPart == "PosterRecently") {
+        document.getElementById('idRecently').classList.add('active');
+    }
+</script>

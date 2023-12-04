@@ -76,7 +76,8 @@
                                     <p class="posts--price">Giá: @item.PhongTro.Gia VNĐ</p>
                                     <p class="posts--address">@item.PhongTro.DiaChi</p>
                                 </div>
-                                <div class="btn-wrap mt-30 d-flex flex-column">
+                                <div class="btn-wrap mt-30 d-flex flex-column" style="margin-top:0px;">
+                                    <span style="text-align: right; margin-bottom:30px;">Lượt xem: @item.LuotXem</span>
                                     <a class="btn btn-primary mb-10" asp-action="EditPoster" asp-controller="Poster" asp-route-posterId="@item.Id">Sửa bài</a>
                                     <a class="btn btn-warning" href="javascript:void(0)" onclick="DeletePoster(@item.Id)">Xóa</a>
                                 </div>

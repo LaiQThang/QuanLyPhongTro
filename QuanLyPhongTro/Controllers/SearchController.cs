@@ -21,11 +21,11 @@ namespace QuanLyPhongTro.Controllers
         {
             _context = roomManagementContext;
         }
-        public async Task<IActionResult> TopPoster(int pg = 1, string price = "price")
+        public async Task<IActionResult> TopPoster(int pg = 1, string price = "price", string quantity = "quantity")
         {
             Authencation();
             const int pageSize = 3;
-            if(pg < 1)
+            if (pg < 1)
             {
                 pg = 1;
             }
@@ -35,8 +35,9 @@ namespace QuanLyPhongTro.Controllers
 
             var model = new SearchModel(_context);
 
-            switch (price) {
-                case "low":  
+            switch (price)
+            {
+                case "low":
                     start = 0;
                     end = 5000000;
                     break;
@@ -49,19 +50,32 @@ namespace QuanLyPhongTro.Controllers
                     end = int.MaxValue;
                     break;
             }
+            var quantityValue = "quantity";
+            switch (quantity)
+            {
+                case "low":
+                    quantityValue = "low";
+                    break;
+                case "hight":
+                    quantityValue = "hight";
+                    break;
+            }
 
             int recsCount = await model.getCountPoster(start, end);
             var pager = new Pager(recsCount, pg, pageSize);
 
             int recSkip = (pg - 1) * pageSize;
             //
-            var list = model.getPosterSeeMore(recSkip, pageSize, start, end);
+            var list = model.getPosterSeeMore(recSkip, pageSize, start, end, quantityValue);
 
             var viewModel = viewModelSearch(list, null);
 
             this.ViewBag.Pager = pager;
             ViewData["Content"] = "Bài đăng";
+            ViewData["price"] = price;
+            ViewData["quantity"] = quantity;
             this.ViewBag.Price = price;
+            this.ViewBag.Quantity = quantity;
             return View(viewModel);
         }
 
@@ -88,7 +102,7 @@ namespace QuanLyPhongTro.Controllers
             return Json(await list);
         }
 
-        public IActionResult PosterDetail(int id) 
+        public async Task<IActionResult> PosterDetail(int id) 
         {
             Authencation();
             string idConvert = id.ToString();
@@ -119,6 +133,7 @@ namespace QuanLyPhongTro.Controllers
             var model = new SearchModel(_context);
             var list = model.GetPosterID(id);
             var viewModel = viewModelSearch(null, list);
+            await model.UpdateQuantityView(id);
             string messageerr = TempData["MessangeError"] as string;
             ViewData["MessangeError"] = messageerr;
             return View(viewModel);

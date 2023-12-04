@@ -31,6 +31,28 @@
             <button class="btn btn-primary" type="submit">Tìm</button>
 
         </form>
+        <form onsubmit="return validateForm2()" class="d-flex flex-column w-100 mt-2">
+
+            <p>Tên chỗ nghỉ/điểm đến</p>
+            <div class="input-group">
+                <span class="input-group-text">
+                    <i class="fas fa-map-marker-alt"></i>
+                </span>
+                <input type="text" value="@ViewData["ValueSearch"]" class="form-control" name="name" id="address" placeholder="Nhập điểm đến">
+            </div>
+
+            <p>Ngày nhận phòng</p>
+            <div class="input-group">
+                <span class="input-group-text">
+                    <i class="fas fa-money-bill-alt"></i>
+                </span>
+                <input type="text" value="@ViewData["ValueDateS"]" class="form-control" name="ngayBD" id="price" placeholder="Khoảng giá tiền">
+                <span id="error" class="toast-message danger" style="color:red;"></span>
+            </div>
+
+            <button class="btn btn-primary" type="submit">Tìm</button>
+
+        </form>
     </div>
 
     <!-- Tìm kiếm theo điều kiện khác -->
@@ -72,5 +94,51 @@
         }
         return true;
 
+    }
+
+
+    function getPosterAjax(callback) {
+        var url = '@Url.Action("GetPosterAjax", "SideBarSearch")';
+        var address = document.getElementById("address").value;
+        var price = document.getElementById("price").value;
+
+        var xhr = new XMLHttpRequest();
+        xhr.open('POST', url, true);
+        xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+
+        // Xử lý sự kiện khi yêu cầu hoàn thành
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState === 4) {
+                if (xhr.status === 200) {
+                    // Phản hồi từ server
+                    var result = JSON.parse(xhr.responseText);
+                    console.log(result);
+                    callback(result);
+                } else {
+                    console.error('Lỗi yêu cầu:', xhr.status);
+                }
+            }
+        };
+
+        // Chuyển đối tượng dữ liệu thành chuỗi query string
+        var data = 'address=' + encodeURIComponent(address) +
+            '&price=' + encodeURIComponent(price);
+
+        // Gửi yêu cầu với dữ liệu đã chuẩn bị
+        xhr.send(data);
+    }
+
+   
+
+    function renderDataAjax(res) {
+        var html = getHtml(res.posters.result);
+        document.getElementById("renderPoster").innerHTML = html;
+    }
+
+
+    function validateForm2() {
+        console.log(12);
+        getPosterAjax(renderDataAjax)
+        return false;
     }
 </script>

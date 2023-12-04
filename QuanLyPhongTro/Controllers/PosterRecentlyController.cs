@@ -27,14 +27,15 @@ namespace QuanLyPhongTro.Controllers
             var model = new PosterModel(_roomManagementContext);
             var list = new List<Models.Domain.BaiDang>();
             var length = relArr.Length;
-            
+            var count = 0;
             for (var i = length - 2; i >= 0 ; i -= 2)
             {
+                if(count == 3) { break; }
+                count++;
                 var value = relArr[i];
                 var id = int.Parse(value);
                 var result = model.getPosterRecently(id);
                 list.Add(result);
-                System.Diagnostics.Debug.WriteLine(id, "ThangK");
             }
             ViewData["CountPoster"] = length / 2;
             this.ViewBag.ArrDateTime = relArr;

@@ -42,7 +42,8 @@
                     <dl>
                             <dd class="title-update-img">Cập nhật thông tin của bạn và tìm hiểu thông tin này được dùng ra sao </d>
                     </dl>
-                    
+                    @if(Model != null)
+                    {
                     @foreach(var item in Model)
                     {
                         <dl>
@@ -89,6 +90,8 @@
                                 <option value="1">nữ</option>
                             </select> *@
                         </dl>
+                    }
+                        
                     }
                     <input type="submit" value="Lưu thông tin" class="btn btn-primary mt-3" style="float: right;">
                 </form>

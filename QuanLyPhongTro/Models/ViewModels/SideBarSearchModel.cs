@@ -3,6 +3,8 @@ using Microsoft.EntityFrameworkCore;
 using QuanLyPhongTro.Data;
 using QuanLyPhongTro.Models.Domain;
 using QuanLyPhongTro.Models.StoredProcedure;
+using System.Drawing.Printing;
+using System.Net;
 
 namespace QuanLyPhongTro.Models.ViewModels
 {
@@ -81,6 +83,14 @@ namespace QuanLyPhongTro.Models.ViewModels
 
             var posters = _context.apiGetPosters
                 .FromSqlRaw("SORT_POSTERS @pageSize={0}, @recSkip={1}, @nameProvince={2}, @DateCheckin={3}", pageSize, recSkip, searchName, sqlFormattedDate);
+
+            return await posters.ToListAsync();
+        }
+
+        public async Task<List<ApiGetPosters>> GetPosterAjax(string address, int priceConvert)
+        {
+            var posters = _context.apiGetPosters
+                .FromSqlRaw("GET_SEARCH @address={0}, @price={1}", address, priceConvert);
 
             return await posters.ToListAsync();
         }

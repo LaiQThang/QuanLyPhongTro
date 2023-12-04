@@ -121,7 +121,14 @@
                                             <option >Tỉnh thành</option>
                                             @foreach (var item in Model.tinhThanhs)
                                             {
-                                                <option selected value="@item.Id">@item.TenTinh</option>
+                                                @if (item.Id == Model.room.TinhThanhId)
+                                                {
+                                                    <option selected value="@item.Id">@item.TenTinh</option>
+                                                }
+                                                else
+                                                {
+                                                    <option value="@item.Id">@item.TenTinh</option>
+                                                }
                                             }
 
                                         </select>

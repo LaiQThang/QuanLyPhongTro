@@ -1,4 +1,4 @@
-﻿                                                                                                                                                                                                                                                       @model QuanLyPhongTro.Models.ViewModels.PosterModel.PosterInput
+﻿@model QuanLyPhongTro.Models.ViewModels.PosterModel.PosterInput 
 @{
     string cookieValue = ViewBag.CookieValue;
     ViewData["AccountUser"] = cookieValue;
@@ -100,7 +100,7 @@
                             <h5 class="title-detail">THÔNG TIN CHI TIẾT</h5>
                             <div class="box-content">
                                 <div class="form-floating">
-                                    <textarea class="form-control" id="noidung" asp-for="NoiDung" placeholder="Leave a comment here" id="floatingTextarea2" style="height: 100px">@Model.baiDang.NoiDung</textarea>
+                                    <textarea class="form-control" id="noidung" name="NoiDung" placeholder="Leave a comment here" id="floatingTextarea2" style="height: 100px">@Model.baiDang.NoiDung</textarea>
                                     <label for="floatingTextarea2"></label>
                                 </div>
                             </div>
@@ -110,7 +110,7 @@
                             <h5 class="title-detail">Tiêu đề</h5>
                             <div class="box-content">
                                 <div class="form-floating">
-                                    <textarea class="form-control" id="tieude" asp-for="TieuDe" placeholder="Leave a comment here" id="floatingTextarea">@Model.baiDang.TieuDe</textarea>
+                                    <textarea class="form-control" id="tieude" name="TieuDe" placeholder="Leave a comment here" id="floatingTextarea">@Model.baiDang.TieuDe</textarea>
                                     <label for="floatingTextarea"></label>
                                 </div>
                             </div>

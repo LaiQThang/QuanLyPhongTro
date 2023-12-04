@@ -285,7 +285,7 @@
 
             // Chuyển đối tượng dữ liệu thành chuỗi query string
             var data = 'TimeClient=' + encodeURIComponent(currentTime.toISOString());
-
+            console.log(data);
             // Gửi yêu cầu với dữ liệu đã chuẩn bị
             xhr.send(data);
            

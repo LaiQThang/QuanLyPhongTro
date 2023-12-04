@@ -11,6 +11,7 @@ namespace QuanLyPhongTro.Models.StoredProcedure
         public string? DiaChi { get; set; }
         public decimal? Gia { get; set; }
         public string? Anh { get; set; }
+        public int LuotXem { get; set; }
 
 
     }
